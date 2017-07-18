@@ -1,11 +1,9 @@
-# from utils.utils import agg_phrase_cnt
-# from utils.utils import agg_phrase_df
-# from utils.utils import normalize
 from heapq import heappush, heappop, heappushpop, nsmallest, nlargest
 import codecs
 import math
 import ast
 import ipdb
+import copy
 
 
 class CaseSlim:
@@ -41,7 +39,6 @@ class CaseSlim:
 			NOPOP: no populairty
 			NODIS: no distinctive
 			NOINT: no integrity
-
 		'''
 		scores = {}
 		multiplier = 1
@@ -178,46 +175,65 @@ class CaseSlim:
 		self.ranked_list = []
 
 
+def read_data(label_f, link_f):
+
+	cells = {}
+	freq_data = {}
+	phrases = set()
+
+	with open(label_f, 'r+') as f:
+		for line in f:
+			segments = line.strip('\n\r').split('\t')
+			cell = segments[1]
+			doc_id = segments[0]
+			if cell not in cells:
+				cells[cell] = []
+			cells[cell].append(doc_id)
+
+	with open(link_f, 'r+') as f:
+		for line in f:
+			# print 'sss' + line
+			segments = line.strip('\n\r ').split('\t')
+			doc_id, phrase, w = segments[0], segments[1], int(segments[2])
+			if doc_id not in freq_data:
+				freq_data[doc_id] = {}
+
+			phrases.add(phrase)
+			freq_data[doc_id][phrase] = w
+
+	return cells, freq_data, phrases
 
 
-	# def __init__(self, freq_data, selected_docs, context_doc_groups, global_scores):
-	# 	print 'start query'
-	# 	self.selected_docs = selected_docs
-	# 	self.phrase_cnt = self.agg_phrase_cnt(freq_data, selected_docs)
-	# 	self.phrase_df = self.agg_phrase_df(freq_data, selected_docs)
-	# 	self.phrase_cnt_context = {}
-	# 	self.phrase_df_context = {}
-	# 	if len(self.phrase_df) > 0:
-	# 		self.max_df = max(self.phrase_df.values())
-	# 	else:
-	# 		self.max_df = 0
-	# 	self.max_df_context = {}
-	# 	self.dc_context = {}
-	# 	self.self_dc = len(selected_docs)
-	# 	self.sum_cnt = sum(self.phrase_cnt.values())
-	# 	self.sum_cnt_context = {}
-	# 	self.global_scores = global_scores
-	# 	for group, docs in context_doc_groups.items():
-	# 		self.phrase_cnt_context[group] = agg_phrase_cnt(freq_data, docs)
-	# 		self.phrase_df_context[group] = agg_phrase_df(freq_data, docs)
-	# 		if len(self.phrase_df_context[group]) > 0:
-	# 			self.max_df_context[group] = max(self.phrase_df_context[group].values())
-	# 		else:
-	# 			self.max_df_context[group] = 0
-	# 		self.dc_context[group] = len(docs)
-	# 		self.sum_cnt_context[group] = sum(self.phrase_cnt_context[group].values())
+def run_caseolap(cells, freq_data, o_file, verbose=3, top_k=200):
+	of = open(o_file, 'w+')
 
-	# 	# added for exploration
-	# 	self.context_groups = {}
-	# 	self.ranked_list = []
+	for cell in cells:
+		print 'Running CaseOLAP for: %s' % cell
+
+		selected_docs = cells[cell]
+		context_doc_groups = copy.copy(cells)
+		context_doc_groups.pop(cell, None)
+		caseslim = CaseSlim(freq_data, selected_docs, context_doc_groups)
+
+		top_phrases = caseslim.compute()
+		of.write('%s\t' % cell)
+
+		phr_str = ', '.join([ph[0] + '|' + str(ph[1]) for ph in top_phrases])
+		of.write('[%s]\n' % phr_str)
 
 
+if __name__ == "__main__":
+	parser = argparse.ArgumentParser(prog='caseslim.py', \
+			description='CaseOLAP slim version without cube structure.')
+	parser.add_argument('-label', required=True, \
+			help='The file with labeled docs.') 
+	parser.add_argument('-link', required=True, \
+			help='The file with doc phrase relationships.') 
+	parser.add_argument('-output', required=True, \
+			help='The output result file')
+	args = parser.parse_args()
 
+	cells, freq_data, phrases = read_data(args.label, args.link)
 
-# def point_query(freq_data, selected_docs, context_doc_groups, global_scores, score_type):
-# 	algorithm = OLAPORP(freq_data, selected_docs, context_doc_groups, global_scores)
-# 	if score_type == 'TFIDF':
-# 		return algorithm.compute_tfidf()
-# 	else:
-# 		return algorithm.compute(score_type), algorithm
-	
+	run_caseolap(cells, freq_data, args.output)
+
