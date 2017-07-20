@@ -3,6 +3,7 @@ import codecs
 import math
 import ast
 import ipdb
+import argparse
 import copy
 
 
@@ -179,6 +180,7 @@ def read_data(label_f, link_f):
 
 	cells = {}
 	freq_data = {}
+	docs = set()
 	phrases = set()
 
 	with open(label_f, 'r+') as f:
@@ -189,26 +191,47 @@ def read_data(label_f, link_f):
 			if cell not in cells:
 				cells[cell] = []
 			cells[cell].append(doc_id)
+			docs.add(doc_id)
+
+	print 'Read label file done.'
 
 	with open(link_f, 'r+') as f:
 		for line in f:
 			# print 'sss' + line
 			segments = line.strip('\n\r ').split('\t')
-			doc_id, phrase, w = segments[0], segments[1], int(segments[2])
+			doc_id = segments[0]
+			if doc_id not in docs:
+				continue
 			if doc_id not in freq_data:
 				freq_data[doc_id] = {}
 
-			phrases.add(phrase)
-			freq_data[doc_id][phrase] = w
+			for i in range(1, len(segments), 2):
+				phrase, w = segments[i], int(segments[i+1])
+				phrases.add(phrase)
+				freq_data[doc_id][phrase] = w
+
+	print 'Read link file done.'
 
 	return cells, freq_data, phrases
 
 
-def run_caseolap(cells, freq_data, o_file, verbose=3, top_k=200):
+def read_target_tokens(token_f):
+
+	tokens = set()
+	with open(token_f, 'r+') as f:
+		for line in f:
+			segments = line.strip('\r\n ').split('\t')
+			tokens.add(segments[1])
+
+	print 'Read target token file done.'
+	return tokens
+
+
+def run_caseolap(cells, freq_data, target_phs, o_file, verbose=3, top_k=200):
 	of = open(o_file, 'w+')
 
 	for cell in cells:
-		print 'Running CaseOLAP for: %s' % cell
+		print 'Running CaseOLAP for cell: %s' % cell
 
 		selected_docs = cells[cell]
 		context_doc_groups = copy.copy(cells)
@@ -218,22 +241,45 @@ def run_caseolap(cells, freq_data, o_file, verbose=3, top_k=200):
 		top_phrases = caseslim.compute()
 		of.write('%s\t' % cell)
 
-		phr_str = ', '.join([ph[0] + '|' + str(ph[1]) for ph in top_phrases])
+		phr_str = ', '.join([ph[0] + '|' + str(ph[1]) for ph in top_phrases if ph[0] in target_phs])
 		of.write('[%s]\n' % phr_str)
 
 
 if __name__ == "__main__":
+	# Traditional CaseOLAP Setting
+	# parser = argparse.ArgumentParser(prog='caseslim.py', \
+	# 		description='CaseOLAP slim version without cube structure.')
+	# parser.add_argument('-label', required=True, \
+	# 		help='The file with labeled docs.') 
+	# parser.add_argument('-link', required=True, \
+	# 		help='The file with doc phrase relationships.') 
+	# parser.add_argument('-output', required=True, \
+	# 		help='The output result file')
+	# args = parser.parse_args()
+
+	# cells, freq_data, phrases = read_data(args.label, args.link)
+
+	# run_caseolap(cells, freq_data, args.output)
+
+	# Taxonomy Special case
 	parser = argparse.ArgumentParser(prog='caseslim.py', \
 			description='CaseOLAP slim version without cube structure.')
-	parser.add_argument('-label', required=True, \
-			help='The file with labeled docs.') 
-	parser.add_argument('-link', required=True, \
-			help='The file with doc phrase relationships.') 
+	parser.add_argument('-folder', required=True, \
+			help='The files used.')
 	parser.add_argument('-output', required=True, \
 			help='The output result file')
 	args = parser.parse_args()
 
-	cells, freq_data, phrases = read_data(args.label, args.link)
+	link_f = '%s/keyword_cnt.txt' % args.folder
+	cell_f = '%s/paper_cluster.txt' % args.folder
+	token_f = '%s/cluster_keyword.txt' % args.folder
 
-	run_caseolap(cells, freq_data, args.output)
+
+	cells, freq_data, phrases = read_data(cell_f, link_f)
+	target_phs = read_target_tokens(token_f)
+	# print target_phs
+
+	run_caseolap(cells, freq_data, target_phs, args.output)
+
+
 
