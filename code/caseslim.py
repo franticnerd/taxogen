@@ -266,13 +266,15 @@ if __name__ == "__main__":
 			description='CaseOLAP slim version without cube structure.')
 	parser.add_argument('-folder', required=True, \
 			help='The files used.')
+	parser.add_argument('-iter', required=True, \
+			help='Iteration index.')
 	parser.add_argument('-output', required=True, \
 			help='The output result file')
 	args = parser.parse_args()
 
 	link_f = '%s/keyword_cnt.txt' % args.folder
-	cell_f = '%s/paper_cluster.txt' % args.folder
-	token_f = '%s/cluster_keyword.txt' % args.folder
+	cell_f = '%s/paper_cluster-%s.txt' % (args.folder, args.iter)
+	token_f = '%s/cluster_keyword-%s.txt' % (args.folder, args.iter)
 
 
 	cells, freq_data, phrases = read_data(cell_f, link_f)
@@ -281,5 +283,8 @@ if __name__ == "__main__":
 
 	run_caseolap(cells, freq_data, target_phs, args.output)
 
+
+# python caseslim.py -folder ../data/cluster/ -output ../data/cluster/caseolap.txt
+# python case_ranker.py -input ../data/cluster/caseolap.txt -output ../data/cluster/ph_dist_ranking.txt -thres 0.15
 
 
