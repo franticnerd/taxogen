@@ -1,20 +1,23 @@
-import numpy as np
-from spherecluster import SphericalKMeans
 from collections import defaultdict
+
 from scipy.spatial.distance import cosine
+from spherecluster import SphericalKMeans
 
 class Clusterer:
+
     def __init__(self, data, n_cluster):
         self.data = data
         self.n_cluster = n_cluster
         self.clus = SphericalKMeans(n_cluster)
-        self.membership = defaultdict(list)
+        self.clusters = defaultdict(list)  # cluster id -> members
+        self.membership = None  # a list contain the membership of the data points
 
     def fit(self):
         self.clus.fit(self.data)
         labels = self.clus.labels_
         for idx, label in enumerate(labels):
-            self.membership[label].append(idx)
+            self.clusters[label].append(idx)
+        self.membership = labels
 
     # find the idx of each cluster center
     def gen_center_idx(self):
@@ -24,10 +27,9 @@ class Clusterer:
             ret.append((cluster_id, center_idx))
         return ret
 
-
     def find_center_idx_for_one_cluster(self, cluster_id):
         query_vec = self.clus.cluster_centers_[cluster_id]
-        members = self.membership[cluster_id]
+        members = self.clusters[cluster_id]
         best_similarity, ret = -1, -1
         for member_idx in members:
             member_vec = self.data[member_idx]
@@ -35,73 +37,46 @@ class Clusterer:
             if cosine_sim > best_similarity:
                 best_similarity = cosine_sim
                 ret = member_idx
-        print best_similarity
         return ret
 
     def calc_cosine(self, vec_a, vec_b):
         return 1 - cosine(vec_a, vec_b)
 
     # the descriptions should have the same size as data
-    def print_cluster(self, descriptions):
-        for label in xrange(self.n_cluster):
-            idx_list = self.membership[label]
-            members = [descriptions[idx] for idx in idx_list]
-            print members
+    def write_cluster_keyword(self, keywords, output_file):
+        with open(output_file, 'w') as fout:
+            for clus_id in xrange(self.n_cluster):
+                members = self.clusters[clus_id]
+                for keyword_id in members:
+                    keyword = keywords[keyword_id]
+                    fout.write(str(clus_id) + '\t' + keyword + '\n')
 
+    def write_hierarchy(self, clus_centers, keywords, parent_keyword, output_file):
+        with open(output_file, 'w') as fout:
+            for cluster_id, center_idx in clus_centers:
+                keyword = keywords[center_idx]
+                fout.write(keyword + ' ' + parent_keyword + '\n')
 
-class DataSet:
-    def __init__(self, data_file):
-        self.word_to_vec = {}
-        with open(data_file, 'r') as fin:
-            header = fin.readline()
-            print 'loading data file: ', header
-            for line in fin:
-                items = line.strip().split()
-                word = items[0]
-                vec = [float(v) for v in items[1:]]
-                self.word_to_vec[word] = vec
+    # the descriptions should have the same size as data
+    def write_document_membership(self, documents, keyword_to_id, keyword_idf, output_file):
+        with open(output_file, 'w') as fout:
+            for idx, doc in enumerate(documents):
+                doc_membership = self.get_doc_membership(doc, keyword_to_id, keyword_idf)
+                cluster_id = self.assign_document(doc_membership)
+                fout.write(str(idx) + '\t' + str(cluster_id) + '\n')
 
+    def get_doc_membership(self, document, keyword_to_id, keyword_idf):
+        ret = [0.0] * self.n_cluster
+        for keyword in document:
+            keyword_id = keyword_to_id[keyword]
+            cluster_id = self.membership[keyword_id]
+            idf = keyword_idf[keyword]
+            ret[cluster_id] += idf
+        return ret
 
-    def gen_np_array(self, word_list):
-        ret = []
-        for word in word_list:
-            vec = self.word_to_vec[word]
-            ret.append(vec)
-        return np.array(ret)
-
-def load_seed_words(seed_word_file):
-    seed_words = []
-    with open(seed_word_file, 'r') as fin:
-        for line in fin:
-            seed_words.append(line.strip())
-    return seed_words
-
-
-def write_hierarchy(clus_centers, descriptions, parent_description, output_file):
-    with open(output_file, 'w') as fout:
-        for cluster_id, center_idx in clus_centers:
-            description = descriptions[center_idx]
-            fout.write(description + ' ' + parent_description + '\n')
-
-
-
-def main():
-    # datafile = '/shared/data/expert_finding/leef/word_embedding/word2vec.txt'
-    data_file = '/Users/chao/data/projects/local-embedding/word2vec.txt'
-    seed_file = '/Users/chao/data/projects/local-embedding/keywords.txt'
-    dataset = DataSet(data_file)
-    seed_words = load_seed_words(seed_file)
-    vectors = dataset.gen_np_array(seed_words)
-
-    # hierarchy_file = '/shared/data/expert_finding/full/query.hierarchy'
-    hierarchy_file = '/Users/chao/data/projects/local-embedding/hierarchy.txt'
-
-    clus = Clusterer(vectors, 5)
-    clus.fit()
-    clus.print_cluster(seed_words)
-    clus_centers = clus.gen_center_idx()
-    write_hierarchy(clus_centers, seed_words, '*', hierarchy_file)
-
-if __name__ == '__main__':
-    main()
-
+    def assign_document(self, doc_membership):
+        best_idx, max_score = -1, 0
+        for idx, score in enumerate(doc_membership):
+            if score > max_score:
+                best_idx, max_score = idx, score
+        return best_idx
