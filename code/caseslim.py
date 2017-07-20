@@ -268,23 +268,22 @@ if __name__ == "__main__":
 			help='The files used.')
 	parser.add_argument('-iter', required=True, \
 			help='Iteration index.')
-	parser.add_argument('-output', required=True, \
-			help='The output result file')
 	args = parser.parse_args()
 
 	link_f = '%s/keyword_cnt.txt' % args.folder
 	cell_f = '%s/paper_cluster-%s.txt' % (args.folder, args.iter)
 	token_f = '%s/cluster_keyword-%s.txt' % (args.folder, args.iter)
+	output_f = '%s/caseolap-%s.txt' % (args.folder, args.iter)
 
 
 	cells, freq_data, phrases = read_data(cell_f, link_f)
 	target_phs = read_target_tokens(token_f)
 	# print target_phs
 
-	run_caseolap(cells, freq_data, target_phs, args.output)
+	run_caseolap(cells, freq_data, target_phs, output_f)
 
 
-# python caseslim.py -folder ../data/cluster/ -output ../data/cluster/caseolap.txt
-# python case_ranker.py -input ../data/cluster/caseolap.txt -output ../data/cluster/ph_dist_ranking.txt -thres 0.15
+# python caseslim.py -folder ../data/cluster -iter 0
+# python case_ranker.py -folder ../data/cluster -iter 0 -thres 0.15
 
 

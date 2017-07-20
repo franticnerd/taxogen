@@ -51,12 +51,15 @@ def rank_phrase(case_file, o_file, thres):
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(prog='case_ranker.py', \
 			description='Ranks the distinctiveness score using caseolap result.')
-	parser.add_argument('-input', required=True, \
-			help='The files used.')
+	parser.add_argument('-folder', required=True, \
+			help='The folder that stores the file.')
+	parser.add_argument('-iter', required=True, \
+			help='Iteration index.')
 	parser.add_argument('-thres', required=True, \
 			help='The files used.')
-	parser.add_argument('-output', required=True, \
-			help='The output result file')
 	args = parser.parse_args()
 
-	rank_phrase(args.input, args.output, float(args.thres))
+	input_f = '%s/caseolap-%s.txt' % (args.folder, args.iter)
+	output_f = '%s/keywords-%s.txt' % (args.folder, args.iter)
+
+	rank_phrase(input_f, output_f, float(args.thres))
