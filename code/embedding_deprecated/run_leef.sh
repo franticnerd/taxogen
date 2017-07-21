@@ -30,3 +30,7 @@ python fetch_papers_relevant.py -input $GRAPH -relevant $ROOT/query_relevant -te
 # retrain the embedding
 # -----
 python local_embedding_training.py -input $ROOT/local_embeddings -query $QUERY_DATA
+
+# params:
+# parent folder
+# embedding.txt

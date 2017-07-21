@@ -1,6 +1,19 @@
 import math
 import operator
 
+def load_embeddings(embedding_file):
+	if embedding_file is None:
+		return {}
+	word_to_vec = {}
+	with open(embedding_file, 'r') as fin:
+		header = fin.readline()
+		for line in fin:
+			items = line.strip().split()
+			word = items[0]
+			vec = [float(v) for v in items[1:]]
+			word_to_vec[word] = vec
+	return word_to_vec
+
 def kl_divergence(p, q):
 	if len(p) != len(q):
 		print 'KL divergence error: p, q have different length'
