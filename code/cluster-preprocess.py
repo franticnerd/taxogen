@@ -3,8 +3,28 @@ import sys
 from paras import load_params
 
 
+def trim_keywords(raw_keyword_file, keyword_file, embedding_file):
+    keywords = load_keywords(raw_keyword_file)
+    embedded_keywords = load_embedding_keywords(embedding_file)
+    with open(keyword_file, 'w') as fout:
+        for w in keywords:
+            if w in embedded_keywords:
+                fout.write(w + '\n')
+
+
+def load_embedding_keywords(embedding_file):
+    keyword_set = set()
+    with open(embedding_file, 'r') as fin:
+        header = fin.readline()
+        for line in fin:
+            items = line.strip().split()
+            word = items[0]
+            keyword_set.add(word)
+    return keyword_set
+
+
 def trim_document_set(raw_doc_file, doc_file, keyword_file):
-    keyword_set = load_keywords(keyword_file)
+    keyword_set = set(load_keywords(keyword_file))
     with open(raw_doc_file, 'r') as fin, open(doc_file, 'w') as fout:
         for line in fin:
             doc = line.strip().split()
@@ -17,7 +37,7 @@ def load_keywords(seed_word_file):
     with open(seed_word_file, 'r') as fin:
         for line in fin:
             seed_words.append(line.strip())
-    return set(seed_words)
+    return seed_words
 
 
 # check whether a document contains one or more keywords
@@ -54,11 +74,17 @@ def counter_to_string(counter):
 
 def main(opt):
     raw_doc_file = opt['raw_doc_file']
+    raw_keyword_file = opt['raw_keyword_file']
+    embedding_file = opt['embedding_file']
     doc_file = opt['doc_file']
     keyword_file = opt['keyword_file']
     doc_keyword_cnt_file = opt['doc_keyword_cnt_file']
+    trim_keywords(raw_keyword_file, keyword_file, embedding_file)
+    print 'Done trimming the keywords.'
     trim_document_set(raw_doc_file, doc_file, keyword_file)
+    print 'Done trimming the documents.'
     gen_doc_keyword_cnt_file(doc_file, doc_keyword_cnt_file)
+    print 'Done counting the keywords in documents.'
 
 if __name__ == '__main__':
     para_file = None if len(sys.argv) <= 1 else sys.argv[1]
