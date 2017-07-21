@@ -40,9 +40,10 @@ def relevant_phs(embs, cates, N):
         worst = -100
         bestw = [-100] * (N + 1)
         bestp = [''] * (N + 1)
+        cate_ph = cate[2:]
 
         for ph in embs:
-            sim = utils.cossim(embs[cate], embs[ph])
+            sim = utils.cossim(embs[cate_ph], embs[ph])
             if sim > worst:
                 for i in range(N):
                     if sim >= bestw[i]:
@@ -64,7 +65,7 @@ def relevant_phs(embs, cates, N):
 
     return cates
 
-def revevant_docs(text, cates):
+def revevant_docs(text, reidx, cates):
     docs = {}
     idx = 0
     pd_map = {}
@@ -75,10 +76,16 @@ def revevant_docs(text, cates):
     with open(text) as f:
         for line in f:
             docs[idx] = line
-            for ph in pd_map:
-                if ph in line:
-                    pd_map[ph].add(idx)
             idx += 1
+
+    with open(reidx) as f:
+        for line in f:
+            segments = line.strip('\r\n').split('\t')
+            doc_ids = segments[1].split(',')
+            if len(doc_ids) > 0 and doc_ids[0] == '':
+                continue
+                # print line
+            pd_map[segments[0]] = set([int(x) for x in doc_ids])
 
     print 'Relevant docs found.'
 
@@ -114,6 +121,8 @@ if __name__ == "__main__":
             help='The folder of previous level.')
     parser.add_argument('-text', required=True, \
             help='The raw text file.')
+    parser.add_argument('-reidx', required=True, \
+            help='The reversed index file.')
     parser.add_argument('-parent', required=True, \
             help='the target expanded phrase')
     parser.add_argument('-N', required=True, \
@@ -122,8 +131,8 @@ if __name__ == "__main__":
      
     embs, keywords, cates = read_files(args.folder, args.parent)
     cates = relevant_phs(embs, cates, int(args.N))
-    pd_map, docs = revevant_docs(args.text, cates)
+    pd_map, docs = revevant_docs(args.text, args.reidx, cates)
     run_word2vec(pd_map, docs, cates, args.folder)
 
-# python local_embedding_training.py -folder ../data/cluster -text ../data/paper_phrases.txt.frequent.hardcode -parent * -N 100
+# python local_embedding_training.py -folder ../data/cluster -text ../data/paper_phrases.txt.frequent.hardcode -reidx ../data/reidx.txt -parent \* -N 100
 
