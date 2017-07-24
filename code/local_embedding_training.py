@@ -107,12 +107,14 @@ def run_word2vec(pd_map, docs, cates, folder):
         sub_folder = '%s/%s' % (folder, cate)
         input_f = '%s/text' % sub_folder
         output_f = '%s/embeddings.txt' % sub_folder
-        os.makedirs(sub_folder)
+        if not os.path.exists(sub_folder):
+            os.makedirs(sub_folder)
         with open(input_f, 'w+') as g:
             for d in c_docs:
                 g.write(docs[d])
 
-        subprocess.Popen(["./word2vec", "-train", input_f, "-output", output_f], stdout=subprocess.PIPE)
+        # subprocess.Popen(["./word2vec", "-train", input_f, "-output", output_f], stdout=subprocess.PIPE)
+        subprocess.call(["./word2vec", "-threads", 10, "-train", input_f, "-output", output_f], stdout=subprocess.PIPE)
 
 
 def main_local_embedding(folder, doc_file, reidx, parent, N):
@@ -120,6 +122,7 @@ def main_local_embedding(folder, doc_file, reidx, parent, N):
     cates = relevant_phs(embs, cates, int(N))
     pd_map, docs = revevant_docs(doc_file, reidx, cates)
     run_word2vec(pd_map, docs, cates, folder)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='local_embedding_training.py', \

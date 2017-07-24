@@ -50,14 +50,14 @@ class Clusterer:
         return 1 - cosine(vec_a, vec_b)
 
 
-def run_clustering(full_data, filter_keyword_file, n_cluster, parent_description,\
+def run_clustering(full_data, doc_id_file, filter_keyword_file, n_cluster, parent_direcotry, parent_description,\
                    cluster_keyword_file, hierarchy_file, doc_membership_file):
-    dataset = SubDataSet(full_data, filter_keyword_file)
-    print 'Start clustering.'
+    dataset = SubDataSet(full_data, doc_id_file, filter_keyword_file)
+    print 'Start clustering for ', len(dataset.keywords), ' keywords.'
     clus = Clusterer(dataset.embeddings, n_cluster)
     clus.fit()
     print 'Done clustering.'
-    dataset.write_cluster_keywords(clus, cluster_keyword_file)
+    dataset.write_cluster_members(clus, cluster_keyword_file, parent_direcotry)
     center_names = dataset.write_cluster_centers(clus, parent_description, hierarchy_file)
-    dataset.write_document_membership(clus, doc_membership_file)
+    dataset.write_document_membership(clus, doc_membership_file, parent_direcotry)
     return center_names
