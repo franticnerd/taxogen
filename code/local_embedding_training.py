@@ -114,7 +114,7 @@ def run_word2vec(pd_map, docs, cates, folder):
                 g.write(docs[d])
 
         # subprocess.Popen(["./word2vec", "-train", input_f, "-output", output_f], stdout=subprocess.PIPE)
-        subprocess.call(["./word2vec", "-threads", 10, "-train", input_f, "-output", output_f], stdout=subprocess.PIPE)
+        subprocess.call(["./word2vec", "-threads", "10", "-train", input_f, "-output", output_f], stdout=subprocess.PIPE)
 
 
 def main_local_embedding(folder, doc_file, reidx, parent, N):
