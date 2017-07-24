@@ -77,6 +77,6 @@ if __name__ == '__main__':
     # iter = 0 if len(sys.argv) <= 1 else int(sys.argv[2])
     # opt = load_params(para_file)  # load parameters as a dict
     # change_params(opt, iter)
-    # opt = load_toy_params()
-    opt = load_dblp_params()
+    opt = load_toy_params()
+    # opt = load_dblp_params()
     main(opt)
