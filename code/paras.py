@@ -28,11 +28,16 @@ def set_default_params():
     pd['doc_keyword_cnt_file'] = pd['data_dir'] + 'input/paper_keyword_cnt.txt'
     pd['keyword_file'] = pd['data_dir'] + 'input/keywords.txt'
     # output
-    pd['filtered_keyword_file'] = pd['data_dir'] + 'output/keywords-'
-    pd['hierarchy_file'] = pd['data_dir'] + 'output/hierarchy-'
-    pd['doc_membership_file'] = pd['data_dir'] + 'output/paper_cluster-'
-    pd['cluster_keyword_file'] = pd['data_dir'] + 'output/cluster_keyword-'
+    pd['input_dir'] = pd['data_dir'] + 'input/'
+    pd['root_node_dir'] = pd['data_dir'] + 'cluster/'
     pd['n_cluster'] = 5
+    pd['filter_thre'] = 0.15
+    pd['n_expand'] = 100
+
+    # pd['filtered_keyword_file'] = pd['data_dir'] + 'output/keywords-'
+    # pd['hierarchy_file'] = pd['data_dir'] + 'output/hierarchy-'
+    # pd['doc_membership_file'] = pd['data_dir'] + 'output/paper_cluster-'
+    # pd['cluster_keyword_file'] = pd['data_dir'] + 'output/cluster_keyword-'
     return pd
 
 

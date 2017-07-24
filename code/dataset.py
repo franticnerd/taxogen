@@ -116,10 +116,13 @@ class SubDataSet:
 
     def write_cluster_centers(self, clus, parent_description, output_file):
         clus_centers = clus.center_ids
+        center_names = []
         with open(output_file, 'w') as fout:
             for cluster_id, keyword_idx in clus_centers:
                 keyword = self.keywords[keyword_idx]
+                center_names.append(keyword)
                 fout.write(keyword + ' ' + parent_description + '\n')
+        return center_names
 
     def write_document_membership(self, clus, output_file):
         n_cluster = clus.n_cluster
@@ -148,11 +151,11 @@ class SubDataSet:
 
 
 # load the full data
-def load_dataset(opt):
-    document_file = opt['doc_file']
-    keyword_file = opt['keyword_file']
-    embedding_file = opt['embedding_file']
-    dataset = DataSet(embedding_file, document_file, keyword_file)
+def load_dataset(document_file, seed_keyword_file, embedding_file):
+    # document_file = opt['doc_file']
+    # keyword_file = opt['keyword_file']
+    # embedding_file = opt['embedding_file']
+    dataset = DataSet(embedding_file, document_file, seed_keyword_file)
     return dataset
 
 

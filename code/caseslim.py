@@ -244,42 +244,44 @@ def run_caseolap(cells, freq_data, target_phs, o_file, verbose=3, top_k=200):
 		of.write('[%s]\n' % phr_str)
 
 
-if __name__ == "__main__":
-	# Traditional CaseOLAP Setting
-	# parser = argparse.ArgumentParser(prog='caseslim.py', \
-	# 		description='CaseOLAP slim version without cube structure.')
-	# parser.add_argument('-label', required=True, \
-	# 		help='The file with labeled docs.') 
-	# parser.add_argument('-link', required=True, \
-	# 		help='The file with doc phrase relationships.') 
-	# parser.add_argument('-output', required=True, \
-	# 		help='The output result file')
-	# args = parser.parse_args()
-
-	# cells, freq_data, phrases = read_data(args.label, args.link)
-
-	# run_caseolap(cells, freq_data, args.output)
-
-	# Taxonomy Special case
-	parser = argparse.ArgumentParser(prog='caseslim.py', \
-			description='CaseOLAP slim version without cube structure.')
-	parser.add_argument('-folder', required=True, \
-			help='The files used.')
-	parser.add_argument('-iter', required=True, \
-			help='Iteration index.')
-	args = parser.parse_args()
-
-	link_f = '%s/keyword_cnt.txt' % args.folder
-	cell_f = '%s/paper_cluster-%s.txt' % (args.folder, args.iter)
-	token_f = '%s/cluster_keyword-%s.txt' % (args.folder, args.iter)
-	output_f = '%s/caseolap-%s.txt' % (args.folder, args.iter)
-
-
+def main_caseolap(link_f, cell_f, token_f, output_f):
 	cells, freq_data, phrases = read_data(cell_f, link_f)
 	target_phs = read_target_tokens(token_f)
-	# print target_phs
-
 	run_caseolap(cells, freq_data, target_phs, output_f)
+
+
+if __name__ == "__main__":
+    # Traditional CaseOLAP Setting
+    # parser = argparse.ArgumentParser(prog='caseslim.py', \
+    # 		description='CaseOLAP slim version without cube structure.')
+    # parser.add_argument('-label', required=True, \
+    # 		help='The file with labeled docs.')
+    # parser.add_argument('-link', required=True, \
+    # 		help='The file with doc phrase relationships.')
+    # parser.add_argument('-output', required=True, \
+    # 		help='The output result file')
+    # args = parser.parse_args()
+
+    # cells, freq_data, phrases = read_data(args.label, args.link)
+
+    # run_caseolap(cells, freq_data, args.output)
+
+    # Taxonomy Special case
+    parser = argparse.ArgumentParser(prog='caseslim.py', \
+                                     description='CaseOLAP slim version without cube structure.')
+    parser.add_argument('-folder', required=True, \
+                        help='The files used.')
+    parser.add_argument('-iter', required=True, \
+                        help='Iteration index.')
+    args = parser.parse_args()
+
+    link_f = '%s/keyword_cnt.txt' % args.folder
+    cell_f = '%s/paper_cluster-%s.txt' % (args.folder, args.iter)
+    token_f = '%s/cluster_keyword-%s.txt' % (args.folder, args.iter)
+    output_f = '%s/caseolap-%s.txt' % (args.folder, args.iter)
+    main_caseolap(link_f, cell_f, token_f, output_f)
+
+
 
 
 # python caseslim.py -folder ../data/cluster -iter 0
