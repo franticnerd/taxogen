@@ -44,6 +44,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre, n
     df = DataFiles(input_dir, node_dir)
     full_data = DataSet(df.embedding_file, df.doc_file)
     print 'Done reading the full data.'
+    print node_dir
 
     for iter in xrange(n_cluster_iter):
         if iter > 0:

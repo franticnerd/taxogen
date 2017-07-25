@@ -104,9 +104,12 @@ def run_word2vec(pd_map, docs, cates, folder):
         print 'Starting cell %s with %d docs.' % (cate, len(c_docs))
         
         # save file
-        sub_folder = '%s/%s' % (folder, cate)
-        input_f = '%s/text' % sub_folder
-        output_f = '%s/embeddings.txt' % sub_folder
+        # sub_folder = '%s/%s' % (folder, cate)
+        # input_f = '%s/text' % sub_folder
+        # output_f = '%s/embeddings.txt' % sub_folder
+        sub_folder = folder + cate + '/'
+        input_f = sub_folder + 'text'
+        output_f = sub_folder + 'embeddings.txt'
         if not os.path.exists(sub_folder):
             os.makedirs(sub_folder)
         with open(input_f, 'w+') as g:
