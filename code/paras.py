@@ -77,5 +77,5 @@ def load_dblp_params():
     pd['n_cluster'] = 5
     pd['filter_thre'] = 0.15
     pd['n_expand'] = 100
-    pd['n_cluster_iter'] = 2
+    pd['n_cluster_iter'] = 5
     return pd
