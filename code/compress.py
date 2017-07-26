@@ -7,7 +7,7 @@ from os.path import isfile, join, isdir, abspath, dirname, basename, exists
 from case_ranker import read_caseolap_result, rank_phrase
 
 def get_rep(folder, c_id, N):
-	print 'Start labeling for %s, %s ========================' % (folder, c_id)
+	print 'Start get representative phrases for %s, %s ========================' % (folder, c_id)
 	# print folder
 	par_folder = dirname(folder)
 	p_case_f = '%s/caseolap.txt' % par_folder
@@ -22,7 +22,7 @@ def get_rep(folder, c_id, N):
 			result_phrases.append(ph)
 		if len(result_phrases) >= N:
 			break
-
+	#print result_phrases
 	return result_phrases
 
 def recursion(root, o_file, N):
@@ -51,7 +51,7 @@ def recursion(root, o_file, N):
 		if c_folder != root:
 			phs = get_rep(c_folder, str(c_id), N)
 			phs_str = ','.join(phs)
-			# g.write('%s\t%s\n' % (c_name, phs_str))
+			g.write('%s\t%s\n' % (c_name, phs_str))
 
 	g.close()
 
