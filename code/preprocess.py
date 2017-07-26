@@ -66,7 +66,3 @@ o_file = '../data/candidates.txt'
 get_candidates(folder, o_file)
 
 
-
-
-
-
