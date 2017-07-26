@@ -126,6 +126,21 @@ def avg_emb(ele_map, embs_from, vec_size):
 
 	return avg_emb
 
+def load_hier_f(hier_f):
+	hier_map = {}
+
+	with open(hier_f) as f:
+		idx = 0
+		for line in f:
+			topic = line.split()[0]
+			hier_map[topic] = idx
+			idx += 1
+
+	return hier_map
+
+
+
+
 
 
 # ensure the path for the output file exist
