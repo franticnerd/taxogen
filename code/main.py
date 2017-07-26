@@ -38,7 +38,7 @@ level: the current level in the recursion
 
 
 def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre, n_expand, level):
-    if level >= 2:
+    if level >= 3:
         return
     print '============================= Running level ', level, ' and node ', parent, '============================='
     df = DataFiles(input_dir, node_dir)
