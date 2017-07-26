@@ -47,7 +47,6 @@ def label(folder, c_id):
 	min_score = 0.12
 	label_cands = {}
 
-
 	# for (ph, score) in parent_dist_ranking:
 	for (ph, score) in cands.items():
 		if ph not in parent_dist_map:
@@ -95,7 +94,6 @@ def recursion(root):
 	except:
 		for (o_l, l) in label_map.items():
 			print '%s ==> %s' % (o_l, l)
-
 
 
 if __name__ == "__main__":
