@@ -23,7 +23,7 @@ def read_caseolap_result(case_file):
 	return phrase_map, cell_cnt
 
 
-def rank_phrase(case_file, o_file, thres):
+def rank_phrase(case_file):
 
 	ph_dist_map = {}
 	smoothing_factor = 0.0
@@ -42,6 +42,11 @@ def rank_phrase(case_file, o_file, thres):
 		ph_dist_map[ph] = utils.kl_divergence(ph_vec, unif)
 
 	ranked_list = sorted(ph_dist_map.items(), key=operator.itemgetter(1), reverse=True)
+	
+	return ranked_list
+
+
+def write_keywords(o_file, ranked_list, thres):
 	with open(o_file, 'w+') as g:
 		for ph in ranked_list:
 			if ph[1] > thres:
@@ -62,4 +67,5 @@ if __name__ == "__main__":
 	input_f = '%s/caseolap-%s.txt' % (args.folder, args.iter)
 	output_f = '%s/keywords-%s.txt' % (args.folder, args.iter)
 
-	rank_phrase(input_f, output_f, float(args.thres))
+	ranked_list = rank_phrase(input_f)
+	write_keywords(output_f, ranked_list, float(args.thres))
