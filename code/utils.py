@@ -1,3 +1,4 @@
+import os
 import math
 import operator
 
@@ -124,3 +125,11 @@ def avg_emb(ele_map, embs_from, vec_size):
 		avg_emb[i] /= t_weight
 
 	return avg_emb
+
+
+
+# ensure the path for the output file exist
+def ensure_directory_exist(file_name):
+	directory = os.path.dirname(file_name)
+	if not os.path.exists(directory):
+		os.makedirs(directory)

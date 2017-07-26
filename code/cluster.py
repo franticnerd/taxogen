@@ -2,6 +2,7 @@ from collections import defaultdict
 
 from scipy.spatial.distance import cosine
 from spherecluster import SphericalKMeans
+from dataset import SubDataSet
 
 class Clusterer:
 
@@ -49,9 +50,14 @@ class Clusterer:
         return 1 - cosine(vec_a, vec_b)
 
 
-def run_clustering(embeddings, n_cluster):
-    print 'Start clustering.'
-    clus = Clusterer(embeddings, n_cluster)
+def run_clustering(full_data, doc_id_file, filter_keyword_file, n_cluster, parent_direcotry, parent_description,\
+                   cluster_keyword_file, hierarchy_file, doc_membership_file):
+    dataset = SubDataSet(full_data, doc_id_file, filter_keyword_file)
+    print 'Start clustering for ', len(dataset.keywords), ' keywords.'
+    clus = Clusterer(dataset.embeddings, n_cluster)
     clus.fit()
     print 'Done clustering.'
-    return clus
+    dataset.write_cluster_members(clus, cluster_keyword_file, parent_direcotry)
+    center_names = dataset.write_cluster_centers(clus, parent_description, hierarchy_file)
+    dataset.write_document_membership(clus, doc_membership_file, parent_direcotry)
+    return center_names

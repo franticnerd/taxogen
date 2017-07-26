@@ -7,9 +7,9 @@ import os
 
 def read_files(folder, parent):
     print parent
-    emb_file = '%s/embedding.txt' % folder
-    hier_file = '%s/hierarchy-final.txt' % folder
-    keyword_file = '%s/keywords-final.txt' % folder
+    emb_file = '%s/embeddings.txt' % folder
+    hier_file = '%s/hierarchy.txt' % folder
+    keyword_file = '%s/keywords.txt' % folder
 
     embs = utils.load_embeddings(emb_file)
     keywords = set()
@@ -40,7 +40,8 @@ def relevant_phs(embs, cates, N):
         worst = -100
         bestw = [-100] * (N + 1)
         bestp = [''] * (N + 1)
-        cate_ph = cate[2:]
+        # cate_ph = cate[2:]
+        cate_ph = cate
 
         for ph in embs:
             sim = utils.cossim(embs[cate_ph], embs[ph])
@@ -103,15 +104,32 @@ def run_word2vec(pd_map, docs, cates, folder):
         print 'Starting cell %s with %d docs.' % (cate, len(c_docs))
         
         # save file
-        sub_folder = '%s/%s' % (folder, cate)
-        input_f = '%s/text' % sub_folder
-        output_f = '%s/embedding.txt' % sub_folder
-        os.makedirs(sub_folder)
+        # sub_folder = '%s/%s' % (folder, cate)
+        # input_f = '%s/text' % sub_folder
+        # output_f = '%s/embeddings.txt' % sub_folder
+        sub_folder = folder + cate + '/'
+        input_f = sub_folder + 'text'
+        output_f = sub_folder + 'embeddings.txt'
+        if not os.path.exists(sub_folder):
+            os.makedirs(sub_folder)
         with open(input_f, 'w+') as g:
             for d in c_docs:
                 g.write(docs[d])
 
-        subprocess.Popen(["./word2vec", "-train", input_f, "-output", output_f], stdout=subprocess.PIPE)
+        print 'starting calling word2vec'
+        print input_f
+        print output_f
+        # embed_proc = subprocess.Popen(["./word2vec", "-threads", "20", "-train", input_f, "-output", output_f], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # embed_proc.wait()
+        subprocess.call(["./word2vec", "-threads", "20", "-train", input_f, "-output", output_f])
+        print 'done training word2vec'
+
+
+def main_local_embedding(folder, doc_file, reidx, parent, N):
+    embs, keywords, cates = read_files(folder, parent)
+    cates = relevant_phs(embs, cates, int(N))
+    pd_map, docs = revevant_docs(doc_file, reidx, cates)
+    run_word2vec(pd_map, docs, cates, folder)
 
 
 if __name__ == "__main__":
@@ -128,11 +146,8 @@ if __name__ == "__main__":
     parser.add_argument('-N', required=True, \
             help='The number of neighbor used to extract documents')
     args = parser.parse_args()
-     
-    embs, keywords, cates = read_files(args.folder, args.parent)
-    cates = relevant_phs(embs, cates, int(args.N))
-    pd_map, docs = revevant_docs(args.text, args.reidx, cates)
-    run_word2vec(pd_map, docs, cates, args.folder)
+    main_local_embedding(args.folder, args.text, args.reidx, args.parent, args.N)
+
 
 # python local_embedding_training.py -folder ../data/cluster -text ../data/paper_phrases.txt.frequent.hardcode -reidx ../data/reidx.txt -parent \* -N 100
 

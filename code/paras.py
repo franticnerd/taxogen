@@ -24,15 +24,20 @@ def set_default_params():
     pd['raw_doc_file'] = pd['data_dir'] + 'raw/papers.txt'
     pd['raw_keyword_file'] = pd['data_dir'] + 'raw/keywords.txt'
     pd['doc_file'] = pd['data_dir'] + 'input/papers.txt'
-    pd['embedding_file'] = pd['data_dir'] + 'input/embeddings.txt'
+    # pd['embedding_file'] = pd['data_dir'] + 'input/embeddings.txt'
     pd['doc_keyword_cnt_file'] = pd['data_dir'] + 'input/paper_keyword_cnt.txt'
-    pd['keyword_file'] = pd['data_dir'] + 'input/keywords.txt'
+    # pd['keyword_file'] = pd['data_dir'] + 'input/keywords.txt'
     # output
-    pd['filtered_keyword_file'] = pd['data_dir'] + 'output/keywords-'
-    pd['hierarchy_file'] = pd['data_dir'] + 'output/hierarchy-'
-    pd['doc_membership_file'] = pd['data_dir'] + 'output/paper_cluster-'
-    pd['cluster_keyword_file'] = pd['data_dir'] + 'output/cluster_keyword-'
-    pd['n_cluster'] = 5
+    pd['input_dir'] = pd['data_dir'] + 'input/'
+    pd['root_node_dir'] = pd['data_dir'] + 'cluster/'
+    pd['n_cluster'] = 2
+    pd['filter_thre'] = 0.15
+    pd['n_expand'] = 100
+
+    # pd['filtered_keyword_file'] = pd['data_dir'] + 'output/keywords-'
+    # pd['hierarchy_file'] = pd['data_dir'] + 'output/hierarchy-'
+    # pd['doc_membership_file'] = pd['data_dir'] + 'output/paper_cluster-'
+    # pd['cluster_keyword_file'] = pd['data_dir'] + 'output/cluster_keyword-'
     return pd
 
 
@@ -45,3 +50,32 @@ def change_params(pd, iter):
     pd['hierarchy_file'] += str(iter) + '.txt'
     pd['doc_membership_file'] += str(iter) + '.txt'
     pd['cluster_keyword_file'] += str(iter) + '.txt'
+
+
+
+def load_toy_params():
+    pd = dict()
+    pd['data_dir'] = '../data/toy/'
+    pd['doc_file'] = pd['data_dir'] + 'input/papers.txt'
+    pd['doc_keyword_cnt_file'] = pd['data_dir'] + 'input/keyword_cnt.txt'
+    pd['input_dir'] = pd['data_dir'] + 'input/'
+    pd['root_node_dir'] = pd['data_dir'] + 'cluster/'
+    pd['n_cluster'] = 2
+    pd['filter_thre'] = 0.15
+    pd['n_expand'] = 100
+    pd['n_cluster_iter'] = 2
+    return pd
+
+
+def load_dblp_params():
+    pd = dict()
+    pd['data_dir'] = '../data/dblp/'
+    pd['doc_file'] = pd['data_dir'] + 'input/papers.txt'
+    pd['doc_keyword_cnt_file'] = pd['data_dir'] + 'input/keyword_cnt.txt'
+    pd['input_dir'] = pd['data_dir'] + 'input/'
+    pd['root_node_dir'] = pd['data_dir'] + 'cluster/'
+    pd['n_cluster'] = 5
+    pd['filter_thre'] = 0.15
+    pd['n_expand'] = 100
+    pd['n_cluster_iter'] = 5
+    return pd

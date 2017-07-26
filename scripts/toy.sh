@@ -7,3 +7,4 @@ do
   python ../code/caseslim.py -folder ../data/toy/cluster -iter $i
   python ../code/case_ranker.py -folder ../data/toy/cluster -iter $i -thres 0.15
 done
+

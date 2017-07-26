@@ -130,3 +130,5 @@ ENV/
 *.exe
 *.out
 *.app
+
+./code/word2vec

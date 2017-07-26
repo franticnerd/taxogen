@@ -72,6 +72,12 @@ def counter_to_string(counter):
     return '\t'.join([str(e) for e in elements])
 
 
+def gen_doc_ids(output_file, n_doc):
+    with open(output_file, 'w') as fout:
+        for doc_id in xrange(n_doc):
+            fout.write(str(doc_id) + '\n')
+
+
 def main(opt):
     raw_doc_file = opt['raw_doc_file']
     raw_keyword_file = opt['raw_keyword_file']
@@ -86,7 +92,10 @@ def main(opt):
     gen_doc_keyword_cnt_file(doc_file, doc_keyword_cnt_file)
     print 'Done counting the keywords in documents.'
 
-if __name__ == '__main__':
-    para_file = None if len(sys.argv) <= 1 else sys.argv[1]
-    opt = load_params(para_file)  # load parameters as a dict
-    main(opt)
+# if __name__ == '__main__':
+#     para_file = None if len(sys.argv) <= 1 else sys.argv[1]
+#     opt = load_params(para_file)  # load parameters as a dict
+#     main(opt)
+
+# gen_doc_ids('../data/toy/cluster/doc_ids.txt', 350)
+# gen_doc_ids('../data/dblp/cluster/doc_ids.txt', 1889656)
