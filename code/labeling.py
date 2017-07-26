@@ -3,13 +3,35 @@ import utils
 import operator
 import Queue
 from os import listdir
-from os.path import isfile, join, isdir, abspath, dirname
+from os.path import isfile, join, isdir, abspath, dirname, basename
 from case_ranker import read_caseolap_result, rank_phrase
 
 def label(folder):
-	print dirname(folder)
-	# p_case_f = '%s'
-	return ''
+	# print folder
+	par_folder = dirname(folder)
+	cur_label = basename(folder)
+	p_case_f = '%s/caseolap.txt' % par_folder
+	c_case_f = '%s/caseolap.txt' % folder
+
+	
+	phrase_map_p, cell_map_p, tmp = read_caseolap_result(p_case_f)
+	ranked_phrases = rank_phrase(p_case_c)
+	desc_ps = {ph:dist for (ph, dist) in ranked_phrases}
+	min_score = 0.15
+	label_cands = {}
+
+	for (ph, score) in cell_map_p[cur_label]:
+		spread_factor = 0
+		if ph not in desc_ps:
+			spread_factor = 1.0 / min_score
+		else:
+			spread_factor = 1.0 / desc_ps[ph]
+
+		label_cands[ph] = score * spread_factor
+
+	ranked_list = sorted(label_cands.items(), key=operator.itemgetter(1), reverse=True)
+
+	return ranked_list[0][0]
 
 
 def recursion(root):
@@ -27,7 +49,7 @@ def recursion(root):
 		# handle current
 		if c_folder != root:
 			l = label(c_folder)
-			# print 'label for %s is: %s' % (c_folder, l)
+			print 'label for %s is: %s' % (c_folder, l)
 
 
 if __name__ == "__main__":

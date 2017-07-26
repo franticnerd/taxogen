@@ -5,6 +5,7 @@ import operator
 
 def read_caseolap_result(case_file):
 	phrase_map = {}
+	cell_map = {}
 
 	cell_cnt = 0
 	with open(case_file) as f:
@@ -12,6 +13,7 @@ def read_caseolap_result(case_file):
 			cell_cnt += 1
 			segments = line.strip('\r\n ').split('\t')
 			cell_id, phs_str = segments[0], segments[1][1:-1]
+			cell_map[cell_id] = []
 			segments = phs_str.split(', ')
 			for ph_score in segments:
 				parts = ph_score.split('|')
@@ -19,8 +21,9 @@ def read_caseolap_result(case_file):
 				if ph not in phrase_map:
 					phrase_map[ph] = {}
 				phrase_map[ph][cell_id] = score
+				cell_map[cell_id].append((ph, score))
 
-	return phrase_map, cell_cnt
+	return phrase_map, cell_map, cell_cnt
 
 
 def rank_phrase(case_file):
@@ -28,7 +31,7 @@ def rank_phrase(case_file):
 	ph_dist_map = {}
 	smoothing_factor = 0.0
 
-	phrase_map, cell_cnt = read_caseolap_result(case_file)
+	phrase_map, cell_map, cell_cnt = read_caseolap_result(case_file)
 
 	unif = [1.0 / cell_cnt] * cell_cnt
 
