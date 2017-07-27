@@ -84,9 +84,9 @@ def main(opt):
     level = 0
 
     # our method
-    root_dir = opt['data_dir'] + 'taxonomy-our/'
-    copy_tree(init_dir, root_dir)
-    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True)
+    # root_dir = opt['data_dir'] + 'taxonomy-our/'
+    # copy_tree(init_dir, root_dir)
+    # recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, True)
 
     # # without caseolap
     root_dir = opt['data_dir'] + 'ablation-no-caseolap/'
