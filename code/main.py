@@ -39,7 +39,7 @@ level: the current level in the recursion
 
 def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
           n_expand, level, caseolap=True, local_embedding=True):
-    if level >= 2:
+    if level >= 3:
         return
     print '============================= Running level ', level, ' and node ', parent, '============================='
     df = DataFiles(input_dir, node_dir)
@@ -84,17 +84,17 @@ def main(opt):
     level = 0
 
     # our method
-    root_dir = opt['data_dir'] + 'cluster-our/'
+    root_dir = opt['data_dir'] + 'taxonomy-our/'
     copy_tree(init_dir, root_dir)
     recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True)
 
     # # without caseolap
-    root_dir = opt['data_dir'] + 'cluster-no-caseolap/'
+    root_dir = opt['data_dir'] + 'ablation-no-caseolap/'
     copy_tree(init_dir, root_dir)
     recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, True)
 
     # without local embedding
-    root_dir = opt['data_dir'] + 'cluster-hierarchical_clustering/'
+    root_dir = opt['data_dir'] + 'hierarchical_clustering/'
     copy_tree(init_dir, root_dir)
     recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, False)
 
