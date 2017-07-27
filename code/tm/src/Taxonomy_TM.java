@@ -47,21 +47,22 @@ public class Taxonomy_TM {
 //        model.estimate();
         
         
-
-//        // ==================================================================== TEST
-        System.out.println("HLDA\n\n\n");
         Randoms random = new Randoms();
+//        // ==================================================================== TEST
+//        System.out.println("HLDA\n\n\n");
+//        
         HierarchicalLDA hlda = new HierarchicalLDA();
         hlda.initialize(instances, null, 3, random);
-        hlda.setTopicDisplay(20, 15);
+        hlda.setGamma(0.000001);
+        hlda.setTopicDisplay(2, 15);
         hlda.estimate(300);
         hlda.printState(new PrintWriter("/Users/taofangbo/Documents/workspace/local-embedding/data/hlda"));
-        
+
 //        // ======================================================================== END
         System.out.println("HPAM\n\n\n");
         
         HierarchicalPAM lpam = new HierarchicalPAM(5, 5, 1.0, 1.0);
-        lpam.estimate(instances, null, 300, 20, 0, 0, "/Users/taofangbo/Documents/workspace/local-embedding/data/hpam", random);
+        lpam.estimate(instances, null, 300, 50, 0, 0, "/Users/taofangbo/Documents/workspace/local-embedding/data/hpam", random);
         lpam.printTopWords(15, true);
         
         System.exit(1);

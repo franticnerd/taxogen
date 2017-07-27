@@ -21,7 +21,8 @@ def read_files(folder, parent):
 
     tmp_embs = {}
     for k in keywords:
-        tmp_embs[k] = embs[k]
+        if k in embs:
+            tmp_embs[k] = embs[k]
     embs = tmp_embs
 
     with open(hier_file) as f:

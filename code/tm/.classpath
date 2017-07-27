@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/mallet.jar"/>
 	<classpathentry kind="lib" path="lib/trove-2.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/bsh-2.0b5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
