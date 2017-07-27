@@ -55,6 +55,9 @@ def write_keywords(o_file, ranked_list, thres):
 			if ph[1] > thres:
 				g.write('%s\n' % (ph[0]))
 
+def main_rank_phrase(input_f, output_f, thres):
+	ranked_list = rank_phrase(input_f)
+	write_keywords(output_f, ranked_list, thres)
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(prog='case_ranker.py', \
@@ -70,5 +73,5 @@ if __name__ == "__main__":
 	input_f = '%s/caseolap-%s.txt' % (args.folder, args.iter)
 	output_f = '%s/keywords-%s.txt' % (args.folder, args.iter)
 
-	ranked_list = rank_phrase(input_f)
-	write_keywords(output_f, ranked_list, float(args.thres))
+	main_rank_phrase(input_f, output_f, float(args.thres))
+
