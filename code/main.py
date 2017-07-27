@@ -94,6 +94,11 @@ def main(opt):
     recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, True)
 
     # without local embedding
+    root_dir = opt['data_dir'] + 'ablation-no-local-embedding/'
+    copy_tree(init_dir, root_dir)
+    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, False)
+
+    # without caseolap and local embedding
     root_dir = opt['data_dir'] + 'hierarchical_clustering/'
     copy_tree(init_dir, root_dir)
     recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, False)
