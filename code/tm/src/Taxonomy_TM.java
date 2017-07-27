@@ -25,7 +25,7 @@ public class Taxonomy_TM {
         InstanceList instances = new InstanceList (new SerialPipes(pipeList));
 
 //        Reader fileReader = new InputStreamReader(new FileInputStream(new File("/Users/taofangbo/Documents/workspace/local-embedding/data/ap.txt")), "UTF-8");
-        Reader fileReader = new InputStreamReader(new FileInputStream(new File("/Users/taofangbo/Documents/workspace/local-embedding/data/paper_phrases.txt.frequent.hardcode.shuffle")), "UTF-8");
+        Reader fileReader = new InputStreamReader(new FileInputStream(new File("/Users/taofangbo/Documents/workspace/local-embedding/data/paper_phrases.txt.frequent.hardcode.shuffle30k")), "UTF-8");
         instances.addThruPipe(new CsvIterator (fileReader, Pattern.compile("^(\\S*)[\\s,]*(\\S*)[\\s,]*(.*)$"),
                                                3, 2, 1)); // data, label, name fields
 
