@@ -10,18 +10,59 @@ def get_rep(folder, c_id, N):
 	print 'Start get representative phrases for %s, %s ========================' % (folder, c_id)
 	# print folder
 	par_folder = dirname(folder)
-	p_case_f = '%s/caseolap.txt' % par_folder
 	cur_label = basename(folder)
 
 	result_phrases = [cur_label]
-	phrase_map_p, cell_map_p, tmp = read_caseolap_result(p_case_f)
-	parent_dist_ranking = cell_map_p[c_id]
 
-	for (ph, score) in parent_dist_ranking:
-		if ph not in result_phrases:
-			result_phrases.append(ph)
-		if len(result_phrases) >= N:
-			break
+	ph_f = '%s/caseolap.txt' % par_folder
+	if exists(ph_f):
+		phrase_map_p, cell_map_p, tmp = read_caseolap_result(ph_f)
+		parent_dist_ranking = cell_map_p[c_id]
+
+		for (ph, score) in parent_dist_ranking:
+			if ph not in result_phrases:
+				result_phrases.append(ph)
+			if len(result_phrases) >= N:
+				break
+
+	else:
+		print 'looking at embeddings for %s' % folder
+
+		ph_f = '%s/embeddings.txt' % par_folder
+		kw_f = '%s/keywords.txt' % par_folder
+		keywords = set()
+		with open(kw_f) as f:
+			for line in f:
+				keywords.add(line.strip('\r\n'))
+
+		embs = utils.load_embeddings(ph_f)
+		tmp_embs = {}
+		for k in keywords:
+			if k in embs:
+				tmp_embs[k] = embs[k]
+		embs = tmp_embs
+
+		worst = -100
+		bestw = [-100] * (N + 1)
+		bestp = [''] * (N + 1)
+
+		for ph in embs:
+			sim = utils.cossim(embs[cur_label], embs[ph])
+			if sim > worst:
+				for i in range(N):
+					if sim >= bestw[i]:
+						for j in range(N - 1, i - 1, -1):
+							bestw[j+1] = bestw[j]
+							bestp[j+1] = bestp[j]
+						bestw[i] = sim
+						bestp[i] = ph
+						worst = bestw[N-1]
+						break
+		
+		for ph in bestp[:N]:
+			if ph not in result_phrases:
+				result_phrases.append(ph)
+	
 	#print result_phrases
 	return result_phrases
 
