@@ -7,7 +7,7 @@ from local_embedding_training import main_local_embedding
 from shutil import copyfile
 from distutils.dir_util import copy_tree
 
-MAX_LEVEL = 2
+MAX_LEVEL = 3
 
 class DataFiles:
     def __init__(self, input_dir, node_dir):
@@ -90,20 +90,20 @@ def main(opt):
     # copy_tree(init_dir, root_dir)
     # recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, True)
 
-    # # without caseolap
-    root_dir = opt['data_dir'] + 'ablation-no-caseolap/'
-    copy_tree(init_dir, root_dir)
-    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, True)
+    # # # without caseolap
+    # root_dir = opt['data_dir'] + 'ablation-no-caseolap/'
+    # copy_tree(init_dir, root_dir)
+    # recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, True)
 
     # without local embedding
     root_dir = opt['data_dir'] + 'ablation-no-local-embedding/'
     copy_tree(init_dir, root_dir)
     recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, False)
 
-    # without caseolap and local embedding
-    root_dir = opt['data_dir'] + 'hierarchical_clustering/'
-    copy_tree(init_dir, root_dir)
-    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, False)
+    # # without caseolap and local embedding
+    # root_dir = opt['data_dir'] + 'hierarchical_clustering/'
+    # copy_tree(init_dir, root_dir)
+    # recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, False)
 
 
 if __name__ == '__main__':
