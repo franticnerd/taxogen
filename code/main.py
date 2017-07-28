@@ -7,6 +7,7 @@ from local_embedding_training import main_local_embedding
 from shutil import copyfile
 from distutils.dir_util import copy_tree
 
+MAX_LEVEL = 2
 
 class DataFiles:
     def __init__(self, input_dir, node_dir):
@@ -39,7 +40,7 @@ level: the current level in the recursion
 
 def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
           n_expand, level, caseolap=True, local_embedding=True):
-    if level >= 3:
+    if level > MAX_LEVEL:
         return
     print '============================= Running level ', level, ' and node ', parent, '============================='
     df = DataFiles(input_dir, node_dir)
@@ -67,7 +68,8 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
             tgt_file = node_dir + child + '/embeddings.txt'
             copyfile(src_file, tgt_file)
     else:
-        main_local_embedding(node_dir, df.doc_file, df.index_file, parent, n_expand)
+        if level < MAX_LEVEL:
+            main_local_embedding(node_dir, df.doc_file, df.index_file, parent, n_expand)
 
     for child in children:
         recur(input_dir, node_dir + child + '/', n_cluster, child, n_cluster_iter, \
