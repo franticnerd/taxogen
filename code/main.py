@@ -70,13 +70,13 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
             main_rank_phrase(df.caseolap_keyword_file, df.filtered_keyword_file, filter_thre)
 
     # prepare the embedding for child level
-    if local_embedding is False:
-        src_file = node_dir + 'embeddings.txt'
-        for child in children:
-            tgt_file = node_dir + child + '/embeddings.txt'
-            copyfile(src_file, tgt_file)
-    else:
-        if level < MAX_LEVEL:
+    if level < MAX_LEVEL:
+        if local_embedding is False:
+            src_file = node_dir + 'embeddings.txt'
+            for child in children:
+                tgt_file = node_dir + child + '/embeddings.txt'
+                copyfile(src_file, tgt_file)
+        else:
             main_local_embedding(node_dir, df.doc_file, df.index_file, parent, n_expand)
 
     for child in children:
@@ -93,25 +93,25 @@ def main(opt):
     n_cluster_iter = opt['n_cluster_iter']
     level = 0
 
-    # our method
-    root_dir = opt['data_dir'] + 'taxonomy-our-l4-0.25/'
-    copy_tree(init_dir, root_dir)
-    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, True)
+    # # our method
+    # root_dir = opt['data_dir'] + 'taxonomy-our-l4-0.25/'
+    # copy_tree(init_dir, root_dir)
+    # recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, True)
 
     # # # without caseolap
-    # root_dir = opt['data_dir'] + 'ablation-no-caseolap/'
-    # copy_tree(init_dir, root_dir)
-    # recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, True)
+    root_dir = opt['data_dir'] + 'ablation-no-caseolap-l4-0.25/'
+    copy_tree(init_dir, root_dir)
+    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, True)
 
     # # without local embedding
-    # root_dir = opt['data_dir'] + 'ablation-no-local-embedding-l4/'
-    # copy_tree(init_dir, root_dir)
-    # recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, False)
+    root_dir = opt['data_dir'] + 'ablation-no-local-embedding-l4/'
+    copy_tree(init_dir, root_dir)
+    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, False)
 
     # # without caseolap and local embedding
-    # root_dir = opt['data_dir'] + 'hierarchical_clustering/'
-    # copy_tree(init_dir, root_dir)
-    # recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, False)
+    root_dir = opt['data_dir'] + 'hc-l4/'
+    copy_tree(init_dir, root_dir)
+    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, False)
 
 
 if __name__ == '__main__':
