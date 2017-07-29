@@ -49,15 +49,23 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
 
     # filter the keywords
     if caseolap is False:
-        children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent, \
-                                  df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file)
+        try:
+            children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent, \
+                                      df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file)
+        except:
+            print 'Clustering not finished.'
+            return
         copyfile(df.seed_keyword_file, df.filtered_keyword_file)
     else:
         for iter in xrange(n_cluster_iter):
             if iter > 0:
                 df.seed_keyword_file = df.filtered_keyword_file
-            children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent,\
-                           df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file)
+            try:
+                children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent,\
+                               df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file)
+            except:
+                print 'Clustering not finished.'
+                return
             main_caseolap(df.link_file, df.doc_membership_file, df.cluster_keyword_file, df.caseolap_keyword_file)
             main_rank_phrase(df.caseolap_keyword_file, df.filtered_keyword_file, filter_thre)
 
