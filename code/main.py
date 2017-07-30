@@ -118,6 +118,6 @@ def main(opt):
 
 
 if __name__ == '__main__':
-    opt = load_toy_params()
-    # opt = load_dblp_params()
+    # opt = load_toy_params()
+    opt = load_dblp_params()
     main(opt)
