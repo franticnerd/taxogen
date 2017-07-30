@@ -48,13 +48,8 @@ def label_emb_centric(folder, c_id):
 	min_score = 0.12
 	label_cands = {}
 
-	for (ph, score) in cands:
-		if ph not in parent_dist_map:
-			continue
-
-
 	# for (ph, score) in parent_dist_ranking:
-	for (ph, score) in cands.items():
+	for (ph, score) in cands:
 		if ph not in parent_dist_map:
 			continue
 
@@ -139,25 +134,25 @@ def recursion(root):
 
 	label_map = {}
 
-	# try:
-	while not q.empty():
-		(c_folder, c_id) = q.get()
-		hier_map = utils.load_hier_f('%s/hierarchy.txt' % c_folder)
+	try:
+		while not q.empty():
+			(c_folder, c_id) = q.get()
+			hier_map = utils.load_hier_f('%s/hierarchy.txt' % c_folder)
 
-		for cluster in hier_map:
-			cc_id = hier_map[cluster]
-			cluster_folder = '%s/%s' % (c_folder, cluster)
-			q.put((cluster_folder, cc_id))
+			for cluster in hier_map:
+				cc_id = hier_map[cluster]
+				cluster_folder = '%s/%s' % (c_folder, cluster)
+				q.put((cluster_folder, cc_id))
 
-		# handle current
-		if c_folder != root:
-			l = label_emb_centric(c_folder, str(c_id))
-			cur_label = basename(c_folder)
-			label_map[cur_label] = l
-			print 'label for %s is: %s\n' % (c_folder, l)
-	# except:
-	# 	for (o_l, l) in label_map.items():
-	# 		print '%s ==> %s' % (o_l, l)
+			# handle current
+			if c_folder != root:
+				l = label_emb_centric(c_folder, str(c_id))
+				cur_label = basename(c_folder)
+				label_map[cur_label] = l
+				print 'label for %s is: %s\n' % (c_folder, l)
+	except:
+		for (o_l, l) in label_map.items():
+			print '%s ==> %s' % (o_l, l)
 
 
 if __name__ == "__main__":
