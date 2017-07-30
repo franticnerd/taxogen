@@ -54,6 +54,10 @@ def write_keywords(o_file, ranked_list, thres):
 		for ph in ranked_list:
 			if ph[1] > thres:
 				g.write('%s\n' % (ph[0]))
+	tmp_file = o_file + '-score.txt'
+	with open(tmp_file, 'w+') as g:
+		for ph in ranked_list:
+			g.write('%s\t%f\n' % (ph[0], ph[1]))
 
 def main_rank_phrase(input_f, output_f, thres):
 	ranked_list = rank_phrase(input_f)
