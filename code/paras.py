@@ -55,7 +55,7 @@ def change_params(pd, iter):
 
 def load_toy_params():
     pd = dict()
-    pd['data_dir'] = '../data/toy/'
+    pd['data_dir'] = '/Users/chao/data/projects/local-embedding/toy/'
     pd['doc_file'] = pd['data_dir'] + 'input/papers.txt'
     pd['doc_keyword_cnt_file'] = pd['data_dir'] + 'input/keyword_cnt.txt'
     pd['input_dir'] = pd['data_dir'] + 'input/'
@@ -69,13 +69,13 @@ def load_toy_params():
 
 def load_dblp_params():
     pd = dict()
-    pd['data_dir'] = '../data/dblp/'
+    pd['data_dir'] = '/shared/data/czhang82/projects/local-embedding/dblp/'
     pd['doc_file'] = pd['data_dir'] + 'input/papers.txt'
     pd['doc_keyword_cnt_file'] = pd['data_dir'] + 'input/keyword_cnt.txt'
     pd['input_dir'] = pd['data_dir'] + 'input/'
     pd['root_node_dir'] = pd['data_dir'] + 'cluster/'
     pd['n_cluster'] = 5
-    pd['filter_thre'] = 0.25
+    pd['filter_thre'] = 0.2
     pd['n_expand'] = 100
     pd['n_cluster_iter'] = 5
     return pd

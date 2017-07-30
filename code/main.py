@@ -6,6 +6,7 @@ from case_ranker import main_rank_phrase
 from local_embedding_training import main_local_embedding
 from shutil import copyfile
 from distutils.dir_util import copy_tree
+from os import symlink
 
 MAX_LEVEL = 3
 
@@ -75,7 +76,8 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
             src_file = node_dir + 'embeddings.txt'
             for child in children:
                 tgt_file = node_dir + child + '/embeddings.txt'
-                copyfile(src_file, tgt_file)
+                # copyfile(src_file, tgt_file)
+                symlink(src_file, tgt_file)
         else:
             main_local_embedding(node_dir, df.doc_file, df.index_file, parent, n_expand)
 
@@ -94,9 +96,9 @@ def main(opt):
     level = 0
 
     # # our method
-    # root_dir = opt['data_dir'] + 'our-l3-0.4-c10/'
-    # copy_tree(init_dir, root_dir)
-    # recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, True)
+    root_dir = opt['data_dir'] + 'our-l4-0.2/'
+    copy_tree(init_dir, root_dir)
+    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, True)
 
     # # # without caseolap
     # root_dir = opt['data_dir'] + 'ablation-no-caseolap-l4/'
@@ -104,7 +106,7 @@ def main(opt):
     # recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, True)
 
     # # without local embedding
-    root_dir = opt['data_dir'] + 'ablation-no-local-embedding-l4-0.25/'
+    root_dir = opt['data_dir'] + 'ablation-no-local-embedding-l4-0.2/'
     copy_tree(init_dir, root_dir)
     recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, False)
 
@@ -116,6 +118,6 @@ def main(opt):
 
 
 if __name__ == '__main__':
-    # opt = load_toy_params()
-    opt = load_dblp_params()
+    opt = load_toy_params()
+    # opt = load_dblp_params()
     main(opt)
