@@ -122,7 +122,7 @@ def run_word2vec(pd_map, docs, cates, folder):
         print output_f
         # embed_proc = subprocess.Popen(["./word2vec", "-threads", "20", "-train", input_f, "-output", output_f], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # embed_proc.wait()
-        subprocess.call(["./word2vec", "-threads", "20", "-train", input_f, "-output", output_f])
+        subprocess.call(["./word2vec", "-threads", "10", "-train", input_f, "-output", output_f])
         print 'done training word2vec'
 
 
