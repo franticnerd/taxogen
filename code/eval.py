@@ -55,9 +55,6 @@ def handler(folder):
 		print '%s accuracy: %d/%d - %f' % (method, correct[method], total[method], float(correct[method]) / total[method])
 
 
-
-
-
 	files = ['%s/%s' % (folder, f) for f in listdir(folder) if isfile(join(folder, f)) and 'isa_exp' in f]
 	print files
 
