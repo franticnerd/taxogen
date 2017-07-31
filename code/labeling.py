@@ -20,7 +20,7 @@ def label_emb_centric(folder, c_id):
 	if cur_label not in embs:
 		print 'Error!!!'
 		exit(1)
-	N = 30
+	N = 100
 	worst = -100
 	bestw = [-100] * (N + 1)
 	bestp = [''] * (N + 1)
@@ -145,7 +145,7 @@ def recursion(root):
 				q.put((cluster_folder, cc_id))
 
 			# handle current
-			if c_folder != root:
+			if cluster_folder != root:
 				l = label_emb_centric(c_folder, str(c_id))
 				cur_label = basename(c_folder)
 				label_map[cur_label] = l
