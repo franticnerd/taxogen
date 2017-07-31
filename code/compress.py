@@ -100,12 +100,19 @@ def get_rep(folder, c_id, N):
 		# Using TF-IDF to generate
 		print 'looking at tf-idf for %s' % folder
 		d_clus_f = '%s/paper_cluster.txt' % par_folder
+		kw_clus_f = '%s/cluster_keywords.txt' % par_folder
 		docs = []
+		kws = set()
 		with open(d_clus_f) as f:
 			for line in f:
 				doc_id, clus_id = line.strip('\r\n').split('\t')
 				if clus_id == c_id:
 					docs.append(doc_id)
+		with open(kw_clus_f) as f:
+			for line in f:
+				clus_id, ph = line.strip('\r\n').split('\t')
+				if clus_id == c_id:
+					kws.add(ph)
 		ph_scores = {x:0 for x in ph_idf}
 		for d in docs:
 			if d in doc_to_ph:
@@ -114,6 +121,9 @@ def get_rep(folder, c_id, N):
 		
 		for ph in ph_scores:
 			if ph_scores[ph] == 0:
+				continue
+			if ph not in kws:
+				ph_scores[ph] = 0
 				continue
 			ph_scores[ph] = 1 + math.log(ph_scores[ph])
 			ph_scores[ph] *= ph_idf[ph]
