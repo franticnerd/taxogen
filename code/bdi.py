@@ -80,7 +80,7 @@ def recursion(root, lvl):
 
         (c_folder, c_id, level, c_name) = q.get()
 
-        if level >= lvl:
+        if level >= int(lvl):
             continue
         
         hier_f = '%s/hierarchy.txt' % c_folder
