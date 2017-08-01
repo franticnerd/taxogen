@@ -79,6 +79,23 @@ def gen_isa_pairs(tax, isa_N, case_N):
 	return pairs
 
 
+def gen_subdomain_pairs(tax, isa_N):
+	pairs = {}
+
+	for node_name in tax.all_nodes:
+		node = tax.all_nodes[node_name]
+		if node.name == '*' or node.parent.name == '*':
+			continue
+
+		n_phs = '|'.join(node.ph_list[:isa_N])
+		p_phs = '|'.join(node.parent.ph_list[:isa_N])
+	
+		exp_line = '%s,%s' % (n_phs, p_phs)
+		pairs[exp_line] = node.level
+
+	return pairs
+
+
 def read_taxonomy(tax_f):
 	root = TNode('*', [])
 	tax = Taxonomy(tax_f, root)
@@ -102,6 +119,7 @@ def handler(folder, output, N, isa_N, case_N):
 
 	intru_maps = {}
 	isa_maps = {}
+	subdomain_map = {}
 
 	for tax_name in taxs:
 		print tax_name
@@ -110,66 +128,101 @@ def handler(folder, output, N, isa_N, case_N):
 		intru_maps[tax_name] = gen_intrusion_pairs(taxs[tax_name], N, case_N)
 		# isa_f = '%s/%s.isa' % (output, tax_name)
 		isa_maps[tax_name] = gen_isa_pairs(taxs[tax_name], isa_N, case_N)
+		subdomain_map[tax_name] = gen_subdomain_pairs(taxs[tax_name], isa_N)
 
 	# exit(1)
 
-	# intru_gold_f = '%s/intrusion_gold.txt' % output
+	# The intrusion part
+	if False:
+		intru_gold_f = '%s/intrusion_gold.txt' % output
 
-	# intru_all = {}
-	# for tax_name in taxs:
-	# 	for exp_str  in intru_maps[tax_name]:
-	# 		intru_all[exp_str] = (tax_name, intru_maps[tax_name][exp_str])
+		intru_all = {}
+		for tax_name in taxs:
+			for exp_str  in intru_maps[tax_name]:
+				intru_all[exp_str] = (tax_name, intru_maps[tax_name][exp_str])
 
-	# each_voter_n = 125
-	# subset_n = 0
+		each_voter_n = 125
+		subset_n = 0
 
-	# intru_exp_f = '%s/intrusion_exp_%d.csv' % (output, subset_n)
-	# g_exp = open(intru_exp_f, 'w+')
-	# g_exp.write('0,1,2,3,4,5,outlier id\n')
-	
-	# with open(intru_gold_f, 'w+') as g_gold:
-	# 	idx = 0
-	# 	for exp_str in intru_all:
-	# 		g_exp.write('%s\n' % exp_str)
-	# 		g_gold.write('%s\t%s\t%d\n' % (exp_str, intru_all[exp_str][0], intru_all[exp_str][1]))
+		intru_exp_f = '%s/intrusion_exp_%d.csv' % (output, subset_n)
+		g_exp = open(intru_exp_f, 'w+')
+		g_exp.write('0,1,2,3,4,5,outlier id\n')
+		
+		with open(intru_gold_f, 'w+') as g_gold:
+			idx = 0
+			for exp_str in intru_all:
+				g_exp.write('%s\n' % exp_str)
+				g_gold.write('%s\t%s\t%d\n' % (exp_str, intru_all[exp_str][0], intru_all[exp_str][1]))
 
-	# 		idx += 1
-	# 		if idx % each_voter_n == 0:
-	# 			subset_n += 1
-	# 			intru_exp_f = '%s/intrusion_exp_%d.csv' % (output, subset_n)
-	# 			g_exp.close()
-	# 			g_exp = open(intru_exp_f, 'w+')
-	# 			g_exp.write('0,1,2,3,4,5,outlier id\n')
-	# g_exp.close()
+				idx += 1
+				if idx % each_voter_n == 0:
+					subset_n += 1
+					intru_exp_f = '%s/intrusion_exp_%d.csv' % (output, subset_n)
+					g_exp.close()
+					g_exp = open(intru_exp_f, 'w+')
+					g_exp.write('0,1,2,3,4,5,outlier id\n')
+		g_exp.close()
 
 
-	isa_gold_f = '%s/isa_gold.txt' % output
+	# The old isa evaluation
+	if False:
+		isa_gold_f = '%s/isa_gold.txt' % output
 
-	intru_all = {}
-	for tax_name in taxs:
-		for exp_str  in isa_maps[tax_name]:
-			intru_all[exp_str] = (tax_name, isa_maps[tax_name][exp_str])
+		intru_all = {}
+		for tax_name in taxs:
+			for exp_str  in isa_maps[tax_name]:
+				intru_all[exp_str] = (tax_name, isa_maps[tax_name][exp_str])
 
-	each_voter_n = 125
-	subset_n = 0
+		each_voter_n = 125
+		subset_n = 0
 
-	intru_exp_f = '%s/isa_exp_%d.csv' % (output, subset_n)
-	g_exp = open(intru_exp_f, 'w+')
-	g_exp.write(',0,1,parent id\n')
-	
-	with open(isa_gold_f, 'w+') as g_gold:
-		idx = 0
-		for exp_str in intru_all:
-			g_exp.write('%s\n' % exp_str)
-			g_gold.write('%s\t%s\t%d\n' % (exp_str, intru_all[exp_str][0], intru_all[exp_str][1]))
+		intru_exp_f = '%s/isa_exp_%d.csv' % (output, subset_n)
+		g_exp = open(intru_exp_f, 'w+')
+		g_exp.write(',0,1,parent id\n')
+		
+		with open(isa_gold_f, 'w+') as g_gold:
+			idx = 0
+			for exp_str in intru_all:
+				g_exp.write('%s\n' % exp_str)
+				g_gold.write('%s\t%s\t%d\n' % (exp_str, intru_all[exp_str][0], intru_all[exp_str][1]))
 
-			idx += 1
-			if idx % each_voter_n == 0:
-				subset_n += 1
-				intru_exp_f = '%s/isa_exp_%d.csv' % (output, subset_n)
-				g_exp.close()
-				g_exp = open(intru_exp_f, 'w+')
-				g_exp.write(',0,1,parent id\n')
+				idx += 1
+				if idx % each_voter_n == 0:
+					subset_n += 1
+					intru_exp_f = '%s/isa_exp_%d.csv' % (output, subset_n)
+					g_exp.close()
+					g_exp = open(intru_exp_f, 'w+')
+					g_exp.write(',0,1,parent id\n')
+
+
+	if True:
+		sub_gold_f = '%s/subdomain_gold.txt' % output
+
+		intru_all = {}
+		for tax_name in taxs:
+			for exp_str  in subdomain_map[tax_name]:
+				intru_all[exp_str] = (tax_name, subdomain_map[tax_name][exp_str])
+
+		each_voter_n = 125
+		subset_n = 0
+
+		intru_exp_f = '%s/subdomain_exp_%d.csv' % (output, subset_n)
+		g_exp = open(intru_exp_f, 'w+')
+		g_exp.write('child,parent,y or n?\n')
+		
+		with open(sub_gold_f, 'w+') as g_gold:
+			idx = 0
+			for exp_str in intru_all:
+				g_exp.write('%s\n' % exp_str)
+				g_gold.write('%s\t%s\t%d\n' % (exp_str, intru_all[exp_str][0], intru_all[exp_str][1]))
+
+				idx += 1
+				if idx % each_voter_n == 0:
+					subset_n += 1
+					intru_exp_f = '%s/subdomain_exp_%d.csv' % (output, subset_n)
+					g_exp.close()
+					g_exp = open(intru_exp_f, 'w+')
+					g_exp.write('child,parent,y or n?\n')
 
 
 if __name__ == "__main__":
