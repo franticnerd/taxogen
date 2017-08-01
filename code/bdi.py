@@ -69,7 +69,7 @@ def output_dbi(dbi_scores):
         print 'Average DBI for level %d is: %f' % (lvl, sum(dbis) / len(dbis))
 
 
-def recursion(root):
+def recursion(root, lvl):
 
     q = Queue.Queue()
     q.put((root, -1, 1, '*'))
@@ -79,6 +79,9 @@ def recursion(root):
     while not q.empty():
 
         (c_folder, c_id, level, c_name) = q.get()
+
+        if level >= lvl:
+            continue
         
         hier_f = '%s/hierarchy.txt' % c_folder
         clus_kws_f = '%s/cluster_keywords.txt' % c_folder
@@ -109,6 +112,8 @@ if __name__ == "__main__":
             description='')
     parser.add_argument('-root', required=True, \
             help='root of data files.')
+    parser.add_argument('-lvl', required=True, \
+            help='')
     args = parser.parse_args()
 
-    recursion(args.root)
+    recursion(args.root, args.lvl)
