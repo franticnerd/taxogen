@@ -58,8 +58,8 @@ def get_rep(folder, c_id, N):
 				clus_id, ph = line.strip('\r\n').split('\t')
 				if clus_id == c_id:
 					kws.add(ph)
-		ph_f = '%s/embeddings.txt' % par_folder
-		embs = utils.load_embeddings(ph_f)
+		emb_f = '%s/embeddings.txt' % par_folder
+		embs = utils.load_embeddings(emb_f)
 
 		# print len(kws)
 		phrase_map_p, cell_map_p, tmp = read_caseolap_result(ph_f)
