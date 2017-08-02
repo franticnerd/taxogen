@@ -58,15 +58,28 @@ def get_rep(folder, c_id, N):
 				clus_id, ph = line.strip('\r\n').split('\t')
 				if clus_id == c_id:
 					kws.add(ph)
-		print len(kws)
+		ph_f = '%s/embeddings.txt' % par_folder
+		embs = utils.load_embeddings(ph_f)
+
+		# print len(kws)
 		phrase_map_p, cell_map_p, tmp = read_caseolap_result(ph_f)
 		parent_dist_ranking = cell_map_p[c_id]
 
+		ph_scores = {} 
 		for (ph, score) in parent_dist_ranking:
+			if ph not in kws:
+				continue
+			emb_dist = utils.cossim(embs[ph], embs[cur_label])
+			ph_scores[ph] = score * emb_dist
+
+		ph_scores = sorted(ph_scores.items(), key=operator.itemgetter(1), reverse=True)
+
+		for (ph, score) in ph_scores:
 			if ph not in result_phrases and ph in kws:
 				result_phrases.append(ph)
 			if len(result_phrases) >= N:
 				break
+		
 	elif ph_idf == None:
 		print 'looking at embeddings for %s' % folder
 
