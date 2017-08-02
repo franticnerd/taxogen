@@ -41,8 +41,8 @@ def handler(folder):
 					first = False
 					continue
 				segs = line.strip('\r\n').split(',')
-				key = ','.join(segs[:-1])
-				value = segs[-1]
+				key = ','.join(segs[:6])
+				value = segs[6]
 				(method, gold_value) = gold[key]
 				total[method] += 1
 				if gold_value == value:
@@ -55,10 +55,48 @@ def handler(folder):
 		print '%s accuracy: %d/%d - %f' % (method, correct[method], total[method], float(correct[method]) / total[method])
 
 
-	files = ['%s/%s' % (folder, f) for f in listdir(folder) if isfile(join(folder, f)) and 'isa_exp' in f]
+	# files = ['%s/%s' % (folder, f) for f in listdir(folder) if isfile(join(folder, f)) and 'isa_exp' in f]
+	# print files
+
+	# intru_gold = '%s/%s' % (folder, 'isa_gold.txt')
+
+	# gold = {}
+	# methods = set()
+	# with open(intru_gold, 'r') as f:
+	# 	for line in f:
+	# 		segs = line.strip('\r\n').split('\t')
+	# 		gold[segs[0]] = (segs[1], segs[2])
+	# 		methods.add(segs[1])
+
+
+	# total = {x:0 for x in methods}
+	# correct = {x:0 for x in methods}
+
+	# for intru_f in files:
+	# 	first = True
+	# 	with open(intru_f) as f:
+	# 		for line in f:
+	# 			if first:
+	# 				first = False
+	# 				continue
+	# 			segs = line.strip('\r\n').split(',')
+	# 			key = ','.join(segs[:-1])
+	# 			value = segs[-1]
+	# 			(method, gold_value) = gold[key]
+	# 			total[method] += 1
+	# 			if gold_value == value:
+	# 				correct[method] += 1
+
+	# print '\nIsa results!!'
+	# for method in total:
+	# 	print '%s accuracy: %d/%d - %f' % (method, correct[method], total[method], float(correct[method]) / total[method])
+
+
+	# subdomain result
+	files = ['%s/%s' % (folder, f) for f in listdir(folder) if isfile(join(folder, f)) and 'subdomain_exp' in f]
 	print files
 
-	intru_gold = '%s/%s' % (folder, 'isa_gold.txt')
+	intru_gold = '%s/%s' % (folder, 'subdomain_gold.txt')
 
 	gold = {}
 	methods = set()
@@ -71,6 +109,7 @@ def handler(folder):
 
 	total = {x:0 for x in methods}
 	correct = {x:0 for x in methods}
+	incorrect = {x:0 for x in methods}
 
 	for intru_f in files:
 		first = True
@@ -80,16 +119,18 @@ def handler(folder):
 					first = False
 					continue
 				segs = line.strip('\r\n').split(',')
-				key = ','.join(segs[:-1])
-				value = segs[-1]
-				(method, gold_value) = gold[key]
+				key = segs[0] + ',' + segs[1]
+				value = segs[2]
+				(method, lvl) = gold[key]
 				total[method] += 1
-				if gold_value == value:
+				if value == 'y':
 					correct[method] += 1
+				if value == 'n':
+					incorrect[method] += 1
 
-	print '\nIsa results!!'
+	print '\nSubdomain results!!'
 	for method in total:
-		print '%s accuracy: %d/%d - %f' % (method, correct[method], total[method], float(correct[method]) / total[method])
+		print '%s accuracy: %d/%d/%d - %f' % (method, correct[method], incorrect[method], total[method], float(correct[method]) / total[method])
 
 
 if __name__ == "__main__":

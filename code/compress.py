@@ -51,11 +51,17 @@ def get_rep(folder, c_id, N):
 
 	ph_f = '%s/caseolap.txt' % par_folder
 	if exists(ph_f):
+		kw_clus_f = '%s/cluster_keywords.txt' % par_folder
+		with open(kw_clus_f) as f:
+			for line in f:
+				clus_id, ph = line.strip('\r\n').split('\t')
+				if clus_id == c_id:
+					kws.add(ph)
 		phrase_map_p, cell_map_p, tmp = read_caseolap_result(ph_f)
 		parent_dist_ranking = cell_map_p[c_id]
 
 		for (ph, score) in parent_dist_ranking:
-			if ph not in result_phrases:
+			if ph not in result_phrases and ph in kws:
 				result_phrases.append(ph)
 			if len(result_phrases) >= N:
 				break
