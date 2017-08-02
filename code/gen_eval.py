@@ -133,7 +133,7 @@ def handler(folder, output, N, isa_N, case_N):
 	# exit(1)
 
 	# The intrusion part
-	if False:
+	if True:
 		intru_gold_f = '%s/intrusion_gold.txt' % output
 
 		intru_all = {}
@@ -141,7 +141,7 @@ def handler(folder, output, N, isa_N, case_N):
 			for exp_str  in intru_maps[tax_name]:
 				intru_all[exp_str] = (tax_name, intru_maps[tax_name][exp_str])
 
-		each_voter_n = 125
+		each_voter_n = 63
 		subset_n = 0
 
 		intru_exp_f = '%s/intrusion_exp_%d.csv' % (output, subset_n)
@@ -195,7 +195,7 @@ def handler(folder, output, N, isa_N, case_N):
 					g_exp.write(',0,1,parent id\n')
 
 
-	if True:
+	if False:
 		sub_gold_f = '%s/subdomain_gold.txt' % output
 
 		intru_all = {}
