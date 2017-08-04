@@ -84,6 +84,7 @@ class SegPhraseOutput(object):
                 phrase = seg[0]
                 pos_sequence = eval(seg[1])
                 self.phrase_to_pos_sequence[phrase] = pos_sequence
+        print("[INFO] Number of phrases before NP pruning = ", len(self.phrase_to_pos_sequence))
 
     def obtain_pos_sequence_to_score(self):
         pos_sequence_2_score = {}

@@ -28,54 +28,63 @@ def rmTag_concat(line):
     res = re.sub("<phrase>(.*?)</phrase>", concat, line)
     return res
 
+def rmTag_concat_segphrase(line):
+    line = re.sub(r"\[", "<phrase>", line)
+    line = re.sub(r"\]", "</phrase>", line)
+    def concat(matched):
+        phrase = matched.group()
+        phrase = re.sub('<phrase>', '', phrase)
+        phrase = re.sub('</phrase>', '', phrase)
+        return '_'.join(phrase.split())
 
+    res = re.sub("<phrase>(.*?)</phrase>", concat, line)
+    return res
 
 
 def main():
-    segphraseOutput = SegPhraseOutput()
-    cnt = 0
-    with open(RAW_SEGMENTATION, "r") as fin:
-        for line in fin:
-            cnt += 1
-            # if cnt == 100:
-            #     break
-            if cnt % 1000 == 0:
-                print(cnt)
-            line = line.strip()
-            segphraseOutput.parse_one_doc(line)
+    ### Step 1: obtain phrase_to_pos_sequence files
+    # segphraseOutput = SegPhraseOutput()
+    # cnt = 0
+    # with open(RAW_SEGMENTATION, "r") as fin:
+    #     for line in fin:
+    #         cnt += 1
+    #         # if cnt == 100:
+    #         #     break
+    #         if cnt % 1000 == 0:
+    #             print(cnt)
+    #         line = line.strip()
+    #         segphraseOutput.parse_one_doc(line)
 
     # print(len(segphraseOutput.phrase_to_pos_sequence))
     # for k in segphraseOutput.phrase_to_pos_sequence:
     #     print(k, segphraseOutput.phrase_to_pos_sequence[k])
 
-    output_file_path = "../../data/phrase_chunk_info_segphrase.txt"
-    segphraseOutput.save_phrase_to_pos_sequence(output_file_path)
+    # output_file_path = "../../data/phrase_chunk_info_segphrase.txt"
+    # segphraseOutput.save_phrase_to_pos_sequence(output_file_path)
+
+
+    ### Step 2: Heuristically select NP
+    # segphraseOutput = SegPhraseOutput()
+    # input_file_path = "../../data/phrase_chunk_info_segphrase.txt"
+    # segphraseOutput.load_phrase_to_pos_sequence(input_file_path)
+    # segphraseOutput.obtain_pos_sequence_to_score()
+    # segphraseOutput.obtain_candidate_phrase(threshold=0.95 , min_sup=10)
+    # output_file_path = "../../data/keywords_segphrase.txt"
+    # segphraseOutput.save_candidate_phrase(output_file_path)
 
 
 
-
-        ### Heuristically select NP
-    # autophraseOutput = AutoPhraseOutput()
-    # input_file_path = "../../data/phrase_chunk_info.txt"
-    # autophraseOutput.load_phrase_to_pos_sequence(input_file_path)
-    # autophraseOutput.obtain_pos_sequence_to_score()
-    # autophraseOutput.obtain_candidate_phrase(threshold=0.95, min_sup=5)
-    # output_file_path = "../../data/keywords.txt"
-    # autophraseOutput.save_candidate_phrase(output_file_path)
-
-
-
-    # cnt = 0
-    # output_file_path = "../../data/papers.txt"
-    # with open(RAW_SEGMENTATION, "r") as fin, open(output_file_path, "w") as fout:
-    #     for line in fin:
-    #         cnt += 1
-    #         if cnt % 1000 == 0:
-    #             print(cnt)
-    #         line = line.strip()
-    #         line = line.lower()
-    #         fout.write(rmTag_concat(line))
-    #         fout.write("\n")
+    cnt = 0
+    output_file_path = "../../data/papers_segphrase.txt"
+    with open(RAW_SEGMENTATION, "r") as fin, open(output_file_path, "w") as fout:
+        for line in fin:
+            cnt += 1
+            if cnt % 1000 == 0:
+                print(cnt)
+            line = line.strip()
+            line = line.lower()
+            fout.write(rmTag_concat_segphrase(line))
+            fout.write("\n")
 
     # output_file_path = "../../data/phrase_chunk_info.txt"
     # autophraseOutput.save_phrase_to_pos_sequence(output_file_path)
