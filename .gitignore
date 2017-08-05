@@ -4,6 +4,9 @@ data/
 # SegPhrase output
 SegPhrase/
 
+# labels
+labels/
+
 .DS_Store
 .AppleDouble
 .LSOverride
