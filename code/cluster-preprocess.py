@@ -89,10 +89,10 @@ def main(raw_dir, input_dir):
     gen_doc_keyword_cnt_file(doc_file, doc_keyword_cnt_file)
     print 'Done counting the keywords in documents.'
 
-raw_dir = '/shared/data/czhang82/projects/local-embedding/sp/raw/'
-input_dir = '/shared/data/czhang82/projects/local-embedding/sp/input/'
-main(raw_dir, input_dir)
+# raw_dir = '/shared/data/czhang82/projects/local-embedding/sp/raw/'
+# input_dir = '/shared/data/czhang82/projects/local-embedding/sp/input/'
+# main(raw_dir, input_dir)
+gen_doc_ids('../data/sp/init/doc_ids.txt', 93738)
 
 # gen_doc_ids('../data/toy/init/doc_ids.txt', 350)
 # gen_doc_ids('../data/dblp/init/doc_ids.txt', 1889656)
-# gen_doc_ids('../data/sp/init/doc_ids.txt', 1889656)
