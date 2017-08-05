@@ -81,7 +81,7 @@ def main(raw_dir, input_dir):
     embedding_file = input_dir + 'embeddings.txt'
     doc_file = input_dir + 'papers.txt'
     keyword_file = input_dir + 'keywords.txt'
-    doc_keyword_cnt_file = input_dir + 'keywords.txt'
+    doc_keyword_cnt_file = input_dir + 'keyword_cnt.txt'
     trim_keywords(raw_keyword_file, keyword_file, embedding_file)
     print 'Done trimming the keywords.'
     trim_document_set(raw_doc_file, doc_file, keyword_file)
