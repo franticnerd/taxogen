@@ -8,7 +8,7 @@ from shutil import copyfile
 from distutils.dir_util import copy_tree
 from os import symlink
 
-MAX_LEVEL = 1
+MAX_LEVEL = 3
 
 class DataFiles:
     def __init__(self, input_dir, node_dir):
@@ -96,22 +96,22 @@ def main(opt):
     level = 0
 
     # our method
-    root_dir = opt['data_dir'] + 'our-l2-0.25/'
+    root_dir = opt['data_dir'] + 'our-l4-0.25/'
     copy_tree(init_dir, root_dir)
     recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, True)
 
     # without caseolap
-    root_dir = opt['data_dir'] + 'ablation-no-caseolap-l2/'
+    root_dir = opt['data_dir'] + 'ablation-no-caseolap-l4/'
     copy_tree(init_dir, root_dir)
     recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, True)
 
     # without local embedding
-    root_dir = opt['data_dir'] + 'ablation-no-local-embedding-l2-0.25/'
+    root_dir = opt['data_dir'] + 'ablation-no-local-embedding-l4-0.25/'
     copy_tree(init_dir, root_dir)
     recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, False)
 
     # without caseolap and local embedding
-    root_dir = opt['data_dir'] + 'hc-l2/'
+    root_dir = opt['data_dir'] + 'hc-l4/'
     copy_tree(init_dir, root_dir)
     recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, False)
 
