@@ -10,7 +10,7 @@ sns.set(font_scale=3,
             'pdf.fonttype': 42}
         )
 
-labels = ['HClus', 'NoAC', 'NoLE', 'AdaTax']
+labels = ['HClus', 'NoAC', 'NoLE', 'Ours']
 
 overall = [1.996514, 1.939001, 2.008682, 1.906742]
 level_1 = [1.751910, 1.751735, 1.740692, 1.74117]
