@@ -99,7 +99,7 @@ def main(raw_dir, input_dir, init_dir):
 raw_dir = '/shared/data/czhang82/projects/local-embedding/sp/raw/'
 input_dir = '/shared/data/czhang82/projects/local-embedding/sp/input/'
 init_dir = '/shared/data/czhang82/projects/local-embedding/sp/init/'
-main(raw_dir, input_dir)
+main(raw_dir, input_dir, init_dir)
 
 # gen_doc_ids('../data/toy/init/doc_ids.txt', 350)
 # gen_doc_ids('../data/dblp/init/doc_ids.txt', 1889656)
