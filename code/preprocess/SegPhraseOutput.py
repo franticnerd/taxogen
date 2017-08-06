@@ -31,7 +31,6 @@ class SegPhraseOutput(object):
 
         tmp = parse(doc, relations=False, lemmata=False).split()
         token_info = itertools.chain(*tmp)
-        # print(token_info)
 
         IN_PHRASE_FLAG = False
         q = deque()
