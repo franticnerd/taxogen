@@ -89,7 +89,7 @@ def load_sp_params():
     pd['input_dir'] = pd['data_dir'] + 'input/'
     pd['root_node_dir'] = pd['data_dir'] + 'cluster/'
     pd['n_cluster'] = 5
-    pd['filter_thre'] = 0.1
+    pd['filter_thre'] = 0.25
     pd['n_expand'] = 200
     pd['n_cluster_iter'] = 5
     return pd
