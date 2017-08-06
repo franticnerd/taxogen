@@ -96,24 +96,24 @@ def main(opt):
     level = 0
 
     # our method
-    root_dir = opt['data_dir'] + 'our-l3-0.25/'
+    root_dir = opt['data_dir'] + 'our-l3-0.15/'
     copy_tree(init_dir, root_dir)
     recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, True)
 
-    # without caseolap
-    root_dir = opt['data_dir'] + 'ablation-no-caseolap-l3/'
-    copy_tree(init_dir, root_dir)
-    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, True)
+    # # without caseolap
+    # root_dir = opt['data_dir'] + 'ablation-no-caseolap-l3/'
+    # copy_tree(init_dir, root_dir)
+    # recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, True)
 
-    # without local embedding
-    root_dir = opt['data_dir'] + 'ablation-no-local-embedding-l3-0.25/'
-    copy_tree(init_dir, root_dir)
-    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, False)
+    # # without local embedding
+    # root_dir = opt['data_dir'] + 'ablation-no-local-embedding-l3-0.25/'
+    # copy_tree(init_dir, root_dir)
+    # recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, False)
 
-    # without caseolap and local embedding
-    root_dir = opt['data_dir'] + 'hc-l3/'
-    copy_tree(init_dir, root_dir)
-    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, False)
+    # # without caseolap and local embedding
+    # root_dir = opt['data_dir'] + 'hc-l3/'
+    # copy_tree(init_dir, root_dir)
+    # recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, False)
 
 
 if __name__ == '__main__':
