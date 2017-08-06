@@ -69,30 +69,37 @@ def counter_to_string(counter):
     return '\t'.join([str(e) for e in elements])
 
 
-def gen_doc_ids(output_file, n_doc):
+def gen_doc_ids(input_file, output_file):
+    with open(input_file, 'r') as fin:
+        docs = fin.readlines()
+        n_doc = len(docs)
     with open(output_file, 'w') as fout:
         for doc_id in xrange(n_doc):
             fout.write(str(doc_id) + '\n')
 
 
-def main(raw_dir, input_dir):
+def main(raw_dir, input_dir, init_dir):
     raw_doc_file = raw_dir + 'papers.txt'
     raw_keyword_file = raw_dir + 'keywords.txt'
     embedding_file = input_dir + 'embeddings.txt'
     doc_file = input_dir + 'papers.txt'
     keyword_file = input_dir + 'keywords.txt'
     doc_keyword_cnt_file = input_dir + 'keyword_cnt.txt'
+    doc_id_file = init_dir + 'doc_ids.txt'
+
     trim_keywords(raw_keyword_file, keyword_file, embedding_file)
     print 'Done trimming the keywords.'
     trim_document_set(raw_doc_file, doc_file, keyword_file)
     print 'Done trimming the documents.'
     gen_doc_keyword_cnt_file(doc_file, doc_keyword_cnt_file)
     print 'Done counting the keywords in documents.'
+    gen_doc_ids(doc_file, doc_id_file)
+    print 'Done generating the doc ids.'
 
-# raw_dir = '/shared/data/czhang82/projects/local-embedding/sp/raw/'
-# input_dir = '/shared/data/czhang82/projects/local-embedding/sp/input/'
-# main(raw_dir, input_dir)
-gen_doc_ids('../data/sp/init/doc_ids.txt', 94376)
+raw_dir = '/shared/data/czhang82/projects/local-embedding/sp/raw/'
+input_dir = '/shared/data/czhang82/projects/local-embedding/sp/input/'
+init_dir = '/shared/data/czhang82/projects/local-embedding/sp/init/'
+main(raw_dir, input_dir)
 
 # gen_doc_ids('../data/toy/init/doc_ids.txt', 350)
 # gen_doc_ids('../data/dblp/init/doc_ids.txt', 1889656)
