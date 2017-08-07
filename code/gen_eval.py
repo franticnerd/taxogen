@@ -141,7 +141,7 @@ def handler(folder, output, N, isa_N, case_N):
 			for exp_str  in intru_maps[tax_name]:
 				intru_all[exp_str] = (tax_name, intru_maps[tax_name][exp_str])
 
-		each_voter_n = 63
+		each_voter_n = 80
 		subset_n = 0
 
 		intru_exp_f = '%s/intrusion_exp_%d.csv' % (output, subset_n)
@@ -195,7 +195,7 @@ def handler(folder, output, N, isa_N, case_N):
 					g_exp.write(',0,1,parent id\n')
 
 
-	if False:
+	if True:
 		sub_gold_f = '%s/subdomain_gold.txt' % output
 
 		intru_all = {}
@@ -203,7 +203,7 @@ def handler(folder, output, N, isa_N, case_N):
 			for exp_str  in subdomain_map[tax_name]:
 				intru_all[exp_str] = (tax_name, subdomain_map[tax_name][exp_str])
 
-		each_voter_n = 125
+		each_voter_n = 80
 		subset_n = 0
 
 		intru_exp_f = '%s/subdomain_exp_%d.csv' % (output, subset_n)
@@ -236,7 +236,7 @@ if __name__ == "__main__":
 
 	N = 5 # number of phrase before intrusion
 	isa_N = 5 # number of phrases to represent a node in isa judgement
-	case_N = 125 # number of cases generated for each taxonomy and task
+	case_N = 49 # number of cases generated for each taxonomy and task
 
 	handler(args.folder, args.output, N, isa_N, case_N)
 

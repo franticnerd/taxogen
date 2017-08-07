@@ -24,25 +24,28 @@ public class Taxonomy_TM {
 
         InstanceList instances = new InstanceList (new SerialPipes(pipeList));
 
-        Reader fileReader = new InputStreamReader(new FileInputStream(new File("/Users/taofangbo/Documents/workspace/local-embedding/data/paper_phrases.txt.frequent.hardcode.long50k")), "UTF-8");
+//        Reader fileReader = new InputStreamReader(new FileInputStream(new File("/Users/taofangbo/Documents/workspace/local-embedding/data/paper_phrases.txt.frequent.hardcode.long5k")), "UTF-8");
+        Reader fileReader = new InputStreamReader(new FileInputStream(new File("/Users/taofangbo/Documents/workspace/local-embedding/data/sp/papers5k.txt")), "UTF-8");
         instances.addThruPipe(new CsvIterator (fileReader, Pattern.compile("^(\\S*)[\\s,]*(\\S*)[\\s,]*(.*)$"),
                                                3, 2, 1)); // data, label, name fields
 
         
         // hierarchical LDA
         Randoms random = new Randoms();
-        HierarchicalLDA hlda = new HierarchicalLDA();
-        hlda.initialize(instances, null, 4, random);
-        hlda.setAlpha(10000);
-        hlda.setTopicDisplay(2, 15);
-        hlda.estimate(500);
-        hlda.printState(new PrintWriter("/Users/taofangbo/Documents/workspace/local-embedding/data/hlda"));
-        System.out.println("HPAM\n\n\n");
+//        HierarchicalLDA hlda = new HierarchicalLDA();
+//        hlda.initialize(instances, null, 4, random);
+//        hlda.setAlpha(100000);
+////        hlda.setGamma(0.01);
+////        hlda.setEta(1000);
+//        hlda.setTopicDisplay(5, 15);
+//        hlda.estimate(500);
+//        hlda.printState(new PrintWriter("/Users/taofangbo/Documents/workspace/local-embedding/data/hlda"));
+//        System.out.println("HPAM\n\n\n");
         
         // hierarchical pam
-//        HierarchicalPAM lpam = new HierarchicalPAM(5, 5, 1.0, 1.0);
-//        lpam.estimate(instances, null, 300, 50, 0, 0, "/Users/taofangbo/Documents/workspace/local-embedding/data/hpam", random);
-//        lpam.printTopWords(15, true);
+        HierarchicalPAM lpam = new HierarchicalPAM(5, 5, 1.0, 1.0);
+        lpam.estimate(instances, null, 300, 50, 0, 0, "/Users/taofangbo/Documents/workspace/local-embedding/data/hpam", random);
+        lpam.printTopWords(15, true);
         
     }
 
