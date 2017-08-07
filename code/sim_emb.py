@@ -48,7 +48,9 @@ def compare(a_f, b_f):
 				sim_map[key] = utils.cossim(t_emb, embs[key])
 			
 			sim_map = sorted(sim_map.items(), key=operator.itemgetter(1), reverse=True)
-			print sim_map[:10]
+			output_str = '\n'.join([sim_map[i][0] + '\t' + str(sim_map[i][1]) for i in range(10)])
+			# print sim_map[:10]
+			print output_str
 			print 'group finished\n'
 
 
