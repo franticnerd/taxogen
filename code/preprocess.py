@@ -64,7 +64,7 @@ def get_reidx_file(text, cand_f, o_file):
 # get_reidx_file('../data/toy/input/papers.txt', '../data/toy/input/keywords.txt', '../data/toy/input/index.txt')
 # get_reidx_file('../data/dblp/input/papers.txt', '../data/dblp/input/keywords.txt', '../data/dblp/input/index.txt')
 # get_reidx_file('../data/sp/input/papers.txt', '../data/sp/input/keywords.txt', '../data/sp/input/index.txt')
-get_reidx_file('../data/dblp/input/papers.txt', '../data/dblp/input/keywords_method.txt', '../data/dblp/input/index_method.txt')
+get_reidx_file('../data/dblp/input/papers.txt', '../data/dblp/input/keywords.txt', '../data/dblp/input/index.txt')
 exit(1)
 
 folder = '../data/leef/query_relevant/'

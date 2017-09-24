@@ -99,7 +99,7 @@ def load_sp_params():
 
 def load_dblp_params_method():
     pd = dict()
-    pd['data_dir'] = '/shared/data/jiaming/local-embedding/dblp/'
+    pd['data_dir'] = '/shared/data/jiaming/local-embedding/data/dblp/'
     pd['doc_file'] = pd['data_dir'] + 'input/papers.txt'
     pd['doc_keyword_cnt_file'] = pd['data_dir'] + 'input/keyword_cnt.txt'
     pd['input_dir'] = pd['data_dir'] + 'input/'
