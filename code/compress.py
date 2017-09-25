@@ -191,6 +191,7 @@ def recursion(root, o_file, N):
 
 
 if __name__ == "__main__":
+  # python compress.py -root ../data/dblp/our-l3-0.15 -output ../data/dblp/taxonomies/l3-our-0.15.txt
 	parser = argparse.ArgumentParser(prog='compress.py', \
 			description='')
 	parser.add_argument('-root', required=True, \
@@ -203,6 +204,7 @@ if __name__ == "__main__":
 			help='number of phrases included.')
 	args = parser.parse_args()
 
+
 	N = 10
 	if args.N is not None:
 		N = int(args.N)
@@ -211,3 +213,5 @@ if __name__ == "__main__":
 		parse_reidx(args.reidx)
 
 	recursion(args.root, args.output, N)
+
+
