@@ -1,3 +1,9 @@
+'''
+__author__: Chao Zhang
+__description__: Construct Full dataset and sub dataset objects.
+  Currently, the document hard clustering is written in the file
+__latest_updates__: 09/25/2017
+'''
 import numpy as np
 from collections import defaultdict
 from math import log
@@ -70,7 +76,7 @@ class SubDataSet:
                 if keyword in full_data.embeddings:
                     keywords.append(keyword)
                 else:
-                    print keyword, ' not in the embedding file'
+                    print(keyword, ' not in the embedding file')
         return keywords
 
     def gen_keyword_id(self):
@@ -88,6 +94,11 @@ class SubDataSet:
         return np.array(ret)
 
     def load_documents(self, full_data, doc_id_file):
+        '''
+        :param full_data:
+        :param doc_id_file:
+        :return: trimmed documents along with its corresponding ids
+        '''
         doc_ids = self.load_doc_ids(doc_id_file)
         trimmed_doc_ids, trimmed_docs = [], []
         for doc_id in doc_ids:
@@ -123,7 +134,7 @@ class SubDataSet:
         n_cluster = clus.n_cluster
         clusters = clus.clusters  # a dict: cluster id -> keywords
         with open(cluster_file, 'w') as fout:
-            for clus_id in xrange(n_cluster):
+            for clus_id in range(n_cluster):
                 members = clusters[clus_id]
                 for keyword_id in members:
                     keyword = self.keywords[keyword_id]
@@ -175,6 +186,8 @@ class SubDataSet:
 
     def get_doc_membership(self, n_cluster, document, keyword_membership):
         ret = [0.0] * n_cluster
+        ## Strength of each document on each cluster is the tf-idf score. The tf part is considered during the
+        ## enumeration of document tokens.
         for keyword in document:
             keyword_id = self.keyword_to_id[keyword]
             cluster_id = keyword_membership[keyword_id]
@@ -183,6 +196,7 @@ class SubDataSet:
         return ret
 
     def assign_document(self, doc_membership):
+        ## Currently document cluster is a hard partition.
         best_idx, max_score = -1, 0
         for idx, score in enumerate(doc_membership):
             if score > max_score:
@@ -196,4 +210,4 @@ if __name__ == '__main__':
     keyword_file = data_dir + 'input/candidates.txt'
     embedding_file = data_dir + 'input/embeddings.txt'
     dataset = DataSet(embedding_file, document_file, keyword_file)
-    print len(dataset.get_candidate_embeddings())
+    print(len(dataset.get_candidate_embeddings()))

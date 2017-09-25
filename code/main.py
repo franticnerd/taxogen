@@ -1,3 +1,8 @@
+'''
+__author__: Chao Zhang
+__description__: Main function for TaxonGen
+__latest_updates__: 09/25/2017
+'''
 from dataset import DataSet
 from cluster import run_clustering
 from paras import *
@@ -43,10 +48,11 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
           n_expand, level, caseolap=True, local_embedding=True):
     if level > MAX_LEVEL:
         return
-    print '============================= Running level ', level, ' and node ', parent, '============================='
+    print('============================= Running level ', level, ' and node ', parent, '=============================')
     df = DataFiles(input_dir, node_dir)
+    ## TODO: Everytime we need to read-in the whole corpus, which can be slow.
     full_data = DataSet(df.embedding_file, df.doc_file)
-    print 'Done reading the full data.'
+    print('Done reading the full data.')
 
     # filter the keywords
     if caseolap is False:
@@ -54,18 +60,19 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
             children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent, \
                                       df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file)
         except:
-            print 'Clustering not finished.'
+            print('Clustering not finished.')
             return
         copyfile(df.seed_keyword_file, df.filtered_keyword_file)
     else:
-        for iter in xrange(n_cluster_iter):
+        ## Adaptive Clustering, maximal n_cluster_iter iterations
+        for iter in range(n_cluster_iter):
             if iter > 0:
                 df.seed_keyword_file = df.filtered_keyword_file
             try:
                 children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent,\
                                df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file)
             except:
-                print 'Clustering not finished.'
+                print('Clustering not finished.')
                 return
             main_caseolap(df.link_file, df.doc_membership_file, df.cluster_keyword_file, df.caseolap_keyword_file)
             main_rank_phrase(df.caseolap_keyword_file, df.filtered_keyword_file, filter_thre)
