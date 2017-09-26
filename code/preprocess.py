@@ -5,6 +5,7 @@ __latest_updates__: 09/24/2017
 '''
 from os import listdir
 from os.path import isfile, join
+import sys
 
 def get_candidates(folder, o_file):
   files = ['%s%s' % (folder, f) for f in listdir(folder) if isfile(join(folder, f))]
@@ -64,12 +65,19 @@ def get_reidx_file(text, cand_f, o_file):
 # get_reidx_file('../data/toy/input/papers.txt', '../data/toy/input/keywords.txt', '../data/toy/input/index.txt')
 # get_reidx_file('../data/dblp/input/papers.txt', '../data/dblp/input/keywords.txt', '../data/dblp/input/index.txt')
 # get_reidx_file('../data/sp/input/papers.txt', '../data/sp/input/keywords.txt', '../data/sp/input/index.txt')
-get_reidx_file('../data/dblp/input/papers.txt', '../data/dblp/input/keywords.txt', '../data/dblp/input/index.txt')
-exit(1)
+if __name__ == '__main__':
+  corpusName = sys.argv[1]
+  papers_file = '../data/'+corpusName+'/input/papers.txt'
+  keywords_file = '../data/'+corpusName+'/input/keywords.txt'
+  index_file = '../data/'+corpusName+'/input/index.txt'
+  get_reidx_file(papers_file, keywords_file, index_file)
 
-folder = '../data/leef/query_relevant/'
-o_file = '../data/candidates.txt'
 
-get_candidates(folder, o_file)
+# exit(1)
 
+# folder = '../data/leef/query_relevant/'
+# o_file = '../data/candidates.txt'
+#
+# get_candidates(folder, o_file)
+#
 

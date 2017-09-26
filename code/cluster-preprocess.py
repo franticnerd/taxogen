@@ -1,8 +1,9 @@
 '''
 __author__: Chao Zhang
 __description__:
-__latest_updates__: 09/24/2017
+__latest_updates__: 09/26/2017
 '''
+import sys
 from collections import Counter
 
 def trim_keywords(raw_keyword_file, keyword_file, embedding_file):
@@ -103,7 +104,7 @@ def gen_doc_ids(input_file, output_file):
 def main(raw_dir, input_dir, init_dir):
     ## Following are three required input files
     raw_doc_file = raw_dir + 'papers.txt'
-    raw_keyword_file = raw_dir + 'keywords_method.txt'
+    raw_keyword_file = raw_dir + 'keywords.txt'
     embedding_file = input_dir + 'embeddings.txt'
 
     ## Following are four output files
@@ -127,7 +128,9 @@ def main(raw_dir, input_dir, init_dir):
 # raw_dir = '/shared/data/czhang82/projects/local-embedding/sp/raw/'
 # input_dir = '/shared/data/czhang82/projects/local-embedding/sp/input/'
 # init_dir = '/shared/data/czhang82/projects/local-embedding/sp/init/'
-raw_dir = '../data/dblp/raw/'
-input_dir = '../data/dblp/input/'
-init_dir = '../data/dblp/init/'
-main(raw_dir, input_dir, init_dir)
+if __name__ == '__main__':
+    corpusName = sys.argv[1]
+    raw_dir = '../data/'+corpusName+'/raw/'
+    input_dir = '../data/'+corpusName+'/input/'
+    init_dir = '../data/'+corpusName+'/init/'
+    main(raw_dir, input_dir, init_dir)
