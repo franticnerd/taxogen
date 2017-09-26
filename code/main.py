@@ -1,8 +1,9 @@
 '''
 __author__: Chao Zhang
 __description__: Main function for TaxonGen
-__latest_updates__: 09/25/2017
+__latest_updates__: 09/26/2017
 '''
+import time
 from dataset import DataSet
 from cluster import run_clustering
 from paras import *
@@ -13,7 +14,7 @@ from shutil import copyfile
 from distutils.dir_util import copy_tree
 from os import symlink
 
-MAX_LEVEL = 2
+MAX_LEVEL = 3
 
 class DataFiles:
     def __init__(self, input_dir, node_dir):
@@ -49,10 +50,12 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
     if level > MAX_LEVEL:
         return
     print('============================= Running level ', level, ' and node ', parent, '=============================')
+    start = time.time()
     df = DataFiles(input_dir, node_dir)
     ## TODO: Everytime we need to read-in the whole corpus, which can be slow.
     full_data = DataSet(df.embedding_file, df.doc_file)
-    print('Done reading the full data.')
+    end = time.time()
+    print('[Main] Done reading the full data using time %s seconds' % (end-start))
 
     # filter the keywords
     if caseolap is False:
@@ -74,8 +77,12 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
             except:
                 print('Clustering not finished.')
                 return
+
+            start = time.time()
             main_caseolap(df.link_file, df.doc_membership_file, df.cluster_keyword_file, df.caseolap_keyword_file)
             main_rank_phrase(df.caseolap_keyword_file, df.filtered_keyword_file, filter_thre)
+            end = time.time()
+            print("[Main] Finish running CaseOALP using %s (seconds)" % (end - start))
 
     # prepare the embedding for child level
     if level < MAX_LEVEL:
@@ -86,7 +93,10 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
                 # copyfile(src_file, tgt_file)
                 symlink(src_file, tgt_file)
         else:
+            start = time.time()
             main_local_embedding(node_dir, df.doc_file, df.index_file, parent, n_expand)
+            end = time.time()
+            print("[Main] Finish running local embedding training using %s (seconds)" % (end - start))
 
     for child in children:
         recur(input_dir, node_dir + child + '/', n_cluster, child, n_cluster_iter, \

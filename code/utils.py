@@ -17,7 +17,7 @@ def load_embeddings(embedding_file):
 
 def kl_divergence(p, q):
 	if len(p) != len(q):
-		print 'KL divergence error: p, q have different length'
+		print('KL divergence error: p, q have different length')
 	c_entropy = 0
 	for i in range(len(p)):
 		if p[i] > 0:
@@ -39,12 +39,12 @@ def avg_weighted_colors(color_list, c_size):
 def l1_normalize(p):
 	sum_p = sum(p)
 	if sum_p <= 0:
-		print 'Normalizing invalid distribution'
+		print('Normalizing invalid distribution')
 	return [x/sum_p for x in p]
 
 def cossim(p, q):
 	if len(p) != len(q):
-		print 'KL divergence error: p, q have different length'
+		print('KL divergence error: p, q have different length')
 	
 	p_len = q_len = mix_len = 0
 

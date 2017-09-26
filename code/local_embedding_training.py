@@ -1,12 +1,16 @@
 #!/usr/bin/env
+'''
+__author__: Chao Zhang
+__description__: Run local embedding using word2vec
+__latest_updates__: 09/26/2017
+'''
 import argparse
 import subprocess
 import utils
 import os
 
-
 def read_files(folder, parent):
-    print parent
+    print("[Local-embedding] Reading file:", parent)
     emb_file = '%s/embeddings.txt' % folder
     hier_file = '%s/hierarchy.txt' % folder
     keyword_file = '%s/keywords.txt' % folder
@@ -31,7 +35,7 @@ def read_files(folder, parent):
             if segs[1] == parent:
                 cates[segs[0]] = set()
 
-    print 'Embedding, hierarchy and keywords read done.'
+    print('[Local-embedding] Finish reading embedding, hierarchy and keywords files.')
 
     return embs, keywords, cates
 
@@ -63,7 +67,7 @@ def relevant_phs(embs, cates, N):
         for ph in bestp[:N]:
             cates[cate].add(ph)
 
-    print 'Top similar phrases found.'
+    print('Top similar phrases found.')
 
     return cates
 
@@ -89,7 +93,7 @@ def revevant_docs(text, reidx, cates):
                 # print line
             pd_map[segments[0]] = set([int(x) for x in doc_ids])
 
-    print 'Relevant docs found.'
+    print('Relevant docs found.')
 
     return pd_map, docs
 
@@ -102,7 +106,7 @@ def run_word2vec(pd_map, docs, cates, folder):
         for ph in cates[cate]:
             c_docs = c_docs.union(pd_map[ph])
 
-        print 'Starting cell %s with %d docs.' % (cate, len(c_docs))
+        print('Starting cell %s with %d docs.' % (cate, len(c_docs)))
         
         # save file
         # sub_folder = '%s/%s' % (folder, cate)
@@ -117,13 +121,13 @@ def run_word2vec(pd_map, docs, cates, folder):
             for d in c_docs:
                 g.write(docs[d])
 
-        print 'starting calling word2vec'
-        print input_f
-        print output_f
+        print('[Local-embedding] starting calling word2vec')
+        print(input_f)
+        print(output_f)
         # embed_proc = subprocess.Popen(["./word2vec", "-threads", "20", "-train", input_f, "-output", output_f], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # embed_proc.wait()
-        subprocess.call(["./word2vec", "-threads", "10", "-train", input_f, "-output", output_f])
-        print 'done training word2vec'
+        subprocess.call(["./word2vec", "-threads", "20", "-train", input_f, "-output", output_f])
+        print('[Local-embedding] done training word2vec')
 
 
 def main_local_embedding(folder, doc_file, reidx, parent, N):

@@ -1,7 +1,12 @@
+'''
+__author__: Fangbao Tao
+__description__: Main function for CaseOLAP
+  Current we use a sim version of CaseOLAP
+__latest_updates__: 09/26/2017
+'''
 import argparse
 import utils
 import operator
-
 
 def read_caseolap_result(case_file):
 	phrase_map = {}
@@ -60,8 +65,9 @@ def write_keywords(o_file, ranked_list, thres):
 			g.write('%s\t%f\n' % (ph[0], ph[1]))
 
 def main_rank_phrase(input_f, output_f, thres):
-	ranked_list = rank_phrase(input_f)
-	write_keywords(output_f, ranked_list, thres)
+  ranked_list = rank_phrase(input_f)
+  write_keywords(output_f, ranked_list, thres)
+  print("[CaseOLAP] Finish pushing general terms up")
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(prog='case_ranker.py', \
