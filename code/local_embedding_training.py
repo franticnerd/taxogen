@@ -13,7 +13,7 @@ def read_files(folder, parent):
     print("[Local-embedding] Reading file:", parent)
     emb_file = '%s/embeddings.txt' % folder
     hier_file = '%s/hierarchy.txt' % folder
-    keyword_file = '%s/keywords.txt' % folder
+    keyword_file = '%s/keywords.txt' % folder ## here only consider those remaining keywords
 
     embs = utils.load_embeddings(emb_file)
     keywords = set()

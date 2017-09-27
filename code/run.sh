@@ -34,3 +34,8 @@ fi
 echo 'Start TaxonGen'
 python main.py
 
+echo 'Generate compressed taxonomy'
+if [ ! -d ../data/$corpusName/taxonomies ]; then
+	mkdir ../data/$corpusName/taxonomies
+fi
+python compress.py -root ../data/$corpusName/$taxonName -output ../data/$corpusName/taxonomies/$taxonName.txt

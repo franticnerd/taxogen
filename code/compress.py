@@ -42,7 +42,7 @@ def parse_reidx(reidx_f):
 
 
 def get_rep(folder, c_id, N):
-	print 'Start get representative phrases for %s, %s ========================' % (folder, c_id)
+	print('Start get representative phrases for %s, %s ========================' % (folder, c_id))
 	# print folder
 	par_folder = dirname(folder)
 	cur_label = basename(folder)

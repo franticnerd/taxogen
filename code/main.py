@@ -102,7 +102,6 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
         recur(input_dir, node_dir + child + '/', n_cluster, child, n_cluster_iter, \
               filter_thre, n_expand, level + 1, caseolap, local_embedding)
 
-
 def main(opt):
     input_dir = opt['input_dir']
     init_dir = opt['data_dir'] + 'init/'
