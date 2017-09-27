@@ -7,6 +7,9 @@ SegPhrase/
 # labels
 labels/
 
+# Experimental folder
+experimental/
+
 .DS_Store
 .AppleDouble
 .LSOverride

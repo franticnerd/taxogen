@@ -191,7 +191,7 @@ def recursion(root, o_file, N):
 
 
 if __name__ == "__main__":
-  # python compress.py -root ../data/dblp/our-l3-0.15 -output ../data/dblp/taxonomies/l3-our-0.15.txt
+  # python compress.py -root ../data/dblp/our-l3-0.15 -output ../data/dblp/taxonomies/l3-our-0.15.txt -N 200
 	parser = argparse.ArgumentParser(prog='compress.py', \
 			description='')
 	parser.add_argument('-root', required=True, \

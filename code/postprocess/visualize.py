@@ -86,8 +86,8 @@ def main(node_file, output_file, min_level, max_level, prefix='*'):
     edges = gen_edges(nodes)
     draw(nodes, edges, output_file)
 
-tax_dir = '/Users/chao/data/projects/local-embedding/dblp/taxonomies/'
-img_dir = '/Users/chao/data/projects/local-embedding/dblp/draw_tax/'
+tax_dir = '../../experimental/'
+img_dir = '../../experimental/'
 
 # main(tax_dir + 'toy.txt', img_dir + 'toy', min_level=2, max_level=4, prefix='*/computer_science')
 
@@ -113,20 +113,32 @@ img_dir = '/Users/chao/data/projects/local-embedding/dblp/draw_tax/'
 # main(tax_dir + 'no-localembedding.txt', img_dir + 'l3-nn-no-le', min_level=3, max_level=4, prefix='*/learning_algorithms/neural_networks')
 
 
-prefix_list = ['*', '*/information_retrieval', '*/information_retrieval/web_search']
-main(tax_dir + 'ours.txt', img_dir + 'our-overall', min_level=0, max_level=3, prefix=prefix_list)
+prefix_list = ['*', '*/information_retrieval', '*/information_retrieval/text_mining']
+main(tax_dir + 'taxonomy_keywords_application.txt', img_dir + 'IR-TM-application', min_level=0, max_level=3, prefix=prefix_list)
 
-prefix_list = ['*/learning_algorithms', '*/learning_algorithms/neural_network']
-main(tax_dir + 'ours.txt', img_dir + 'our-overall-ml', min_level=1, max_level=3, prefix=prefix_list)
+prefix_list = ['*', '*/information_retrieval', '*/information_retrieval/text_mining']
+main(tax_dir + 'taxonomy_keywords_method.txt', img_dir + 'IR-TM-method', min_level=0, max_level=3, prefix=prefix_list)
 
-prefix_list = ['*/information_retrieval/web_search/']
-main(tax_dir + 'no-localembedding.txt', img_dir + 'no-local-l4-ws', min_level=3, max_level=3, prefix=prefix_list)
+prefix_list = ['*', '*/object_recognition', '*/object_recognition/face_recognition']
+main(tax_dir + 'taxonomy_keywords_application.txt', img_dir + 'OR-FR-application', min_level=0, max_level=3, prefix=prefix_list)
 
-prefix_list = ['*/learning_algorithms/neural_networks/']
-main(tax_dir + 'no-localembedding.txt', img_dir + 'no-local-l4-nn', min_level=3, max_level=3, prefix=prefix_list)
+prefix_list = ['*', '*/object_recognition', '*/object_recognition/face_recognition']
+main(tax_dir + 'taxonomy_keywords_method.txt', img_dir + 'OR-FR-method', min_level=0, max_level=3, prefix=prefix_list)
 
-prefix_list = ['*/learning_algorithms/neural_network/']
-main(tax_dir + 'no-caseolap.txt', img_dir + 'no-case-l4-nn', min_level=3, max_level=3, prefix=prefix_list)
 
-prefix_list = ['*/1/1/']
-main(tax_dir + 'hlda.txt', img_dir + 'hlda-l4', min_level=3, max_level=3, prefix=prefix_list)
+
+
+# prefix_list = ['*/learning_algorithms', '*/learning_algorithms/neural_network']
+# main(tax_dir + 'ours.txt', img_dir + 'our-overall-ml', min_level=1, max_level=3, prefix=prefix_list)
+
+# prefix_list = ['*/information_retrieval/web_search/']
+# main(tax_dir + 'no-localembedding.txt', img_dir + 'no-local-l4-ws', min_level=3, max_level=3, prefix=prefix_list)
+#
+# prefix_list = ['*/learning_algorithms/neural_networks/']
+# main(tax_dir + 'no-localembedding.txt', img_dir + 'no-local-l4-nn', min_level=3, max_level=3, prefix=prefix_list)
+#
+# prefix_list = ['*/learning_algorithms/neural_network/']
+# main(tax_dir + 'no-caseolap.txt', img_dir + 'no-case-l4-nn', min_level=3, max_level=3, prefix=prefix_list)
+#
+# prefix_list = ['*/1/1/']
+# main(tax_dir + 'hlda.txt', img_dir + 'hlda-l4', min_level=3, max_level=3, prefix=prefix_list)
