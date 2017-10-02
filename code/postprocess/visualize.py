@@ -113,18 +113,23 @@ img_dir = '../../experimental/'
 # main(tax_dir + 'no-localembedding.txt', img_dir + 'l3-nn-no-le', min_level=3, max_level=4, prefix='*/learning_algorithms/neural_networks')
 
 
-prefix_list = ['*', '*/information_retrieval', '*/information_retrieval/text_mining']
-main(tax_dir + 'taxonomy_keywords_application.txt', img_dir + 'IR-TM-application', min_level=0, max_level=3, prefix=prefix_list)
+# prefix_list = ['*', '*/information_retrieval', '*/information_retrieval/text_mining']
+# main(tax_dir + 'taxonomy_keywords_application.txt', img_dir + 'IR-TM-application', min_level=0, max_level=3, prefix=prefix_list)
+#
+# prefix_list = ['*', '*/information_retrieval', '*/information_retrieval/text_mining']
+# main(tax_dir + 'taxonomy_keywords_method.txt', img_dir + 'IR-TM-method', min_level=0, max_level=3, prefix=prefix_list)
+#
+# prefix_list = ['*', '*/object_recognition', '*/object_recognition/face_recognition']
+# main(tax_dir + 'taxonomy_keywords_application.txt', img_dir + 'OR-FR-application', min_level=0, max_level=3, prefix=prefix_list)
+#
+# prefix_list = ['*', '*/object_recognition', '*/object_recognition/face_recognition']
+# main(tax_dir + 'taxonomy_keywords_method.txt', img_dir + 'OR-FR-method', min_level=0, max_level=3, prefix=prefix_list)
 
-prefix_list = ['*', '*/information_retrieval', '*/information_retrieval/text_mining']
-main(tax_dir + 'taxonomy_keywords_method.txt', img_dir + 'IR-TM-method', min_level=0, max_level=3, prefix=prefix_list)
+prefix_list = ['*', '*/learning_algorithms', '*/learning_algorithms/neural_network']
+main(tax_dir + 'taxonomy_keywords_application.txt', img_dir + 'ML-NN-application', min_level=0, max_level=3, prefix=prefix_list)
 
-prefix_list = ['*', '*/object_recognition', '*/object_recognition/face_recognition']
-main(tax_dir + 'taxonomy_keywords_application.txt', img_dir + 'OR-FR-application', min_level=0, max_level=3, prefix=prefix_list)
-
-prefix_list = ['*', '*/object_recognition', '*/object_recognition/face_recognition']
-main(tax_dir + 'taxonomy_keywords_method.txt', img_dir + 'OR-FR-method', min_level=0, max_level=3, prefix=prefix_list)
-
+prefix_list = ['*', '*/learning_algorithms', '*/learning_algorithms/neural_network']
+main(tax_dir + 'taxonomy_keywords_method.txt', img_dir + 'ML-NN-method', min_level=0, max_level=3, prefix=prefix_list)
 
 
 
