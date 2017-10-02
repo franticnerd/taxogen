@@ -20,7 +20,7 @@ if __name__ == '__main__':
     '''
     following is the defined schema
     totally 2 fields: 
-    id, sentence
+    docID, document
     '''
     request_body = {
         "settings": {
