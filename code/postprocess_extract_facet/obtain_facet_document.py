@@ -46,7 +46,8 @@ def main(args):
 
       num_terms = len(terms)
       ## use top-10 terms as query
-      query_terms_list = [ele.split(":")[0] for ele in terms][:max(10, num_terms)]
+      query_terms_list = [taxonName.split("/")[-1]]
+      query_terms_list.extend([ele.split(":")[0] for ele in terms][:max(10, num_terms)])
       query_string = " OR ".join(query_terms_list)
 
       search_body = {
