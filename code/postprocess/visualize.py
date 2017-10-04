@@ -125,11 +125,11 @@ img_dir = '../../experimental/'
 # prefix_list = ['*', '*/object_recognition', '*/object_recognition/face_recognition']
 # main(tax_dir + 'taxonomy_keywords_method.txt', img_dir + 'OR-FR-method', min_level=0, max_level=3, prefix=prefix_list)
 
-prefix_list = ['*', '*/learning_algorithms', '*/learning_algorithms/neural_network']
-main(tax_dir + 'taxonomy_keywords_application.txt', img_dir + 'ML-NN-application', min_level=0, max_level=3, prefix=prefix_list)
+prefix_list = ['*', '*/human_action', '*/human_action/speech_recognition']
+main(tax_dir + 'taxonomy_keywords_application_sp.txt', img_dir + 'HA-SR-application', min_level=0, max_level=3, prefix=prefix_list)
 
-prefix_list = ['*', '*/learning_algorithms', '*/learning_algorithms/neural_network']
-main(tax_dir + 'taxonomy_keywords_method.txt', img_dir + 'ML-NN-method', min_level=0, max_level=3, prefix=prefix_list)
+prefix_list = ['*', '*/human_action', '*/human_action/speech_recognition']
+main(tax_dir + 'taxonomy_keywords_method_sp.txt', img_dir + 'HR-SR-method', min_level=0, max_level=3, prefix=prefix_list)
 
 
 

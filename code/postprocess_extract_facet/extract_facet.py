@@ -34,9 +34,9 @@ def main(global_taxonomy, faceted_keyword_list, outputPath, topK=10):
 
 
 if __name__ == "__main__":
-  corpusName = "dblp"
+  corpusName = "sp"
   taxonName = "global_taxonomy"
-  facetName = "keywords_application"
+  facetName = "keywords_method_sp"
 
   global_taxonomy = "../../data/"+corpusName+"/taxonomies/"+taxonName+".txt"
   faceted_keyword_list = "../../data/"+corpusName+"/facets/"+facetName+".txt"
