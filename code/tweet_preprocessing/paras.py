@@ -13,5 +13,8 @@ la_pure_tweets = la_input + 'pure_tweets.txt'
 la_pos_tweets = la_input + 'pos_tag_tweets.txt'
 la_keywords = la_input + 'keywords.txt'
 
+#logger name
+MAIN_LOG = "MAIN LOG"
+
 #log
-la_log = la_output + 'log/log.txt'
+la_log = la_output + 'log/'
