@@ -4,14 +4,13 @@ from tweet_handler import TweetHandler
 from paras import la_log, la_tweets, la_input, la_pos_tweets, la_keywords, la_pure_tweets, lexnorm, MAIN_LOG
 from seed_term_generator import KeywordGenerator
 
-
 if __name__ == '__main__':
     git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[0]
-    dir = la_log + git_version
+    dir = la_log + git_version.strip('\n')
     if not os.path.exists(dir):
         os.mkdir(dir)
 
-    logger = Logger(dir+"/log.txt")
+    logger = Logger(dir + "/log.txt")
 
     # generate lexnorm.txt and pure_tweets.txt
     tweet_handler = TweetHandler(la_tweets, la_input, MAIN_LOG, lexnorm)

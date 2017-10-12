@@ -1,5 +1,6 @@
 import logging
 
+
 class Logger:
     def __init__(self, logging_file):
         self.logger = logging.getLogger("MAIN LOG")
@@ -14,7 +15,6 @@ class Logger:
 
     def get_logger(self):
         return self.logger
-
 
     @staticmethod
     def get_logger(logger_name):
