@@ -53,7 +53,7 @@ class KeywordGenerator:
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_pos_tag_tweets.__name__,
                                                   'Start building pos tag tweets'))
 
-        subprocess.Popen('python python/ner/extractEntities.py %s -o %s' % (self.pure_tweets, self.pos_tweets), shell=True)
+        subprocess.Popen('shell_script/pos_tag.sh %s %s' % (self.pure_tweets, self.pos_tweets), shell=True)
 
 
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_pos_tag_tweets.__name__,
