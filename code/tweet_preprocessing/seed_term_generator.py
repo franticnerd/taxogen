@@ -14,10 +14,10 @@ class KeywordGenerator:
         pos_tweet = pos_tweet.split(' ')
 
         for segment in pos_tweet:
-            segment = segment.split('/')
+            segment = segment.strip().split('/')
 
             if segment[2] in self.noun_tag:
-                self.keywords.add(segment[0])
+                self.keywords.add(segment[0]+"\n")
 
     def build_keyword(self):
 
