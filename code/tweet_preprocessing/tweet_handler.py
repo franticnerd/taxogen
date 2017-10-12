@@ -5,9 +5,10 @@ import subprocess
 from paras import la_tweets, la_input, lexnorm, la_log
 from util.logger import Logger
 class TweetHandler:
-    def __init__(self, file_in, file_out, logging_file):
+    def __init__(self, file_in, file_out, logging_file, lexnorm):
         self.input = file_in
         self.output = file_out
+        self.lexnorm = lexnorm
         self.lexnorm_dic = self.output + 'lexnorm.txt'
         self.pure_tweets = self.output + 'pure_tweets.txt'
         self.embeddings = self.output + 'embeddings.txt'
@@ -44,7 +45,7 @@ class TweetHandler:
         if not os.path.exists(self.lexnorm_dic):
             self.logger.info(Logger.build_log_message(self.__class__.__name__, self.preprocess.__name__,
                                                   'Start building lexnorm'))
-            self.build_lexnorm_dict(lexnorm, self.lexnorm_dic)
+            self.build_lexnorm_dict(self.lexnorm)
 
         with open(self.lexnorm_dic) as json_data:
             self.lexnorm = json.load(json_data)
@@ -72,5 +73,5 @@ class TweetHandler:
         self.run_word2vec()
 
 if __name__ == '__main__':
-    test = TweetHandler(la_tweets, la_input, la_log)
+    test = TweetHandler(la_tweets, la_input, la_log, lexnorm)
     test.preprocess()
