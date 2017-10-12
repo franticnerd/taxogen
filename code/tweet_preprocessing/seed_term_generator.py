@@ -1,13 +1,15 @@
-from paras import la_pos_tweets, la_keywords
+import subprocess, os
+from paras import la_pure_tweets, la_pos_tweets, la_keywords
 from datetime import datetime
 
 class KeywordGenerator:
 
-    def __init__(self, f_in, f_out):
-        self.input = f_in
+    def __init__(self, pure_tweets, pos_tweets, f_out):
+        self.pure_tweets = pure_tweets
+        self.pos_tweets = pos_tweets
         self.output = f_out
         self.keywords = set()
-        self.noun_tag = set(['NN', 'NNS', 'NNP', 'NNPS'])
+        self.noun_tag = {'NN', 'NNS', 'NNP', 'NNPS'}
 
     def parse_pos_tweet(self, pos_tweet):
 
@@ -21,7 +23,7 @@ class KeywordGenerator:
 
     def build_keyword(self):
 
-        with open(self.input, 'r') as f:
+        with open(self.pos_tweets, 'r') as f:
             data = f.readlines()
 
             for pos_tweet in data:
@@ -30,9 +32,20 @@ class KeywordGenerator:
         with open(self.output, 'w+') as f:
             f.writelines(self.keywords)
 
+    def build_pos_tag_tweets(self):
+
+        if os.path.exists(self.pos_tweets):
+            return
+
+        subprocess.call("cd ../../../twitter_nlp")
+        subprocess.call(['export TWITTER_NLP=./'])
+        subprocess.call(['python python/ner/extractEntities.py %s ' % self.pure_tweets, '-o', '%s' % self.pos_tweets])
+        subprocess.call("cd ../local-embedding/code/tweet_preprocessing/")
+
+
 if __name__ == '__main__':
     start = datetime.utcnow()
-    gen = KeywordGenerator(la_pos_tweets, la_keywords)
+    gen = KeywordGenerator(la_pure_tweets, la_pos_tweets, la_keywords)
     gen.build_keyword()
     finish = datetime.utcnow()
     exec_time = finish-start

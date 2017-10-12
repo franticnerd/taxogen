@@ -141,3 +141,6 @@ ENV/
 *.app
 
 ./code/word2vec
+
+#local log file
+code/tweet_preprocessing/log.txt
