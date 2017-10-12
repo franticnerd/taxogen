@@ -37,10 +37,10 @@ class KeywordGenerator:
         if os.path.exists(self.pos_tweets):
             return
 
-        subprocess.call("cd ../../../twitter_nlp")
-        subprocess.call(['export TWITTER_NLP=./'])
-        subprocess.call(['python python/ner/extractEntities.py %s ' % self.pure_tweets, '-o', '%s' % self.pos_tweets])
-        subprocess.call("cd ../local-embedding/code/tweet_preprocessing/")
+        subprocess.call("cd ../../../twitter_nlp", shell=True)
+        subprocess.call(['export TWITTER_NLP=./'], shell=True)
+        subprocess.call(['python python/ner/extractEntities.py %s -o %s' % (self.pure_tweets, self.pos_tweets)], shell=True)
+        subprocess.call("cd ../local-embedding/code/tweet_preprocessing/", shell=True)
 
 
 if __name__ == '__main__':

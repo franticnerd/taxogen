@@ -16,6 +16,6 @@ if __name__ == '__main__':
     tweet_handler = TweetHandler(la_tweets, la_input)
     tweet_handler.preprocess()
 
-    #generate keywords.txt
+    #generate pos_tag_tweets.txt and keywords.txt
     gen = KeywordGenerator(la_pure_tweets, la_pos_tweets, la_keywords)
     gen.build_keyword()
