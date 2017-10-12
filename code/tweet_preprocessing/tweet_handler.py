@@ -2,17 +2,18 @@ import json
 import preprocessor as p
 import os
 import subprocess
-from paras import la_tweets, la_input, lexnorm
+from paras import la_tweets, la_input, lexnorm, la_log
 from util.logger import Logger
 class TweetHandler:
-    def __init__(self, file_in, file_out):
+    def __init__(self, file_in, file_out, logging_file):
         self.input = file_in
         self.output = file_out
         self.lexnorm_dic = self.output + 'lexnorm.txt'
         self.pure_tweets = self.output + 'pure_tweets.txt'
         self.embeddings = self.output + 'embeddings.txt'
         p.set_options(p.OPT.EMOJI, p.OPT.URL, p.OPT.MENTION)
-        self.logger = Logger().get_logger()
+        self.logging_file = logging_file
+        self.logger = Logger(self.logging_file).get_logger()
 
     def build_lexnorm_dict(self, file_in):
         res = {}
@@ -71,5 +72,5 @@ class TweetHandler:
         self.run_word2vec()
 
 if __name__ == '__main__':
-    test = TweetHandler(la_tweets, la_input)
+    test = TweetHandler(la_tweets, la_input, la_log)
     test.preprocess()

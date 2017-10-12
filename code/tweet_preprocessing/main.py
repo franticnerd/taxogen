@@ -13,7 +13,7 @@ if __name__ == '__main__':
     logger = Logger(la_log)
 
     # generate lexnorm.txt and pure_tweets.txt
-    tweet_handler = TweetHandler(la_tweets, la_input)
+    tweet_handler = TweetHandler(la_tweets, la_input, la_log)
     tweet_handler.preprocess()
 
     #generate pos_tag_tweets.txt and keywords.txt
