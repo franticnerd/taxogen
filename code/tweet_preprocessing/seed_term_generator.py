@@ -46,6 +46,7 @@ class KeywordGenerator:
 if __name__ == '__main__':
     start = datetime.utcnow()
     gen = KeywordGenerator(la_pure_tweets, la_pos_tweets, la_keywords)
+    gen.build_pos_tag_tweets()
     gen.build_keyword()
     finish = datetime.utcnow()
     exec_time = finish-start

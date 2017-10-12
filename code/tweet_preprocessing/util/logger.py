@@ -5,11 +5,8 @@ class Logger:
         self.logger = logging.getLogger("MAIN LOG")
         self.logger.setLevel(logging.INFO)
         fh = logging.FileHandler(filename=logging_file)
-        ch = logging.StreamHandler()
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        ch.setFormatter(formatter)
         fh.setFormatter(formatter)
-        self.logger.addHandler(ch)
         self.logger.addHandler(fh)
 
     def get_logger(self):

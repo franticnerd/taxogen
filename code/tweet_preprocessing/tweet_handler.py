@@ -34,7 +34,7 @@ class TweetHandler:
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.run_word2vec.__name__,
                                                   'Run word2vec on pure_tweets.txt'))
         if not os.path.exists('word2vec'):
-            subprocess.call(['gcc word2vec.c -o word2vec -lm -pthread -O2 -Wall -funroll-loops -Wno-unused-result'],
+            subprocess.call(['gcc ../word2vec.c -o word2vec -lm -pthread -O2 -Wall -funroll-loops -Wno-unused-result'],
                             shell=True)
 
         subprocess.call(["./word2vec", "-threads", "20", "-train", self.pure_tweets, "-output", self.embeddings])
