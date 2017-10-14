@@ -25,7 +25,7 @@ class TweetHandler:
             data = f.readlines()
             for line in data:
                 line = line.strip().split('\t')
-                res[line[0]] = line[1]
+                res[line[0]] = line[1].strip().strip('\n')
             self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_lexnorm_dict.__name__,
                                                       'Finish building lexnorm.txt, write to file'))
         with open(self.lexnorm_dic, 'w+') as f:
@@ -62,10 +62,7 @@ class TweetHandler:
                     raw_tweet = tweet_content[7]
 
                     # clean tweet - remove emoji, mention and url
-                    clean_tweet = p.clean(raw_tweet).strip().strip('\n')
-
-                    if clean_tweet == '':
-                        continue
+                    clean_tweet = p.clean(raw_tweet)
 
                     tweet_words = clean_tweet.encode('ascii', 'ignore').split(' ')
                     for i in range(len(tweet_words)):
@@ -73,6 +70,9 @@ class TweetHandler:
                             tweet_words[i] = self.lexnorm[tweet_words[i]]
 
                     clean_tweet = ' '.join(tweet_words)
+                    clean_tweet = clean_tweet.strip(' ').strip('\n')
+                    if clean_tweet == '':
+                        continue
                     outf.write(clean_tweet + '\n')
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.preprocess.__name__,
                                                   'Embedding tweets'))
