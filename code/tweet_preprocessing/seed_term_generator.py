@@ -11,7 +11,7 @@ class KeywordGenerator:
         self.output = f_out
         self.keywords = set()
         self.noun_tag = {'NN', 'NNS', 'NNP', 'NNPS'}
-        self.logger = Logger.get_logger(MAIN_LOG)
+        self.logger = Logger.get_logger(logger_name)
 
     def parse_pos_tweet(self, pos_tweet):
 
@@ -53,8 +53,8 @@ class KeywordGenerator:
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_pos_tag_tweets.__name__,
                                                   'Start building pos tag tweets'))
 
-        subprocess.Popen('shell_script/pos_tag.sh %s %s' % (self.pure_tweets, self.pos_tweets), shell=True)
-
+        p = subprocess.Popen('shell_script/pos_tag.sh %s %s' % (self.pure_tweets, self.pos_tweets), shell=True)
+	p.communicate()
 
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_pos_tag_tweets.__name__,
                                                   'Finish building pos tag tweets'))
