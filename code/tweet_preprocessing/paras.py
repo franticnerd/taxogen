@@ -1,3 +1,4 @@
+la_raw = '/shared/data/lunanli3/local-embedding/raw/tweets/la/'
 la_input = '/shared/data/lunanli3/local-embedding/input/tweets/la/'
 la_output = '/shared/data/lunanli3/local-embedding/output/tweets/la/'
 

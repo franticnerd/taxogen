@@ -110,13 +110,16 @@ def load_dblp_params_method():
     pd['n_cluster_iter'] = 2
     return pd
 
-def load_tweets_params_method():
+def load_tweets_params_method(corpusPath):
     pd = dict()
     pd['data_dir'] = '/shared/data/lunanli3/local-embedding/'
-    pd['input_dir'] = pd['data_dir'] + 'input/tweets/la/'
-    pd['doc_file'] = pd['input_dir'] + 'tweets.txt'
-    pd['doc_keyword_cnt_file'] = pd['input_dir'] + 'input/keyword_cnt.txt'
-    pd['input_dir'] = pd['data_dir'] + 'input/'
+    pd['raw_dir'] = pd['data_dir'] + 'raw/' + corpusPath + '/'
+    pd['input_dir'] = pd['data_dir'] + 'input/' + corpusPath + '/'
+    pd['init_dir'] = pd['data_dir'] + 'init/' + corpusPath + '/'
+
+    pd['doc_file'] = pd['raw_dir'] + 'pure_tweets.txt'
+    pd['doc_keyword_cnt_file'] = pd['raw_dir'] + 'keywords.txt'
+    pd['doc_keyword_embedding_file'] = pd['raw_dir'] + 'embeddings.txt'
     pd['root_node_dir'] = pd['data_dir'] + 'cluster/'
     pd['n_cluster'] = 5
     pd['filter_thre'] = 0.25
