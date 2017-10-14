@@ -136,9 +136,13 @@ if __name__ == '__main__':
 
     else:
         corpusPath = sys.argv[1]
+        print('Corpus path is: %s' % corpusPath)
         tweet_paras = load_tweets_params_method(corpusPath)
+        print('Raw dir is: %s' % tweet_paras['raw_dir'])
         input_dir = tweet_paras['input_dir']
+        print('Input dir is: %s' % input_dir)
         init_dir = tweet_paras['init_dir']
+        print('Init dir is: %s' % init_dir)
 
         if not os.path.exists(input_dir):
             os.mkdir(input_dir)
