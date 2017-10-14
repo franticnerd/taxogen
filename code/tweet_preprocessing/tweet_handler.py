@@ -62,7 +62,11 @@ class TweetHandler:
                     raw_tweet = tweet_content[7]
 
                     # clean tweet - remove emoji, mention and url
-                    clean_tweet = p.clean(raw_tweet)
+                    clean_tweet = p.clean(raw_tweet).strip().strip('\n')
+
+                    if clean_tweet == '':
+                        continue
+
                     tweet_words = clean_tweet.encode('ascii', 'ignore').split(' ')
                     for i in range(len(tweet_words)):
                         if tweet_words[i] in self.lexnorm:

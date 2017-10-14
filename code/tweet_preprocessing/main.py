@@ -17,6 +17,6 @@ if __name__ == '__main__':
     tweet_handler.preprocess()
 
     # generate pos_tag_tweets.txt and keywords.txt
-    gen = KeywordGenerator(la_pure_tweets, la_pos_tweets, la_keywords, MAIN_LOG)
-    gen.build_pos_tag_tweets()
-    gen.build_keyword()
+    # gen = KeywordGenerator(la_pure_tweets, la_pos_tweets, la_keywords, MAIN_LOG)
+    # gen.build_pos_tag_tweets()
+    # gen.build_keyword()
