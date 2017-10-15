@@ -104,7 +104,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
 
 def main(opt):
     input_dir = opt['input_dir']
-    init_dir = opt['data_dir'] + 'init/'
+    init_dir = opt['init_dir']
     n_cluster = opt['n_cluster']
     filter_thre = opt['filter_thre']
     n_expand = opt['n_expand']
@@ -112,7 +112,7 @@ def main(opt):
     level = 0
 
     # our method
-    root_dir = opt['data_dir'] + 'our-l3-0.15/'
+    root_dir = opt['data_dir'] + 'our-tweets'
     copy_tree(init_dir, root_dir)
     recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, True)
 
@@ -136,6 +136,7 @@ if __name__ == '__main__':
     # opt = load_toy_params()
     # opt = load_dblp_params()
     # opt = load_sp_params()
-    opt = load_dblp_params_method()
+    #opt = load_dblp_params_method()
+    opt = load_tweets_params_method('tweets/la')
     main(opt)
 
