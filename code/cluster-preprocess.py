@@ -135,7 +135,7 @@ if __name__ == '__main__':
         print('Usage: python dir/file')
 
     else:
-	print(sys.argv)
+        print(sys.argv)
         corpusPath = sys.argv[1]
         print('Corpus path is: %s' % corpusPath)
         tweet_paras = load_tweets_params_method(corpusPath)
