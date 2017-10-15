@@ -4,6 +4,9 @@ __description__: Main function for TaxonGen
 __latest_updates__: 09/26/2017
 '''
 import time
+
+import pydevd as pydevd
+
 from dataset import DataSet
 from cluster import run_clustering
 from paras import *
@@ -58,6 +61,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
     print('[Main] Done reading the full data using time %s seconds' % (end-start))
 
     # filter the keywords
+    print("caseolap is: %s" % caseolap)
     if caseolap is False:
         try:
             children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent, \
@@ -137,6 +141,9 @@ if __name__ == '__main__':
     # opt = load_dblp_params()
     # opt = load_sp_params()
     #opt = load_dblp_params_method()
+    pydevd.settrace('dmserv5.cs.illinois.edu', port = 5000)
+
+
     opt = load_tweets_params_method('tweets/la')
     print()
     print("[Main] Finish load parameters: %s" % str(opt))
