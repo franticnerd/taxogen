@@ -47,10 +47,14 @@ def relevant_phs(embs, cates, N):
         bestp = [''] * (N + 1)
         # cate_ph = cate[2:]
         cate_ph = cate
-
         for ph in embs:
-            sim = utils.cossim(embs[cate_ph], embs[ph])
-            if sim > worst:
+	    sim = 0
+	    if cate_ph in embs:
+            	sim = utils.cossim(embs[cate_ph], embs[ph])
+            else:
+		print("cate_ph not in embs: %s"%cate)
+		print(("embs is %s")%embs)
+	    if sim > worst:
                 for i in range(N):
                     if sim >= bestw[i]:
                         for j in range(N - 1, i - 1, -1):

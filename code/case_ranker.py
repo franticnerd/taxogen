@@ -22,7 +22,8 @@ def read_caseolap_result(case_file):
 			segments = phs_str.split(', ')
 			for ph_score in segments:
 				parts = ph_score.split('|')
-				ph, score = parts[0], float(parts[1])
+				#print('parts is: %s'%parts)
+				ph, score = parts[0], float(parts[-1])
 				if ph not in phrase_map:
 					phrase_map[ph] = {}
 				phrase_map[ph][cell_id] = score

@@ -5,7 +5,6 @@ __latest_updates__: 09/26/2017
 '''
 import time
 
-import pydevd as pydevd
 
 from dataset import DataSet
 from cluster import run_clustering
@@ -141,7 +140,6 @@ if __name__ == '__main__':
     # opt = load_dblp_params()
     # opt = load_sp_params()
     #opt = load_dblp_params_method()
-    pydevd.settrace('dmserv5.cs.illinois.edu', port = 5000)
 
 
     opt = load_tweets_params_method('tweets/la')
