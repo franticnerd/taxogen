@@ -135,6 +135,7 @@ if __name__ == '__main__':
         print('Usage: python dir/file')
 
     else:
+	print(sys.argv)
         corpusPath = sys.argv[1]
         print('Corpus path is: %s' % corpusPath)
         tweet_paras = load_tweets_params_method(corpusPath)
@@ -145,9 +146,9 @@ if __name__ == '__main__':
         print('Init dir is: %s' % init_dir)
 
         if not os.path.exists(input_dir):
-            os.mkdir(input_dir)
+            os.makedirs(input_dir)
 
         if not os.path.exists(init_dir):
-            os.mkdir(init_dir)
+            os.makedirs(init_dir)
 
         main(tweet_paras)
