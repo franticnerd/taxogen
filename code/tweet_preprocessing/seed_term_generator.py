@@ -6,6 +6,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 import json
 from tweet_handler import preprocess_tweet
+from collections import OrderedDict
+import operator
 
 class KeywordGenerator:
     def __init__(self, pure_tweets, pos_tweets, f_out, logger_name, category, category_keywords, embeddings):
@@ -103,35 +105,59 @@ class KeywordGenerator:
         for line in embedding_data[1:]:
             line = preprocess_tweet(line, lower=False)
             line = line.split(' ')
-            embed_dic[line[0].strip()] = np.asarray([float(i) for i in line[1:]]).reshape((1, dim_len))
+            embed_dic[line[0].strip()] = [float(i) for i in line[1:]]
 
-        category_keywords_dic = {}
-        cosine_cate = {}
+        category_keywords_embed = OrderedDict()
         for word in category_keywords:
             word = word.lower()
             if word in embed_dic:
-                category_keywords_dic[word] = embed_dic[word]
-                cosine_cate[word] = []
+                category_keywords_embed[word] = embed_dic[word]
 
         # print category_keywords_dic.keys()
         # print embed_dic.keys()
         count = 0
+        keywords_embed = OrderedDict()
         for word in keywords:
             word = preprocess_tweet(word)
-            word = word.strip().strip('\n').lower()
             count += 1
             if word in embed_dic:
                 # print word
-                word_embed = embed_dic[word]
-                for cate in category_keywords_dic:
-                    # print cosine_similarity(word_embed, category_keywords_dic[cate])
-                    cossim = cosine_similarity(word_embed, category_keywords_dic[cate])[0][0]
-                    if cossim >= 0.5:
-                        cosine_cate[cate].append(word)
-                        break
+                keywords_embed[word] = embed_dic[word]
+                # for cate in category_keywords_dic:
+                #     # print cosine_similarity(word_embed, category_keywords_dic[cate])
+                #     cossim = cosine_similarity(word_embed, category_keywords_dic[cate])[0][0]
+                #     if cossim >= 0.5:
+                #         cosine_cate[cate].append(word)
+                #         break
 
             if count % 10000 == 0:
                 print "%s keywords processed" % count
+
+        keywords_embed_arary = np.asarray(keywords_embed.values())
+        category_keywords_array = np.asarray(category_keywords_embed.values())
+
+        print len(keywords_embed_arary)
+        print len(category_keywords_array)
+
+        result = cosine_similarity(category_keywords_array, keywords_embed_arary)
+
+        keywords_embed_keys = keywords_embed.keys()
+        category_keywords_embed_keys = category_keywords_embed.keys()
+
+        print result.shape
+        print "result is %s" % result
+        print len(result[0])
+
+        cosine_cate = {}
+        for i in range(len(result)):
+            cosine_cate[category_keywords_embed_keys[i]] = {}
+            for j in range(len(result[i])):
+                if result[i][j] >= 0.55:
+                    cosine_cate[category_keywords_embed_keys[i]][keywords_embed_keys[j]] = result[i][j]
+
+        for key in cosine_cate:
+            cosine_cate[key] = OrderedDict(sorted(cosine_cate[key].items(), key=lambda t: t[1], reverse=True))
+            print cosine_cate[key]
         with open('test.txt', 'w+') as fout:
             json.dump(cosine_cate, fout, indent=4)
 
@@ -148,3 +174,23 @@ if __name__ == '__main__':
     exec_time = finish - start
     print exec_time.seconds
     print exec_time.microseconds
+
+    # o = OrderedDict()
+    # z = OrderedDict()
+    #
+    # o[0] = [1,1]
+    # o[1] = [3,2]
+    # o[2] = [3,4]
+    #
+    # z[0] = [3,1]
+    # z[1] = [4,2]
+    # z[2] = [5,3]
+    #
+    # print o.values()
+    # print z.values()
+    #
+    # nx = np.asarray(o.values())
+    # ny = np.asarray(z.values())
+    #
+    # res = cosine_similarity(nx, ny)
+    # print res
