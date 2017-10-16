@@ -16,6 +16,9 @@ la_pos_tweets = la_raw + 'pos_tag_tweets.txt'
 la_keywords = la_raw + 'keywords.txt'
 la_category_keywords = la_raw + 'category_keywords.txt'
 la_embeddings = la_raw + 'embeddings.txt'
+la_seed_keywords_dic = la_raw + 'seed_keywords_dic.txt'
+la_seed_keywords = la_raw + 'seed_keywords.txt'
+
 # logger name
 MAIN_LOG = "MAIN LOG"
 

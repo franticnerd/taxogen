@@ -1,5 +1,5 @@
 import subprocess, os
-from paras import la_pure_tweets, la_pos_tweets, la_keywords, MAIN_LOG, la_category, la_category_keywords, la_embeddings
+from paras import la_pure_tweets, la_pos_tweets, la_keywords, MAIN_LOG, la_category, la_category_keywords, la_embeddings, la_seed_keywords_dic, la_seed_keywords
 from datetime import datetime
 from util.logger import Logger
 from sklearn.metrics.pairwise import cosine_similarity
@@ -7,10 +7,10 @@ import numpy as np
 import json
 from tweet_handler import preprocess_tweet
 from collections import OrderedDict
-import operator
+
 
 class KeywordGenerator:
-    def __init__(self, pure_tweets, pos_tweets, f_out, logger_name, category, category_keywords, embeddings):
+    def __init__(self, pure_tweets, pos_tweets, f_out, logger_name, category, category_keywords, embeddings, seed_keywords_dic, seed_keywords):
         self.pure_tweets = pure_tweets
         self.pos_tweets = pos_tweets
         self.output = f_out
@@ -20,6 +20,8 @@ class KeywordGenerator:
         self.category = category
         self.category_keywords = category_keywords
         self.embeddings = embeddings
+        self.seed_keywords_dic = seed_keywords_dic
+        self.seed_keywords = seed_keywords
 
     def parse_pos_tweet(self, pos_tweet):
         pos_tweet = preprocess_tweet(pos_tweet, lower=False)
@@ -99,9 +101,6 @@ class KeywordGenerator:
             keywords = f.readlines()
 
         embed_dic = {}
-        dim_len = int(embedding_data[0].strip().strip('\n').split(' ')[-1])
-        # print dim_len
-        # skip the first line since its metadata(number of words, embedding dim)
         for line in embedding_data[1:]:
             line = preprocess_tweet(line, lower=False)
             line = line.split(' ')
@@ -113,40 +112,23 @@ class KeywordGenerator:
             if word in embed_dic:
                 category_keywords_embed[word] = embed_dic[word]
 
-        # print category_keywords_dic.keys()
-        # print embed_dic.keys()
         count = 0
         keywords_embed = OrderedDict()
         for word in keywords:
             word = preprocess_tweet(word)
             count += 1
             if word in embed_dic:
-                # print word
                 keywords_embed[word] = embed_dic[word]
-                # for cate in category_keywords_dic:
-                #     # print cosine_similarity(word_embed, category_keywords_dic[cate])
-                #     cossim = cosine_similarity(word_embed, category_keywords_dic[cate])[0][0]
-                #     if cossim >= 0.5:
-                #         cosine_cate[cate].append(word)
-                #         break
 
             if count % 10000 == 0:
                 print "%s keywords processed" % count
 
-        keywords_embed_arary = np.asarray(keywords_embed.values())
+        keywords_embed_array = np.asarray(keywords_embed.values())
         category_keywords_array = np.asarray(category_keywords_embed.values())
-
-        print len(keywords_embed_arary)
-        print len(category_keywords_array)
-
-        result = cosine_similarity(category_keywords_array, keywords_embed_arary)
+        result = cosine_similarity(category_keywords_array, keywords_embed_array)
 
         keywords_embed_keys = keywords_embed.keys()
         category_keywords_embed_keys = category_keywords_embed.keys()
-
-        print result.shape
-        print "result is %s" % result
-        print len(result[0])
 
         cosine_cate = {}
         for i in range(len(result)):
@@ -158,14 +140,14 @@ class KeywordGenerator:
         for key in cosine_cate:
             cosine_cate[key] = OrderedDict(sorted(cosine_cate[key].items(), key=lambda t: t[1], reverse=True))
             print cosine_cate[key]
-        with open('test.txt', 'w+') as fout:
+        with open(self.seed_keywords_dic, 'w+') as fout:
             json.dump(cosine_cate, fout, indent=4)
 
 
 
 if __name__ == '__main__':
     start = datetime.utcnow()
-    gen = KeywordGenerator(la_pure_tweets, la_pos_tweets, la_keywords, MAIN_LOG, la_category, la_category_keywords, la_embeddings)
+    gen = KeywordGenerator(la_pure_tweets, la_pos_tweets, la_keywords, MAIN_LOG, la_category, la_category_keywords, la_embeddings, la_seed_keywords_dic, la_seed_keywords)
     # gen.build_pos_tag_tweets()
     # gen.build_keyword()
     gen.build_category_keywords()
@@ -174,23 +156,3 @@ if __name__ == '__main__':
     exec_time = finish - start
     print exec_time.seconds
     print exec_time.microseconds
-
-    # o = OrderedDict()
-    # z = OrderedDict()
-    #
-    # o[0] = [1,1]
-    # o[1] = [3,2]
-    # o[2] = [3,4]
-    #
-    # z[0] = [3,1]
-    # z[1] = [4,2]
-    # z[2] = [5,3]
-    #
-    # print o.values()
-    # print z.values()
-    #
-    # nx = np.asarray(o.values())
-    # ny = np.asarray(z.values())
-    #
-    # res = cosine_similarity(nx, ny)
-    # print res
