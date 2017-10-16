@@ -82,11 +82,13 @@ class TweetHandler:
                     if clean_tweet == '':
                         continue
                     outf.write(clean_tweet + '\n')
-                    self.logger.info(Logger.build_log_message(self.__class__.__name__, self.preprocess.__name__, '%s tweets processed')%count)
+
+                    if count%100000 == 0:
+                        self.logger.info(Logger.build_log_message(self.__class__.__name__, self.preprocess.__name__, '%s tweets processed')%count)
+
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.preprocess.__name__,
                                                   'Embedding tweets'))
         self.run_word2vec()
-
 
     def remove_non_alphanumeric(self, tweet):
         """ Only keeps letter, digit and # in tweets, remove all other chars
