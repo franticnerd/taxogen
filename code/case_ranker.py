@@ -51,7 +51,7 @@ def rank_phrase(case_file):
 		ph_dist_map[ph] = utils.kl_divergence(ph_vec, unif)
 
 	ranked_list = sorted(ph_dist_map.items(), key=operator.itemgetter(1), reverse=True)
-	
+
 	return ranked_list
 
 
