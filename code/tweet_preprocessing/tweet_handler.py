@@ -59,7 +59,10 @@ class TweetHandler:
             with open(self.input, 'r') as f:
                 self.logger.info(Logger.build_log_message(self.__class__.__name__, self.preprocess.__name__,
                                                           'Preprocess tweets'))
+
+                count = 0
                 for line in f:
+                    count += 1
                     tweet_content = line.split('\x01')
                     raw_tweet = tweet_content[7]
                     raw_tweet = preprocess_tweet(raw_tweet)
@@ -79,6 +82,7 @@ class TweetHandler:
                     if clean_tweet == '':
                         continue
                     outf.write(clean_tweet + '\n')
+                    self.logger.info(Logger.build_log_message(self.__class__.__name__, self.preprocess.__name__, '%s tweets processed')%count)
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.preprocess.__name__,
                                                   'Embedding tweets'))
         self.run_word2vec()
