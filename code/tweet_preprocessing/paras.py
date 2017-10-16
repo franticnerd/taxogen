@@ -1,4 +1,4 @@
-la_raw = '../shared/data/lunanli3/local-embedding/raw/tweets/la/'
+la_raw = '/shared/data/lunanli3/local-embedding/raw/tweets/la/'
 la_input = '/shared/data/lunanli3/local-embedding/input/tweets/la/'
 la_output = '/shared/data/lunanli3/local-embedding/output/tweets/la/'
 
@@ -7,7 +7,7 @@ lexnorm = './../../lib/emnlp2012-lexnorm/emnlp_dict.txt'
 
 # raw tweet data
 la_tweets = la_input + 'tweets.txt'
-la_category = '../shared/data/lunanli3/local-embedding/raw/category/category.txt'
+la_category = '/shared/data/lunanli3/local-embedding/raw/category/category.txt'
 
 # preprocess data
 lexnorm_dic = la_raw + 'lexnorm.txt'
