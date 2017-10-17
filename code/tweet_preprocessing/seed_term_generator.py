@@ -7,6 +7,7 @@ import numpy as np
 import json
 from tweet_handler import preprocess_tweet
 from collections import OrderedDict
+import re
 
 
 class KeywordGenerator:
@@ -22,6 +23,7 @@ class KeywordGenerator:
         self.embeddings = embeddings
         self.seed_keywords_dic = seed_keywords_dic
         self.seed_keywords = seed_keywords
+        self.pattern = re.compile("[^a-zA-Z0-9\s]+")
 
     def parse_pos_tweet(self, pos_tweet):
         pos_tweet = preprocess_tweet(pos_tweet, lower=False)
@@ -72,8 +74,7 @@ class KeywordGenerator:
             data = f.read()
         category_dict = json.loads(data)
         category_dict = category_dict['categories']
-        category_keywords = self.recursive_build_category_keywords(category_dict)
-        category_keywords = set(category_keywords)
+        category_keywords = set(self.recursive_build_category_keywords(category_dict))
         with open(self.category_keywords, 'w+') as fout:
             fout.write(' '.join(category_keywords))
 
@@ -84,7 +85,8 @@ class KeywordGenerator:
         keywords = []
         for category in category_dict:
             name = preprocess_tweet(category['name']).encode('ascii', 'ignore')
-            words = name.split()
+            re.sub(self.pattern, '', name).encode('utf8', 'ignore')
+            words = name.split(' ')
             words = [word for word in words if len(word) > 1]
             keywords.extend(words)
             child_keywords = self.recursive_build_category_keywords(category['categories'])
@@ -150,7 +152,7 @@ if __name__ == '__main__':
     # gen.build_pos_tag_tweets()
     # gen.build_keyword()
     gen.build_category_keywords()
-    gen.match_category_keyword()
+    #gen.match_category_keyword()
     finish = datetime.utcnow()
     exec_time = finish - start
     print exec_time.seconds
