@@ -73,7 +73,7 @@ class KeywordGenerator:
         category_dict = json.loads(data)
         category_dict = category_dict['categories']
         category_keywords = self.recursive_build_category_keywords(category_dict)
-
+        category_keywords = set(category_keywords)
         with open(self.category_keywords, 'w+') as fout:
             fout.write(' '.join(category_keywords))
 
@@ -139,7 +139,6 @@ class KeywordGenerator:
 
         for key in cosine_cate:
             cosine_cate[key] = OrderedDict(sorted(cosine_cate[key].items(), key=lambda t: t[1], reverse=True))
-            print cosine_cate[key]
         with open(self.seed_keywords_dic, 'w+') as fout:
             json.dump(cosine_cate, fout, indent=4)
 

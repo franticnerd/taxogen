@@ -118,7 +118,7 @@ def load_tweets_params_method(corpusPath):
     pd['init_dir'] = pd['data_dir'] + 'init/' + corpusPath + '/'
 
     pd['doc_file'] = pd['raw_dir'] + 'pure_tweets.txt'
-    pd['doc_keyword_cnt_file'] = pd['raw_dir'] + 'keywords.txt'
+    pd['doc_keyword_cnt_file'] = pd['raw_dir'] + 'seed_keywords.txt'
     pd['doc_keyword_embedding_file'] = pd['raw_dir'] + 'embeddings.txt'
 
     pd['root_node_dir'] = pd['data_dir'] + 'cluster/'
