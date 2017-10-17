@@ -139,10 +139,16 @@ class KeywordGenerator:
                 if result[i][j] >= 0.55:
                     cosine_cate[category_keywords_embed_keys[i]][keywords_embed_keys[j]] = result[i][j]
 
+        result = []
         for key in cosine_cate:
             cosine_cate[key] = OrderedDict(sorted(cosine_cate[key].items(), key=lambda t: t[1], reverse=True))
+            result.extend(cosine_cate[key].keys())
         with open(self.seed_keywords_dic, 'w+') as fout:
             json.dump(cosine_cate, fout, indent=4)
+
+        with open(self.seed_keywords, 'w+') as fout:
+            fout.write('\n'.join(result))
+
 
 
 
