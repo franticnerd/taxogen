@@ -2,18 +2,19 @@ import json
 import preprocessor as p
 import os
 import subprocess
-from paras import la_tweets, la_input, lexnorm, MAIN_LOG
+import paras
 from util.logger import Logger
 import re
 
 class TweetHandler:
-    def __init__(self, file_in, file_out, logger_name, lexnorm):
-        self.input = file_in
-        self.output = file_out
+    def __init__(self, paras, logger_name, lexnorm):
+        self.input = paras['tweets']
+        self.output = paras['raw']
         self.lexnorm = lexnorm
-        self.lexnorm_dic = self.output + 'lexnorm.txt'
-        self.pure_tweets = self.output + 'pure_tweets.txt'
-        self.embeddings = self.output + 'embeddings.txt'
+        self.lexnorm_dic = paras['lexnorm_dic']
+        self.pure_tweets = paras['pure_tweets']
+        self.embeddings = paras['embeddings']
+        self.hashtags = paras['hashtags']
         p.set_options(p.OPT.EMOJI, p.OPT.URL, p.OPT.MENTION)
         self.logger = Logger.get_logger(logger_name)
         self.pattern = re.compile("[^a-z0-9\#\s]+")
@@ -81,7 +82,7 @@ class TweetHandler:
                     clean_tweet = clean_tweet.strip(' ')
                     if clean_tweet == '':
                         continue
-                    outf.write(clean_tweet + '\n')
+                    outf.write('{0}\n'.format(clean_tweet))
 
                     if count%100000 == 0:
                         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.preprocess.__name__, '%s tweets processed')%count)
@@ -97,6 +98,28 @@ class TweetHandler:
         """
         return re.sub(self.pattern, '', tweet)
 
+    def build_hashtags(self):
+        with open(self.pure_tweets, 'r') as f:
+            data = f.readlines()
+        self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_hashtags.__name__,
+                                                      'Build hashtags'))
+        count = 0
+        with open(self.hashtags, 'w') as outf:
+            for line in data:
+                count += 1
+                line = preprocess_tweet(line, lower=False)
+                line = line.split(' ')
+                for word in line:
+                    if word.startswith('#'):
+                        if word.count('#') == 1:
+                            outf.write('{0}\n'.format(word))
+                        else:
+                            tags = word.strip('#').split('#')
+                            for tag in tags:
+                                outf.write('#{0}\n'.format(tag))
+        self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_hashtags.__name__,
+                                                  'Finish building hashtags'))
+
 
 def preprocess_tweet(tweet, lower=True):
     if lower:
@@ -106,5 +129,7 @@ def preprocess_tweet(tweet, lower=True):
 
 
 if __name__ == '__main__':
-    test = TweetHandler(la_tweets, la_input, MAIN_LOG, lexnorm)
-    test.preprocess()
+    la_paras = paras.load_la_tweets_paras()
+    test = TweetHandler(la_paras, paras.MAIN_LOG, paras.lexnorm)
+    #test.preprocess()
+    test.build_hashtags()

@@ -1,5 +1,5 @@
 import subprocess, os
-from paras import la_pure_tweets, la_pos_tweets, la_keywords, MAIN_LOG, la_category, la_category_keywords, la_embeddings, la_seed_keywords_dic, la_seed_keywords
+import paras
 from datetime import datetime
 from util.logger import Logger
 from sklearn.metrics.pairwise import cosine_similarity
@@ -11,18 +11,18 @@ import re
 
 
 class KeywordGenerator:
-    def __init__(self, pure_tweets, pos_tweets, f_out, logger_name, category, category_keywords, embeddings, seed_keywords_dic, seed_keywords):
-        self.pure_tweets = pure_tweets
-        self.pos_tweets = pos_tweets
-        self.output = f_out
+    def __init__(self, paras, logger_name):
+        self.pure_tweets = paras['pure_tweets']
+        self.pos_tweets = paras['pos_tweets']
+        self.output = paras['keywords']
         self.keywords = set()
         self.noun_tag = {'NN', 'NNS', 'NNP', 'NNPS'}
         self.logger = Logger.get_logger(logger_name)
-        self.category = category
-        self.category_keywords = category_keywords
-        self.embeddings = embeddings
-        self.seed_keywords_dic = seed_keywords_dic
-        self.seed_keywords = seed_keywords
+        self.category = paras['category']
+        self.category_keywords = paras['category_keywords']
+        self.embeddings = paras['embeddings']
+        self.seed_keywords_dic = paras['seed_keywords_dic']
+        self.seed_keywords = paras['seed_keywords']
         self.pattern = re.compile("[^a-zA-Z0-9\s]+")
 
     def parse_pos_tweet(self, pos_tweet):
@@ -154,7 +154,8 @@ class KeywordGenerator:
 
 if __name__ == '__main__':
     start = datetime.utcnow()
-    gen = KeywordGenerator(la_pure_tweets, la_pos_tweets, la_keywords, MAIN_LOG, la_category, la_category_keywords, la_embeddings, la_seed_keywords_dic, la_seed_keywords)
+    la_paras = paras.load_la_tweets_paras()
+    gen = KeywordGenerator(paras, paras.MAIN_LOG)
     # gen.build_pos_tag_tweets()
     # gen.build_keyword()
     # gen.build_category_keywords()

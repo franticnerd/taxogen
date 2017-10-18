@@ -1,26 +1,30 @@
-la_raw = '/shared/data/lunanli3/local-embedding/raw/tweets/la/'
-la_input = '/shared/data/lunanli3/local-embedding/input/tweets/la/'
-la_output = '/shared/data/lunanli3/local-embedding/output/tweets/la/'
-
+# logger name
+MAIN_LOG = "MAIN LOG"
 # normalization dictionary
 lexnorm = './../../lib/emnlp2012-lexnorm/emnlp_dict.txt'
 
-# raw tweet data
-la_tweets = la_raw + 'tweets.txt'
-la_category = '/shared/data/lunanli3/local-embedding/raw/category/category.txt'
+def load_la_tweets_paras():
+    ret = {}
+    ret['raw'] = '/shared/data/lunanli3/local-embedding/raw/tweets/la/'
+    ret['input'] = '/shared/data/lunanli3/local-embedding/input/tweets/la/'
+    ret['output'] = '/shared/data/lunanli3/local-embedding/output/tweets/la/'
 
-# preprocess data
-lexnorm_dic = la_raw + 'lexnorm.txt'
-la_pure_tweets = la_raw + 'pure_tweets.txt'
-la_pos_tweets = la_raw + 'pos_tag_tweets.txt'
-la_keywords = la_raw + 'keywords.txt'
-la_category_keywords = la_raw + 'category_keywords.txt'
-la_embeddings = la_raw + 'embeddings.txt'
-la_seed_keywords_dic = la_raw + 'seed_keywords_dic.txt'
-la_seed_keywords = la_raw + 'seed_keywords.txt'
+    # raw tweet data
+    ret['tweets'] = ret['raw'] + 'tweets.txt'
+    ret['category'] = '/shared/data/lunanli3/local-embedding/raw/category/category.txt'
 
-# logger name
-MAIN_LOG = "MAIN LOG"
+    # preprocess data
+    ret['lexnorm_dic'] = ret['raw'] + 'lexnorm.txt'
+    ret['pure_tweets'] = ret['raw'] + 'pure_tweets.txt'
+    ret['pos_tweets'] = ret['raw'] + 'pos_tag_tweets.txt'
+    ret['keywords'] = ret['raw'] + 'keywords.txt'
+    ret['category_keywords'] = ret['raw'] + 'category_keywords.txt'
+    ret['embeddings'] = ret['raw'] + 'embeddings.txt'
+    ret['seed_keywords_dic'] = ret['raw'] + 'seed_keywords_dic.txt'
+    ret['seed_keywords'] = ret['raw'] + 'seed_keywords.txt'
+    ret['hashtags'] = ret['raw'] + 'hashtags.txt'
 
-# log
-la_log = la_output + 'log/'
+    # log
+    ret['log'] = ret['output'] + 'log/'
+
+    return ret

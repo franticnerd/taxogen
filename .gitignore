@@ -147,3 +147,4 @@ code/tweet_preprocessing/log.txt
 code/tweet_preprocessing/test.txt
 
 *word2vec
+*client_secret.json
