@@ -46,7 +46,7 @@ level: the current level in the recursion
 
 
 def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
-          n_expand, level, en, caseolap=True, local_embedding=True):
+          n_expand, level, email, caseolap=True, local_embedding=True):
     if level > MAX_LEVEL:
         return
     print('============================= Running level ', level, ' and node ', parent, '=============================')
@@ -68,7 +68,8 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
             print('Clustering not finished.')
             print "*** print_exc:"
             traceback.print_exc()
-            en.send_email(subject='Taxongen exception', content='Exception throw in taxongen. Please check out.log')
+            if level < 3:
+                email.send_email(subject='Taxongen exception', content='Exception throw in taxongen. Please check out.log')
             return
         copyfile(df.seed_keyword_file, df.filtered_keyword_file)
     else:
@@ -83,7 +84,8 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
                 print('Clustering not finished.')
                 print "*** print_exc:"
                 traceback.print_exc()
-                en.send_email(subject='Taxongen exception', content='Exception throw in taxongen. Please check out.log')
+                if level < 3:
+                    email.send_email(subject='Taxongen exception', content='Exception throw in taxongen. Please check out.log')
                 return
 
             start = time.time()
@@ -108,7 +110,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
 
     for child in children:
         recur(input_dir, node_dir + child + '/', n_cluster, child, n_cluster_iter, \
-              filter_thre, n_expand, level + 1, caseolap, local_embedding)
+              filter_thre, n_expand, level + 1, email, caseolap, local_embedding)
 
 def main(opt, en):
     input_dir = opt['input_dir']
