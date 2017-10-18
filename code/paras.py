@@ -122,8 +122,8 @@ def load_tweets_params_method(corpusPath):
     pd['doc_keyword_embedding_file'] = pd['raw_dir'] + 'embeddings.txt'
 
     pd['root_node_dir'] = pd['data_dir'] + 'cluster/'
-    pd['n_cluster'] = 10
-    pd['filter_thre'] = 0.2
+    pd['n_cluster'] = 7
+    pd['filter_thre'] = 0.22
     pd['n_expand'] = 100
     pd['n_cluster_iter'] = 4
     return pd
