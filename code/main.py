@@ -4,8 +4,6 @@ __description__: Main function for TaxonGen
 __latest_updates__: 09/26/2017
 '''
 import time
-
-
 from dataset import DataSet
 from cluster import run_clustering
 from paras import *
@@ -15,7 +13,7 @@ from local_embedding_training import main_local_embedding
 from shutil import copyfile
 from distutils.dir_util import copy_tree
 from os import symlink
-
+import traceback
 MAX_LEVEL = 3
 
 class DataFiles:
@@ -66,7 +64,10 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
             children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent, \
                                       df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file)
         except:
+            print
             print('Clustering not finished.')
+            print "*** print_exc:"
+            traceback.print_exc()
             return
         copyfile(df.seed_keyword_file, df.filtered_keyword_file)
     else:
@@ -79,6 +80,8 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
                                df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file)
             except:
                 print('Clustering not finished.')
+                print "*** print_exc:"
+                traceback.print_exc()
                 return
 
             start = time.time()
