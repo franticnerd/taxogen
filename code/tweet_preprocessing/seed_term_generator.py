@@ -157,5 +157,5 @@ if __name__ == '__main__':
     gen = KeywordGenerator(la_pure_tweets, la_pos_tweets, la_keywords, MAIN_LOG, la_category, la_category_keywords, la_embeddings, la_seed_keywords_dic, la_seed_keywords)
     # gen.build_pos_tag_tweets()
     # gen.build_keyword()
-    gen.build_category_keywords()
+    # gen.build_category_keywords()
     gen.match_category_keyword()

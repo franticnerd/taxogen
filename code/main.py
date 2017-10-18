@@ -148,7 +148,7 @@ if __name__ == '__main__':
     opt = load_tweets_params_method('tweets/la')
     print()
     print("[Main] Finish load parameters: %s" % str(opt))
-    print("--- %s seconds ---" % (time.time() - start_time))
 
     main(opt)
 
+    print("--- %s seconds ---" % (time.time() - start_time))

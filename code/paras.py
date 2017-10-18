@@ -123,7 +123,7 @@ def load_tweets_params_method(corpusPath):
 
     pd['root_node_dir'] = pd['data_dir'] + 'cluster/'
     pd['n_cluster'] = 7
-    pd['filter_thre'] = 0.22
+    pd['filter_thre'] = 0.17
     pd['n_expand'] = 100
     pd['n_cluster_iter'] = 4
     return pd
