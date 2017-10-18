@@ -144,10 +144,11 @@ if __name__ == '__main__':
     # opt = load_sp_params()
     #opt = load_dblp_params_method()
 
-
+    start_time = time.time()
     opt = load_tweets_params_method('tweets/la')
     print()
     print("[Main] Finish load parameters: %s" % str(opt))
+    print("--- %s seconds ---" % (time.time() - start_time))
 
     main(opt)
 
