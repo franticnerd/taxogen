@@ -136,7 +136,7 @@ class KeywordGenerator:
         for i in range(len(result)):
             cosine_cate[category_keywords_embed_keys[i]] = {}
             for j in range(len(result[i])):
-                if result[i][j] >= 0.6:
+                if result[i][j] >= 0.5:
                     cosine_cate[category_keywords_embed_keys[i]][keywords_embed_keys[j]] = result[i][j]
 
         result = []
@@ -157,5 +157,5 @@ if __name__ == '__main__':
     gen = KeywordGenerator(la_pure_tweets, la_pos_tweets, la_keywords, MAIN_LOG, la_category, la_category_keywords, la_embeddings, la_seed_keywords_dic, la_seed_keywords)
     # gen.build_pos_tag_tweets()
     # gen.build_keyword()
-    # gen.build_category_keywords()
+    gen.build_category_keywords()
     gen.match_category_keyword()
