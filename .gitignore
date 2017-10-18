@@ -145,3 +145,5 @@ ENV/
 #local log file
 code/tweet_preprocessing/log.txt
 code/tweet_preprocessing/test.txt
+
+*word2vec
