@@ -15,7 +15,7 @@ from distutils.dir_util import copy_tree
 from os import symlink
 import traceback
 MAX_LEVEL = 3
-
+from tweet_preprocessing.util.emailutil import EmailNotification
 class DataFiles:
     def __init__(self, input_dir, node_dir):
         self.doc_file = input_dir + 'papers.txt'
@@ -46,7 +46,7 @@ level: the current level in the recursion
 
 
 def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
-          n_expand, level, caseolap=True, local_embedding=True):
+          n_expand, level, en, caseolap=True, local_embedding=True):
     if level > MAX_LEVEL:
         return
     print('============================= Running level ', level, ' and node ', parent, '=============================')
@@ -68,6 +68,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
             print('Clustering not finished.')
             print "*** print_exc:"
             traceback.print_exc()
+            en.send_email(subject='Taxongen exception', content='Exception throw in taxongen. Please check out.log')
             return
         copyfile(df.seed_keyword_file, df.filtered_keyword_file)
     else:
@@ -82,6 +83,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
                 print('Clustering not finished.')
                 print "*** print_exc:"
                 traceback.print_exc()
+                en.send_email(subject='Taxongen exception', content='Exception throw in taxongen. Please check out.log')
                 return
 
             start = time.time()
@@ -108,7 +110,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
         recur(input_dir, node_dir + child + '/', n_cluster, child, n_cluster_iter, \
               filter_thre, n_expand, level + 1, caseolap, local_embedding)
 
-def main(opt):
+def main(opt, en):
     input_dir = opt['input_dir']
     init_dir = opt['init_dir']
     n_cluster = opt['n_cluster']
@@ -120,7 +122,7 @@ def main(opt):
     # our method
     root_dir = opt['data_dir'] + 'our-tweets/'
     copy_tree(init_dir, root_dir)
-    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, local_embedding=False)
+    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, en, True, local_embedding=False)
 
     # without caseolap
     # root_dir = opt['data_dir'] + 'ablation-no-caseolap-l3/'
@@ -148,7 +150,7 @@ if __name__ == '__main__':
     opt = load_tweets_params_method('tweets/la')
     print()
     print("[Main] Finish load parameters: %s" % str(opt))
-
-    main(opt)
-
+    en =EmailNotification()
+    main(opt, en)
     print("--- %s seconds ---" % (time.time() - start_time))
+    en.send_email()
