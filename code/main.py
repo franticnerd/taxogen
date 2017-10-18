@@ -69,7 +69,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
             print "*** print_exc:"
             traceback.print_exc()
             if level < 3:
-                email.send_email(subject='Taxongen exception', content='Exception throw in taxongen. Please check out.log')
+                email.send_email(to='lunanli3@illinois.edu', subject='Taxongen exception', content='Exception throw in taxongen. Please check out.log')
             return
         copyfile(df.seed_keyword_file, df.filtered_keyword_file)
     else:
@@ -85,7 +85,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
                 print "*** print_exc:"
                 traceback.print_exc()
                 if level < 3:
-                    email.send_email(subject='Taxongen exception', content='Exception throw in taxongen. Please check out.log')
+                    email.send_email(to='lunanli3@illinois.edu', subject='Taxongen exception', content='Exception throw in taxongen. Please check out.log')
                 return
 
             start = time.time()
