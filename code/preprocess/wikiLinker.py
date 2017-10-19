@@ -1,7 +1,7 @@
 '''
 __author__: Jiaming Shen
 __description__: use wikipedia to determine the noun phrases
-__latest_updates__: 10/18/2017
+__latest_updates__: 10/19/2017
 '''
 import wikipedia
 import re
@@ -9,6 +9,7 @@ import sys
 import time
 import math
 import multiprocessing as mp
+from collections import Counter
 
 class WikiLinker:
   """A class for Wikipedia"""
@@ -17,13 +18,22 @@ class WikiLinker:
   def __init__(self):
     None
 
-  def save_to_file(self, res, filepath):
+  def save_to_file(self, res, phrases2score=None, filepath="./results.txt"):
     with open(filepath, "w") as fout:
-      for phrase in res:
-        fout.write(phrase+"\t")
-        link_res = res[phrase]
-        fout.write(str(link_res[0])+"\t"+link_res[1])
-        fout.write("\n")
+      if phrases2score:
+        for ele in sorted(phrases2score.items(), key = lambda x:-x[1]):
+          phrase = ele[0]
+          fout.write(phrase + "\t")
+          link_res = res[phrase]
+          fout.write(str(link_res[0]) + "\t" + link_res[1] + "\t")
+          fout.write(str(ele[1])) # add phrase score to the last column
+          fout.write("\n")
+      else:
+        for phrase in res:
+          fout.write(phrase+"\t")
+          link_res = res[phrase]
+          fout.write(str(link_res[0])+"\t"+link_res[1])
+          fout.write("\n")
 
   def get_wiki_online(self, phrase):
     try:
@@ -38,7 +48,7 @@ class WikiLinker:
       except wikipedia.exceptions.DisambiguationError as e:
         options = e.options
         print("[{}]Indirectly linking phrase with ambiguity: {}".format(mp.current_process().name, phrase, ))
-        return (1, "|".join(options))
+        return (1, re.sub("\n"," ", "|".join(options))) # some options has "\n" in text ...
       except:
         print("[{}]Unlinkable phrase: {}".format(mp.current_process().name, phrase, ))
         return (0, "")
@@ -55,7 +65,7 @@ class WikiLinker:
     return res
 
 
-  def get_wiki_parallel(self, phrases, num_workers = 1, save = False):
+  def get_wiki_parallel(self, phrases, phrases2score, num_workers = 1, save = False):
     num_workers += 1
     pool = mp.Pool(processes=num_workers)
 
@@ -72,8 +82,12 @@ class WikiLinker:
     for r in results:
       res.update(r)
 
+    ## simple analysis
+    for ele in Counter([ele[0] for ele in res.values()]).items():
+      print(ele)
+
     if (save):
-      self.save_to_file(res, "linked_results.wiki.txt")
+      self.save_to_file(res, phrases2score, "linked_results.wiki.txt")
 
 def get_phrases(phrase_file, sep="\t", first_nrow=0):
   phrases = []
@@ -99,7 +113,7 @@ def main():
 
   w = WikiLinker()
   start = time.time()
-  w.get_wiki_parallel(phrases, num_workers=30, save=True)
+  w.get_wiki_parallel(phrases, phrases2score, num_workers=30, save=True)
   end = time.time()
   print("Linking %s phrases using time %s (seconds)" % (len(phrases), end - start))
 
