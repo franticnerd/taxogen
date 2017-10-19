@@ -49,7 +49,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
           n_expand, level, email, caseolap=True, local_embedding=True):
     if level > MAX_LEVEL:
         return
-    print('============================= Running level ', level, ' and node ', parent, '=============================')
+    print '============================= Running level %s, and node: %s =============================', level, parent
     start = time.time()
     df = DataFiles(input_dir, node_dir)
     ## TODO: Everytime we need to read-in the whole corpus, which can be slow.
