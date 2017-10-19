@@ -29,12 +29,16 @@ class WikiLinker:
     try:
       m = wikipedia.page(title = phrase, pageid=None, auto_suggest=False, redirect=True, preload=False)
       print("[{}]Directly linking phrase: {}".format(mp.current_process().name, phrase, ))
-      return (2, m.original_title)
+      return (3, m.original_title)
     except:
       try:
         m2 = wikipedia.page(title = phrase, pageid=None, auto_suggest=True, redirect=True, preload=False)
         print("[{}]Indirectly linking phrase: {}".format(mp.current_process().name, phrase, ))
-        return (1, m2.original_title)
+        return (2, m2.original_title)
+      except wikipedia.exceptions.DisambiguationError as e:
+        options = e.options
+        print("[{}]Indirectly linking phrase with ambiguity: {}".format(mp.current_process().name, phrase, ))
+        return (1, "|".join(options))
       except:
         print("[{}]Unlinkable phrase: {}".format(mp.current_process().name, phrase, ))
         return (0, "")
