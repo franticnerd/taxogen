@@ -124,7 +124,7 @@ def main(opt, en):
     # our method
     root_dir = opt['data_dir'] + 'our-tweets/'
     copy_tree(init_dir, root_dir)
-    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, en, True, local_embedding=False)
+    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, en, True, local_embedding=True)
 
     # without caseolap
     # root_dir = opt['data_dir'] + 'ablation-no-caseolap-l3/'
