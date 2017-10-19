@@ -155,4 +155,5 @@ if __name__ == '__main__':
     en =EmailNotification()
     main(opt, en)
     print("--- %s seconds ---" % (time.time() - start_time))
-    en.send_email()
+    en.send_email(to='lunanli3@illinois.edu', subject='Taxongen job finished',
+          content='Please check the result on server at /shared/data/lunanli3/local-embedding/taxonomies/our-tweets.txt. Thanks.\n Best,\nLunan Li')
