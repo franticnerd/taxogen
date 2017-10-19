@@ -14,7 +14,7 @@ class TweetHandler:
         self.lexnorm_dic = paras['lexnorm_dic']
         self.pure_tweets = paras['pure_tweets']
         self.embeddings = paras['embeddings']
-        self.seed_keywords = paras['seed_keywords']
+        self.hashtags = paras['hashtags']
         p.set_options(p.OPT.EMOJI, p.OPT.URL, p.OPT.MENTION)
         self.logger = Logger.get_logger(logger_name)
         self.pattern = re.compile("[^a-z0-9\#\s]+")
@@ -116,7 +116,7 @@ class TweetHandler:
                         for tag in tags:
                             self.add_hashtag_to_dic(hashtag_dic, '#'+tag)
 
-        with open(self.seed_keywords, 'a') as outf:
+        with open(self.hashtags, 'w') as outf:
             for key in hashtag_dic:
                 if hashtag_dic[key] >= 10:
                     outf.write('{0}\n'.format(key))
