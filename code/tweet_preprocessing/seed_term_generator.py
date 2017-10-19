@@ -169,7 +169,7 @@ class SeedTermGenerator:
 if __name__ == '__main__':
     start = datetime.utcnow()
     la_paras = paras.load_la_tweets_paras()
-    gen = SeedTermGenerator(paras, paras.MAIN_LOG)
+    gen = SeedTermGenerator(la_paras, paras.MAIN_LOG)
     # gen.build_pos_tag_tweets()
     # gen.build_keyword()
     # gen.build_category_keywords()
