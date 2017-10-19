@@ -112,9 +112,9 @@ class TweetHandler:
                     if word.count('#') == 1:
                         self.add_hashtag_to_dic(hashtag_dic, word)
                     else:
-                        tags = word.strip('#').split('#')
+                        tags = word[1:].split('#')
                         for tag in tags:
-                            self.add_hashtag_to_dic(hashtag_dic, tag)
+                            self.add_hashtag_to_dic(hashtag_dic, '#'+tag)
 
         with open(self.hashtags, 'w') as outf:
             for key in hashtag_dic:
