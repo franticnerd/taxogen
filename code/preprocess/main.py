@@ -78,17 +78,17 @@ def main():
 
 
     ### Step 3: lower case seged output
-    cnt = 0
-    output_file_path = "../../data/papers_segphrase_w_unigram_no_hypen.txt"
-    with open(RAW_SEGMENTATION, "r") as fin, open(output_file_path, "w") as fout:
-        for line in fin:
-            cnt += 1
-            if cnt % 1000 == 0:
-                print(cnt)
-            line = line.strip()
-            line = line.lower()
-            fout.write(rmTag_concat_segphrase(line, no_hypen=True))
-            fout.write("\n")
+    # cnt = 0
+    # output_file_path = "../../data/papers_segphrase_w_unigram_no_hypen.txt"
+    # with open(RAW_SEGMENTATION, "r") as fin, open(output_file_path, "w") as fout:
+    #     for line in fin:
+    #         cnt += 1
+    #         if cnt % 1000 == 0:
+    #             print(cnt)
+    #         line = line.strip()
+    #         line = line.lower()
+    #         fout.write(rmTag_concat_segphrase(line, no_hypen=True))
+    #         fout.write("\n")
 
 
     # output_file_path = "../../data/phrase_chunk_info.txt"
@@ -99,19 +99,26 @@ def main():
     #     print(k, autophraseOutput.phrase_to_pos_sequence[k])
 
     ## Additional steps (deal with hypen)
-    # intput_keyword_path = "../../data/keywords_segphrase_w_unigram.txt"
-    # output_keyword_path = "../../data/keywords_segphrase_w_unigram_no_hypen.txt"
-    # keywords = set()
-    # with open(intput_keyword_path, "r") as fin:
-    #     for line in fin:
-    #         line = line.strip()
-    #         line = re.sub(r"-","_",line)
-    #         keywords.add(line)
-    # print("Number of deduplicated keywords = ", len(keywords))
-    # with open(output_keyword_path, "w") as fout:
-    #     for keyword in keywords:
-    #         fout.write(keyword)
-    #         fout.write("\n")
+    intput_keyword_path = "../../data/keywords_segphrase.txt"
+    output_keyword_path = "../../data/keywords_segphrase_no_hypen.txt"
+    keyword2score = {}
+    with open(intput_keyword_path, "r") as fin:
+        for line in fin:
+            line = line.strip()
+            segs = line.split(",")
+            phrase = re.sub(r"-","_", segs[0])
+            score = float(segs[1])
+            if score >= 0.799999:
+              keyword2score[phrase] = score
+            else:
+              break
+    print("Number of deduplicated keywords = ", len(keyword2score))
+    with open(output_keyword_path, "w") as fout:
+        for ele in sorted(keyword2score.items(), key = lambda x:-x[1]):
+            fout.write(ele[0])
+            fout.write("\t")
+            fout.write(str(ele[1]))
+            fout.write("\n")
 
 
 
@@ -119,5 +126,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 
