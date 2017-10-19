@@ -9,8 +9,8 @@ from scipy.spatial.distance import cosine
 from spherecluster import SphericalKMeans
 from dataset import SubDataSet
 
-class Clusterer:
 
+class Clusterer:
     def __init__(self, data, n_cluster):
         self.data = data
         self.n_cluster = n_cluster
@@ -38,7 +38,6 @@ class Clusterer:
             ret.append((cluster_id, center_idx))
         return ret
 
-
     def find_center_idx_for_one_cluster(self, cluster_id):
         query_vec = self.clus.cluster_centers_[cluster_id]
         members = self.clusters[cluster_id]
@@ -55,14 +54,14 @@ class Clusterer:
         return 1 - cosine(vec_a, vec_b)
 
 
-def run_clustering(full_data, doc_id_file, filter_keyword_file, n_cluster, parent_direcotry, parent_description,\
+def run_clustering(full_data, doc_id_file, filter_keyword_file, n_cluster, parent_direcotry, parent_description, \
                    cluster_keyword_file, hierarchy_file, doc_membership_file):
     dataset = SubDataSet(full_data, doc_id_file, filter_keyword_file)
     print 'Start clustering for %s  keywords under parent: %s' % (len(dataset.keywords), parent_description)
     ## TODO: change later here for n_cluster selection from a range
     clus = Clusterer(dataset.embeddings, n_cluster)
     clus.fit()
-    print('Done clustering for %s keywords under parent: %s', (len(dataset.keywords), parent_description))
+    print('Done clustering for %s keywords under parent: %s' % (len(dataset.keywords), parent_description))
     dataset.write_cluster_members(clus, cluster_keyword_file, parent_direcotry)
     center_names = dataset.write_cluster_centers(clus, parent_description, hierarchy_file)
     dataset.write_document_membership(clus, doc_membership_file, parent_direcotry)
