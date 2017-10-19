@@ -23,6 +23,7 @@ class SeedTermGenerator:
         self.embeddings = paras['embeddings']
         self.seed_keywords_dic = paras['seed_keywords_dic']
         self.seed_keywords = paras['seed_keywords']
+        self.hashtags = paras['hashtags']
         self.pattern = re.compile("[^a-zA-Z0-9\s]+")
 
     def parse_pos_tweet(self, pos_tweet):
@@ -143,6 +144,16 @@ class SeedTermGenerator:
         for key in cosine_cate:
             cosine_cate[key] = OrderedDict(sorted(cosine_cate[key].items(), key=lambda t: t[1], reverse=True))
             result.extend(cosine_cate[key].keys())
+
+        with open(self.hashtags, 'r') as f:
+            data = f.readlines()
+
+        for line in data:
+            line = preprocess_tweet(line, lower=False)
+            result.append(line)
+
+        result = list(set(result))
+
         with open(self.seed_keywords_dic, 'w+') as fout:
             json.dump(cosine_cate, fout, indent=4)
 
