@@ -10,7 +10,7 @@ from collections import OrderedDict
 import re
 
 
-class KeywordGenerator:
+class SeedTermGenerator:
     def __init__(self, paras, logger_name):
         self.pure_tweets = paras['pure_tweets']
         self.pos_tweets = paras['pos_tweets']
@@ -149,13 +149,16 @@ class KeywordGenerator:
         with open(self.seed_keywords, 'w+') as fout:
             fout.write('\n'.join(result))
 
+    def build_phrases(self):
+        return
+
 
 
 
 if __name__ == '__main__':
     start = datetime.utcnow()
     la_paras = paras.load_la_tweets_paras()
-    gen = KeywordGenerator(paras, paras.MAIN_LOG)
+    gen = SeedTermGenerator(paras, paras.MAIN_LOG)
     # gen.build_pos_tag_tweets()
     # gen.build_keyword()
     # gen.build_category_keywords()
