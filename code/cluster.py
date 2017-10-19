@@ -58,7 +58,7 @@ class Clusterer:
 def run_clustering(full_data, doc_id_file, filter_keyword_file, n_cluster, parent_direcotry, parent_description,\
                    cluster_keyword_file, hierarchy_file, doc_membership_file):
     dataset = SubDataSet(full_data, doc_id_file, filter_keyword_file)
-    print('Start clustering for %s  keywords under parent: %s' % (len(dataset.keywords), parent_description))
+    print 'Start clustering for %s  keywords under parent: %s' % (len(dataset.keywords), parent_description)
     ## TODO: change later here for n_cluster selection from a range
     clus = Clusterer(dataset.embeddings, n_cluster)
     clus.fit()
@@ -66,5 +66,5 @@ def run_clustering(full_data, doc_id_file, filter_keyword_file, n_cluster, paren
     dataset.write_cluster_members(clus, cluster_keyword_file, parent_direcotry)
     center_names = dataset.write_cluster_centers(clus, parent_description, hierarchy_file)
     dataset.write_document_membership(clus, doc_membership_file, parent_direcotry)
-    print('Done saving cluster results for %s keywords under parent: %s' % (len(dataset.keywords), parent_description))
+    print 'Done saving cluster results for %s keywords under parent: %s' % (len(dataset.keywords), parent_description)
     return center_names
