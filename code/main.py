@@ -14,8 +14,10 @@ from shutil import copyfile
 from distutils.dir_util import copy_tree
 from os import symlink
 import traceback
-MAX_LEVEL = 3
 from tweet_preprocessing.util.emailutil import EmailNotification
+
+MAX_LEVEL = 3
+
 class DataFiles:
     def __init__(self, input_dir, node_dir):
         self.doc_file = input_dir + 'papers.txt'
@@ -49,7 +51,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
           n_expand, level, email, caseolap=True, local_embedding=True):
     if level > MAX_LEVEL:
         return
-    print '============================= Running level %s, and node: %s ============================='%(level, parent)
+    print('============================= Running level ', level, ' and node ', parent, '=============================')
     start = time.time()
     df = DataFiles(input_dir, node_dir)
     ## TODO: Everytime we need to read-in the whole corpus, which can be slow.
@@ -58,18 +60,17 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
     print('[Main] Done reading the full data using time %s seconds' % (end-start))
 
     # filter the keywords
-    print("caseolap is: %s" % caseolap)
     if caseolap is False:
         try:
             children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent, \
                                       df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file)
         except:
-            print
+	    print
             print('Clustering not finished.')
             print "*** print_exc:"
             traceback.print_exc()
-            if level < 3:
-                email.send_email(to='lunanli3@illinois.edu', subject='Taxongen exception', content='Exception throw in taxongen. Please check out.log')
+	    if level < 3:
+		email.send_email(to='lunanli3@illinois.edu', subject='Taxongen exception', content='Exception throw in taxongen. Please check out.log')
             return
         copyfile(df.seed_keyword_file, df.filtered_keyword_file)
     else:
@@ -81,12 +82,14 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
                 children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent,\
                                df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file)
             except:
-                print('Clustering not finished.')
-                print "*** print_exc:"
+		
+ 		print
+            	print('Clustering not finished.')
+            	print "*** print_exc:"
                 traceback.print_exc()
                 if level < 3:
                     email.send_email(to='lunanli3@illinois.edu', subject='Taxongen exception', content='Exception throw in taxongen. Please check out.log')
-                return
+		return
 
             start = time.time()
             main_caseolap(df.link_file, df.doc_membership_file, df.cluster_keyword_file, df.caseolap_keyword_file)
@@ -110,7 +113,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
 
     for child in children:
         recur(input_dir, node_dir + child + '/', n_cluster, child, n_cluster_iter, \
-              filter_thre, n_expand, level + 1, email, caseolap, local_embedding)
+              filter_thre, n_expand, level + 1, en, caseolap, local_embedding)
 
 def main(opt, en):
     input_dir = opt['input_dir']
@@ -124,7 +127,7 @@ def main(opt, en):
     # our method
     root_dir = opt['data_dir'] + 'our-tweets/'
     copy_tree(init_dir, root_dir)
-    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, en, True, local_embedding=True)
+    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, en, True, True)
 
     # without caseolap
     # root_dir = opt['data_dir'] + 'ablation-no-caseolap-l3/'
@@ -147,9 +150,8 @@ if __name__ == '__main__':
     # opt = load_dblp_params()
     # opt = load_sp_params()
     #opt = load_dblp_params_method()
-
-    start_time = time.time()
     opt = load_tweets_params_method('tweets/la')
+    
     print()
     print("[Main] Finish load parameters: %s" % str(opt))
     en =EmailNotification()
@@ -157,3 +159,6 @@ if __name__ == '__main__':
     print("--- %s seconds ---" % (time.time() - start_time))
     en.send_email(to='lunanli3@illinois.edu', subject='Taxongen job finished',
           content='Please check the result on server at /shared/data/lunanli3/local-embedding/taxonomies/our-tweets.txt. Thanks.\n Best,\nLunan Li')
+
+    main(opt)
+

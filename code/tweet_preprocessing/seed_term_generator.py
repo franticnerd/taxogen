@@ -145,14 +145,14 @@ class SeedTermGenerator:
             cosine_cate[key] = OrderedDict(sorted(cosine_cate[key].items(), key=lambda t: t[1], reverse=True))
             result.extend(cosine_cate[key].keys())
 
-        with open(self.hashtags, 'r') as f:
-            data = f.readlines()
+        #with open(self.hashtags, 'r') as f:
+            #data = f.readlines()
 
-        for line in data:
-            line = preprocess_tweet(line, lower=False)
-            result.append(line)
+        #for line in data:
+            #line = preprocess_tweet(line, lower=False)
+            #result.append(line)
 
-        result = list(set(result))
+        #result = list(set(result))
 
         with open(self.seed_keywords_dic, 'w+') as fout:
             json.dump(cosine_cate, fout, indent=4)

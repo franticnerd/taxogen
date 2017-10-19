@@ -130,7 +130,6 @@ def main(paras):
 # input_dir = '/shared/data/czhang82/projects/local-embedding/sp/input/'
 # init_dir = '/shared/data/czhang82/projects/local-embedding/sp/init/'
 if __name__ == '__main__':
-
     if len(sys.argv) < 2:
         print('Usage: python dir/file')
 
