@@ -103,23 +103,31 @@ class TweetHandler:
             data = f.readlines()
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_hashtags.__name__,
                                                       'Build hashtags'))
-        count = 0
+        hashtag_dic = {}
+        for line in data:
+            line = preprocess_tweet(line, lower=False)
+            line = line.split(' ')
+            for word in line:
+                if word.startswith('#'):
+                    if word.count('#') == 1:
+                        self.add_hashtag_to_dic(hashtag_dic, word)
+                    else:
+                        tags = word.strip('#').split('#')
+                        for tag in tags:
+                            self.add_hashtag_to_dic(hashtag_dic, tag)
+
         with open(self.hashtags, 'w') as outf:
-            for line in data:
-                count += 1
-                line = preprocess_tweet(line, lower=False)
-                line = line.split(' ')
-                for word in line:
-                    if word.startswith('#'):
-                        if word.count('#') == 1:
-                            outf.write('{0}\n'.format(word))
-                        else:
-                            tags = word.strip('#').split('#')
-                            for tag in tags:
-                                outf.write('#{0}\n'.format(tag))
+            for key in hashtag_dic:
+                if hashtag_dic[key] >= 10:
+                    outf.write('{0}\n'.format(key))
+
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_hashtags.__name__,
                                                   'Finish building hashtags'))
 
+    def add_hashtag_to_dic(self, dic, hastag):
+        if hastag not in dic:
+            dic[hastag] = 0
+        dic[hastag] += 1
 
 def preprocess_tweet(tweet, lower=True):
     if lower:
