@@ -118,7 +118,7 @@ class TweetHandler:
 
         with open(self.hashtags, 'w') as outf:
             for key in hashtag_dic:
-                if hashtag_dic[key] >= 30:
+                if hashtag_dic[key] >= 10:
                     outf.write('{0}\n'.format(key))
 
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_hashtags.__name__,
