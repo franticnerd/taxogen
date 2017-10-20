@@ -112,7 +112,7 @@ def load_dblp_params_method():
 
 def load_tweets_params_method(corpusPath):
     pd = dict()
-    pd['data_dir'] = 'shared/data/lunanli3/local-embedding/'
+    pd['data_dir'] = '/shared/data/lunanli3/local-embedding/'
     pd['raw_dir'] = pd['data_dir'] + 'raw/' + corpusPath + '/'
     pd['input_dir'] = pd['data_dir'] + 'input/' + corpusPath + '/'
     pd['init_dir'] = pd['data_dir'] + 'init/' + corpusPath + '/'
