@@ -13,8 +13,8 @@ from local_embedding_training import main_local_embedding
 from shutil import copyfile
 from distutils.dir_util import copy_tree
 from os import symlink
-import traceback
-
+from tweet_preprocessing.util.logger import Logger
+from tweet_preprocessing.util.emailutil import EmailNotification
 MAX_LEVEL = 3
 
 class DataFiles:
@@ -48,15 +48,16 @@ level: the current level in the recursion
 
 def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
           n_expand, level, caseolap=True, local_embedding=True):
+    logger = Logger.get_logger("MAIN LOG")
     if level > MAX_LEVEL:
         return
-    print('============================= Running level ', level, ' and node ', parent, '=============================')
+    logger.info('============================= Running level: %s, and node: %s =============================' % (level, parent))
     start = time.time()
     df = DataFiles(input_dir, node_dir)
     ## TODO: Everytime we need to read-in the whole corpus, which can be slow.
     full_data = DataSet(df.embedding_file, df.doc_file)
     end = time.time()
-    print('[Main] Done reading the full data using time %s seconds' % (end-start))
+    logger.info('[Main] Done reading the full data using time %s seconds' % (end-start))
 
     # filter the keywords
     if caseolap is False:
@@ -64,10 +65,8 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
             children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent, \
                                       df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file)
         except:
-	    print
-            print('Clustering not finished.')
-            print "*** print_exc:"
-            traceback.print_exc()
+            logger.info("\n")
+            logger.exception("Clustering not finished.")
             return
         copyfile(df.seed_keyword_file, df.filtered_keyword_file)
     else:
@@ -79,17 +78,15 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
                 children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent,\
                                df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file)
             except:
- 		print
-            	print('Clustering not finished.')
-            	print "*** print_exc:"
-                traceback.print_exc()
+                logger.info("\n")
+                logger.exception("Clustering not finished.")
                 return
 
             start = time.time()
             main_caseolap(df.link_file, df.doc_membership_file, df.cluster_keyword_file, df.caseolap_keyword_file)
             main_rank_phrase(df.caseolap_keyword_file, df.filtered_keyword_file, filter_thre)
             end = time.time()
-            print("[Main] Finish running CaseOALP using %s (seconds)" % (end - start))
+            logger.info("[Main] Finish running CaseOALP using %s (seconds)" % (end - start))
 
     # prepare the embedding for child level
     if level < MAX_LEVEL:
@@ -97,13 +94,13 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
             src_file = node_dir + 'embeddings.txt'
             for child in children:
                 tgt_file = node_dir + child + '/embeddings.txt'
-                # copyfile(src_file, tgt_file)
+                copyfile(src_file, tgt_file)
                 symlink(src_file, tgt_file)
         else:
             start = time.time()
             main_local_embedding(node_dir, df.doc_file, df.index_file, parent, n_expand)
             end = time.time()
-            print("[Main] Finish running local embedding training using %s (seconds)" % (end - start))
+            logger.info("[Main] Finish running local embedding training using %s (seconds)" % (end - start))
 
     for child in children:
         recur(input_dir, node_dir + child + '/', n_cluster, child, n_cluster_iter, \
@@ -144,9 +141,18 @@ if __name__ == '__main__':
     # opt = load_dblp_params()
     # opt = load_sp_params()
     #opt = load_dblp_params_method()
+
+    email_notif = EmailNotification()
     opt = load_tweets_params_method('tweets/la')
-    print()
-    print("[Main] Finish load parameters: %s" % str(opt))
+    logger = Logger("./out_log.txt")
+    logger.info("[Main] Finish load parameters: %s" % str(opt))
 
-    main(opt)
-
+    try:
+        main(opt)
+    except:
+        logger.exception("*** print_exc:")
+        email_notif.send_email(to='lunanli3@illinois.edu', subject='Taxongen job throw error',
+                               content='Please check the log file on server at ~/local_embedding/code/out_log.txt. Thanks.\n Best,\nLunan Li')
+    else:
+        email_notif.send_email(to='lunanli3@illinois.edu', subject='Taxongen job finished',
+                  content='Please check the result on server at /shared/data/lunanli3/local-embedding/taxonomies/our-tweets.txt. Thanks.\n Best,\nLunan Li')

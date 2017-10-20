@@ -10,7 +10,7 @@ import math
 import ast
 import argparse
 import copy
-
+from tweet_preprocessing.util.logger import Logger
 
 class CaseSlim:
 
@@ -207,7 +207,8 @@ def read_data(label_f, link_f):
       cells[cell].append(doc_id)
       docs.add(doc_id)
 
-  print('[CaseOLAP] Read document cluster membership file done.')
+  logger = Logger.get_logger("MAIN LOG")
+  logger.info('[CaseOLAP] Read document cluster membership file done.')
 
   with open(link_f, 'r+') as f:
     for line in f:
@@ -223,7 +224,7 @@ def read_data(label_f, link_f):
         phrases.add(phrase)
         freq_data[doc_id][phrase] = w
 
-  print('[CaseOLAP] Read keyword_cnt file done.')
+  logger.info('[CaseOLAP] Read keyword_cnt file done.')
 
   return cells, freq_data, phrases
 
@@ -239,16 +240,16 @@ def read_target_tokens(token_f):
     for line in f:
       segments = line.strip('\r\n ').split('\t')
       tokens.add(segments[1])
-
-  print('[CaseOLAP] Read keyword cluster membership file done.')
+  logger = Logger.get_logger("MAIN LOG")
+  logger.info('[CaseOLAP] Read keyword cluster membership file done.')
   return tokens
 
 
 def run_caseolap(cells, freq_data, target_phs, o_file, verbose=3, top_k=200):
   of = open(o_file, 'w+')
-
+  logger = Logger.get_logger("MAIN LOG")
   for cell in cells:
-    print('[CaseOLAP] Running CaseOLAP for cell: %s' % cell)
+    logger.info('[CaseOLAP] Running CaseOLAP for cell: %s' % cell)
 
     selected_docs = cells[cell]
     context_doc_groups = copy.copy(cells)
@@ -260,7 +261,7 @@ def run_caseolap(cells, freq_data, target_phs, o_file, verbose=3, top_k=200):
 
     phr_str = ', '.join([ph[0] + '|' + str(ph[1]) for ph in top_phrases if ph[0] in target_phs])
     of.write('[%s]\n' % phr_str)
-    print('[CaseOLAP] Finished CaseOLAP for cell: %s' % cell)
+    logger.info('[CaseOLAP] Finished CaseOLAP for cell: %s' % cell)
 
 
 def main_caseolap(link_f, cell_f, token_f, output_f):

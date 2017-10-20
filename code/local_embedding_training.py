@@ -8,9 +8,11 @@ import argparse
 import subprocess
 import utils
 import os
+from tweet_preprocessing.util.logger import Logger
 
 def read_files(folder, parent):
-    print("[Local-embedding] Reading file:", parent)
+    logger = Logger.get_logger("MAIN LOG")
+    logger.info("[Local-embedding] Reading file:", parent)
     emb_file = '%s/embeddings.txt' % folder
     hier_file = '%s/hierarchy.txt' % folder
     keyword_file = '%s/keywords.txt' % folder ## here only consider those remaining keywords
@@ -35,12 +37,12 @@ def read_files(folder, parent):
             if segs[1] == parent:
                 cates[segs[0]] = set()
 
-    print('[Local-embedding] Finish reading embedding, hierarchy and keywords files.')
+    logger.info('[Local-embedding] Finish reading embedding, hierarchy and keywords files.')
 
     return embs, keywords, cates
 
 def relevant_phs(embs, cates, N):
-
+    logger = Logger.get_logger("MAIN LOG")
     for cate in cates:
         worst = -100
         bestw = [-100] * (N + 1)
@@ -67,11 +69,12 @@ def relevant_phs(embs, cates, N):
         for ph in bestp[:N]:
             cates[cate].add(ph)
 
-    print('Top similar phrases found.')
+    logger.info('Top similar phrases found.')
 
     return cates
 
 def revevant_docs(text, reidx, cates):
+    logger = Logger.get_logger("MAIN LOG")
     docs = {}
     idx = 0
     pd_map = {}
@@ -93,20 +96,20 @@ def revevant_docs(text, reidx, cates):
                 # print line
             pd_map[segments[0]] = set([int(x) for x in doc_ids])
 
-    print('Relevant docs found.')
+    logger.info('Relevant docs found.')
 
     return pd_map, docs
 
 
 def run_word2vec(pd_map, docs, cates, folder):
-
+    logger = Logger.get_logger("MAIN LOG")
     for cate in cates:
 
         c_docs = set()
         for ph in cates[cate]:
             c_docs = c_docs.union(pd_map[ph])
 
-        print('Starting cell %s with %d docs.' % (cate, len(c_docs)))
+        logger.info('Starting cell %s with %d docs.' % (cate, len(c_docs)))
         
         # save file
         # sub_folder = '%s/%s' % (folder, cate)
@@ -121,13 +124,13 @@ def run_word2vec(pd_map, docs, cates, folder):
             for d in c_docs:
                 g.write(docs[d])
 
-        print('[Local-embedding] starting calling word2vec')
-        print(input_f)
-        print(output_f)
+        logger.info('[Local-embedding] starting calling word2vec')
+        # print(input_f)
+        # print(output_f)
         # embed_proc = subprocess.Popen(["./word2vec", "-threads", "20", "-train", input_f, "-output", output_f], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # embed_proc.wait()
         subprocess.call(["./word2vec", "-threads", "20", "-train", input_f, "-output", output_f])
-        print('[Local-embedding] done training word2vec')
+        logger.info('[Local-embedding] done training word2vec')
 
 
 def main_local_embedding(folder, doc_file, reidx, parent, N):

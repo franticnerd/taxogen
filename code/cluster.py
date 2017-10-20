@@ -8,6 +8,8 @@ from collections import defaultdict
 from scipy.spatial.distance import cosine
 from spherecluster import SphericalKMeans
 from dataset import SubDataSet
+from tweet_preprocessing.util.logger import Logger
+
 
 class Clusterer:
 
@@ -28,7 +30,8 @@ class Clusterer:
         self.membership = labels
         self.center_ids = self.gen_center_idx()
         self.inertia_scores = self.clus.inertia_
-        print('Clustering concentration score:', self.inertia_scores)
+        logger = Logger.get_logger("MAIN LOG")
+        logger.info('Clustering concentration score: %s'%self.inertia_scores)
 
     # find the idx of each cluster center
     def gen_center_idx(self):
@@ -57,14 +60,19 @@ class Clusterer:
 
 def run_clustering(full_data, doc_id_file, filter_keyword_file, n_cluster, parent_direcotry, parent_description,\
                    cluster_keyword_file, hierarchy_file, doc_membership_file):
+    logger = Logger.get_logger("MAIN LOG")
     dataset = SubDataSet(full_data, doc_id_file, filter_keyword_file)
-    print('Start clustering for ', len(dataset.keywords), ' keywords under parent:', parent_description)
+    logger.info('\n')
+    logger.info('Start clustering for %s keywords under parent: %s' % (len(dataset.keywords), parent_description))
     ## TODO: change later here for n_cluster selection from a range
     clus = Clusterer(dataset.embeddings, n_cluster)
     clus.fit()
-    print('Done clustering for ', len(dataset.keywords), ' keywords under parent:', parent_description)
+    logger.info('\n')
+    logger.info('Done clustering for %s keywords under parent: %s'%(len(dataset.keywords), parent_description))
     dataset.write_cluster_members(clus, cluster_keyword_file, parent_direcotry)
     center_names = dataset.write_cluster_centers(clus, parent_description, hierarchy_file)
     dataset.write_document_membership(clus, doc_membership_file, parent_direcotry)
-    print('Done saving cluster results for ', len(dataset.keywords), ' keywords under parent:', parent_description)
+    logger.info('\n')
+    logger.info('Done saving cluster results for %s keywords under parent: %s'%(len(dataset.keywords), parent_description))
+    logger.info('\n')
     return center_names

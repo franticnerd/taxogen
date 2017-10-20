@@ -8,6 +8,7 @@ import numpy as np
 from collections import defaultdict
 from math import log
 from utils import ensure_directory_exist
+from tweet_preprocessing.util.logger import Logger
 
 # the complete data set
 class DataSet:
@@ -70,13 +71,14 @@ class SubDataSet:
 
     def load_keywords(self, keyword_file, full_data):
         keywords = []
+        logger = Logger.get_logger("MAIN LOG")
         with open(keyword_file, 'r') as fin:
             for line in fin:
                 keyword = line.strip()
                 if keyword in full_data.embeddings:
                     keywords.append(keyword)
                 else:
-                    print(keyword, ' not in the embedding file')
+                    logger.info('%s not in the embedding file'%keyword)
         return keywords
 
     def gen_keyword_id(self):
