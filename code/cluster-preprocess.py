@@ -48,11 +48,18 @@ def trim_document_set(raw_doc_file, doc_file, keyword_file):
     :return:
     '''
     keyword_set = set(load_keywords(keyword_file))
+    doc_ids = []
+    doc_id = 0
     with open(raw_doc_file, 'r') as fin, open(doc_file, 'w') as fout:
         for line in fin:
             doc = line.strip().split()
             if check_doc_contain_keyword(doc, keyword_set):
+                doc_ids.append(doc_id)
+                doc_id += 1
                 fout.write(' '.join(doc) + '\n')
+            else:
+                doc_ids.append(-1)
+    return doc_ids
 
 
 def check_doc_contain_keyword(doc, keyword_set):
@@ -113,11 +120,19 @@ def main(raw_dir, input_dir, init_dir):
     doc_keyword_cnt_file = input_dir + 'keyword_cnt.txt'
     doc_id_file = init_dir + 'doc_ids.txt'
 
+
     trim_keywords(raw_keyword_file, keyword_file, embedding_file)
     print('Done trimming the keywords.')
 
-    trim_document_set(raw_doc_file, doc_file, keyword_file)
+    doc_ids = trim_document_set(raw_doc_file, doc_file, keyword_file)
     print('Done trimming the documents.')
+    ## additional output file to map original document line number to new doc_id
+    raw_doc_cnt2doc_id_file = input_dir + "doc_cnt2doc_id.txt"
+    with open(raw_doc_cnt2doc_id_file, "w") as fout:
+        for ele in doc_ids:
+            fout.write(str(ele)+"\n")
+    print('Done saving doc_cnt2doc_id the documents.')
+
 
     gen_doc_keyword_cnt_file(doc_file, doc_keyword_cnt_file)
     print('Done counting the keywords in documents.')
