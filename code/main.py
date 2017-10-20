@@ -94,7 +94,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
             src_file = node_dir + 'embeddings.txt'
             for child in children:
                 tgt_file = node_dir + child + '/embeddings.txt'
-                copyfile(src_file, tgt_file)
+                # copyfile(src_file, tgt_file)
                 symlink(src_file, tgt_file)
         else:
             start = time.time()
