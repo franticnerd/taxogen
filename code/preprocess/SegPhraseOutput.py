@@ -1,10 +1,11 @@
+'''
+__author__: Jiaming Shen
+__description__: Parse SegPhrase output
+'''
 import re
 import itertools
 from collections import deque
-from pattern.en import parsetree
-from pattern.en import parse
-from pattern.search import search
-from pattern.en import pprint
+# from pattern.en import parse
 
 class SegPhraseOutput(object):
     def __init__(self, input_path=None):
@@ -128,3 +129,16 @@ class SegPhraseOutput(object):
             for phrase in self.candidate_phrase:
                 fout.write("_".join(phrase.split()))
                 fout.write("\n")
+
+    def obtain_candidate_phrase_wiki(self, inputFile, outputFile):
+        with open(inputFile, "r") as fin, open(outputFile, "w") as fout:
+            for line in fin:
+              line = line.strip()
+              segs = line.split("\t")
+              phrase = "_".join(segs[0].split())
+              try:
+                score = int(segs[1])
+              except:
+                print(line)
+              if score != 0:
+                fout.write(phrase+"\n")

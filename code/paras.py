@@ -110,3 +110,16 @@ def load_dblp_params_method():
     pd['n_cluster_iter'] = 2
     return pd
 
+
+def load_semantic_scholar_params():
+    pd = dict()
+    pd['data_dir'] = '/shared/data/jiaming/local-embedding/data/semantic_scholar/'
+    pd['doc_file'] = pd['data_dir'] + 'input/papers.txt'
+    pd['doc_keyword_cnt_file'] = pd['data_dir'] + 'input/keyword_cnt.txt'
+    pd['input_dir'] = pd['data_dir'] + 'input/'
+    pd['root_node_dir'] = pd['data_dir'] + 'cluster/'
+    pd['n_cluster'] = 8
+    pd['filter_thre'] = 0.25
+    pd['n_expand'] = 100
+    pd['n_cluster_iter'] = 4
+    return pd

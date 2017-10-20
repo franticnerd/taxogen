@@ -4,19 +4,19 @@ __description__: Based on AutoPhrase output, generate 1) papers.txt, 2) keywords
 __latest_update__: Auguest 2, 2017
 '''
 from config import *
-from AutoPhraseOutput import AutoPhraseOutput
+# from AutoPhraseOutput import AutoPhraseOutput
 from SegPhraseOutput import SegPhraseOutput
 import re
-from pattern.en import parsetree
-from pattern.en import parse
-from pattern.search import search
-from pattern.en import pprint
-from textblob import TextBlob
-from collections import deque
-import time
-from collections import Counter
-from itertools import groupby
-import itertools
+# from pattern.en import parsetree
+# from pattern.en import parse
+# from pattern.search import search
+# from pattern.en import pprint
+# from textblob import TextBlob
+# from collections import deque
+# import time
+# from collections import Counter
+# from itertools import groupby
+# import itertools
 
 def rmTag_concat(line):
     def concat(matched):
@@ -28,9 +28,17 @@ def rmTag_concat(line):
     res = re.sub("<phrase>(.*?)</phrase>", concat, line)
     return res
 
-def rmTag_concat_segphrase(line, no_hypen = False):
+def rmTag_concat_segphrase(line, no_hypen = False, remove_noise=False):
     line = re.sub(r"\[", "<phrase>", line)
     line = re.sub(r"\]", "</phrase>", line)
+
+    if remove_noise:
+        line = re.sub(r'[^\x00-\x7F]+', ' ', line)
+        ## add space before and after special characters
+        line = re.sub(r"([.,!:?()])", r" \1 ", line)
+        ## replace multiple continuous whitespace with a single one
+        line = re.sub(r"\s{2,}", " ", line)
+
     def concat(matched):
         phrase = matched.group()
         phrase = re.sub('<phrase>', '', phrase)
@@ -46,6 +54,12 @@ def rmTag_concat_segphrase(line, no_hypen = False):
 def main():
     ### Step 1: obtain phrase_to_pos_sequence files
     # segphraseOutput = SegPhraseOutput()
+    # inputPath = "../../data/linked_results3.wiki.tsv"
+    # outputPath = "../../data/quality_NP.txt"
+    # segphraseOutput.obtain_candidate_phrase_wiki(inputPath, outputPath)
+
+
+
     # cnt = 0
     # start = time.time()
     # with open(RAW_SEGMENTATION, "r") as fin:
@@ -78,17 +92,18 @@ def main():
 
 
     ### Step 3: lower case seged output
-    # cnt = 0
-    # output_file_path = "../../data/papers_segphrase_w_unigram_no_hypen.txt"
-    # with open(RAW_SEGMENTATION, "r") as fin, open(output_file_path, "w") as fout:
-    #     for line in fin:
-    #         cnt += 1
-    #         if cnt % 1000 == 0:
-    #             print(cnt)
-    #         line = line.strip()
-    #         line = line.lower()
-    #         fout.write(rmTag_concat_segphrase(line, no_hypen=True))
-    #         fout.write("\n")
+    cnt = 0
+    input_file_path = "/shared/data/jiaming/semantic_scholar/parsed_semantic_scholar_docs_segphrase.txt"
+    output_file_path = "/shared/data/jiaming/semantic_scholar/papers_segphrase_w_unigram_no_hypen.txt"
+    with open(input_file_path, "r") as fin, open(output_file_path, "w") as fout:
+        for line in fin:
+            cnt += 1
+            if cnt % 10000 == 0:
+                print(cnt)
+            line = line.strip()
+            line = line.lower()
+            fout.write(rmTag_concat_segphrase(line, no_hypen=True, remove_noise=True))
+            fout.write("\n")
 
 
     # output_file_path = "../../data/phrase_chunk_info.txt"
@@ -99,26 +114,27 @@ def main():
     #     print(k, autophraseOutput.phrase_to_pos_sequence[k])
 
     ## Additional steps (deal with hypen)
-    intput_keyword_path = "../../data/keywords_segphrase.txt"
-    output_keyword_path = "../../data/keywords_segphrase_no_hypen.txt"
-    keyword2score = {}
-    with open(intput_keyword_path, "r") as fin:
-        for line in fin:
-            line = line.strip()
-            segs = line.split(",")
-            phrase = re.sub(r"-","_", segs[0])
-            score = float(segs[1])
-            if score >= 0.799999:
-              keyword2score[phrase] = score
-            else:
-              break
-    print("Number of deduplicated keywords = ", len(keyword2score))
-    with open(output_keyword_path, "w") as fout:
-        for ele in sorted(keyword2score.items(), key = lambda x:-x[1]):
-            fout.write(ele[0])
-            fout.write("\t")
-            fout.write(str(ele[1]))
-            fout.write("\n")
+    # intput_keyword_path = "../../data/keywords_segphrase.txt"
+    # output_keyword_path = "../../data/keywords_segphrase_no_hypen.txt"
+    # keyword2score = {}
+    # with open(intput_keyword_path, "r") as fin:
+    #     for line in fin:
+    #         line = line.strip()
+    #         segs = line.split(",")
+    #         phrase = re.sub(r"-","_", segs[0])
+    #         score = float(segs[1])
+    #         if score >= 0.799999:
+    #           keyword2score[phrase] = score
+    #         else:
+    #           break
+    # print("Number of deduplicated keywords = ", len(keyword2score))
+    # with open(output_keyword_path, "w") as fout:
+    #     for ele in sorted(keyword2score.items(), key = lambda x:-x[1]):
+    #         fout.write(ele[0])
+    #         fout.write("\t")
+    #         fout.write(str(ele[1]))
+    #         fout.write("\n")
+
 
 
 

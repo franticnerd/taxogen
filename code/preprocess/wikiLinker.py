@@ -13,7 +13,7 @@ from collections import Counter
 
 class WikiLinker:
   """A class for Wikipedia"""
-  _version = 1.0
+  _version = 0.2
 
   def __init__(self):
     None
