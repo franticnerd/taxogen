@@ -6,6 +6,7 @@ __latest_updates__: 09/24/2017
 from os import listdir
 from os.path import isfile, join
 import sys
+from paras import load_tweets_params_method
 
 def get_candidates(folder, o_file):
   files = ['%s%s' % (folder, f) for f in listdir(folder) if isfile(join(folder, f))]
@@ -66,11 +67,23 @@ def get_reidx_file(text, cand_f, o_file):
 # get_reidx_file('../data/dblp/input/papers.txt', '../data/dblp/input/keywords.txt', '../data/dblp/input/index.txt')
 # get_reidx_file('../data/sp/input/papers.txt', '../data/sp/input/keywords.txt', '../data/sp/input/index.txt')
 if __name__ == '__main__':
-  corpusName = sys.argv[1]
-  papers_file = '../data/'+corpusName+'/input/papers.txt'
-  keywords_file = '../data/'+corpusName+'/input/keywords.txt'
-  index_file = '../data/'+corpusName+'/input/index.txt'
-  get_reidx_file(papers_file, keywords_file, index_file)
+    if len(sys.argv) < 2:
+        print('Usage: python dir/file')
+    else:
+        print(sys.argv)
+        corpusPath = sys.argv[1]
+        print('Corpus path is: %s' % corpusPath)
+        tweet_paras = load_tweets_params_method(corpusPath)
+        print('Raw dir is: %s' % tweet_paras['raw_dir'])
+        input_dir = tweet_paras['input_dir']
+        print('Input dir is: %s' % input_dir)
+        init_dir = tweet_paras['init_dir']
+        print('Init dir is: %s' % init_dir)
+
+        papers_file = tweet_paras['input_dir'] + 'papers.txt'
+        keywords_file = tweet_paras['input_dir'] + 'keywords.txt'
+        index_file = tweet_paras['input_dir'] + 'index.txt'
+        get_reidx_file(papers_file, keywords_file, index_file)
 
 
 # exit(1)

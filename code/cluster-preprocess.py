@@ -3,8 +3,9 @@ __author__: Chao Zhang
 __description__:
 __latest_updates__: 09/26/2017
 '''
-import sys
+import sys, os
 from collections import Counter
+from paras import load_tweets_params_method
 
 def trim_keywords(raw_keyword_file, keyword_file, embedding_file):
     '''
@@ -101,17 +102,17 @@ def gen_doc_ids(input_file, output_file):
             doc_id += 1
 
 
-def main(raw_dir, input_dir, init_dir):
+def main(paras):
     ## Following are three required input files
-    raw_doc_file = raw_dir + 'papers.txt'
-    raw_keyword_file = raw_dir + 'keywords.txt'
-    embedding_file = input_dir + 'embeddings.txt'
+    raw_doc_file = paras['doc_file']
+    raw_keyword_file = paras['doc_keyword_cnt_file']
+    embedding_file = paras['doc_keyword_embedding_file']
 
     ## Following are four output files
-    doc_file = input_dir + 'papers.txt'
-    keyword_file = input_dir + 'keywords.txt'
-    doc_keyword_cnt_file = input_dir + 'keyword_cnt.txt'
-    doc_id_file = init_dir + 'doc_ids.txt'
+    doc_file = paras['input_dir'] + 'papers.txt'
+    keyword_file = paras['input_dir'] + 'keywords.txt'
+    doc_keyword_cnt_file = paras['input_dir'] + 'keyword_cnt.txt'
+    doc_id_file = paras['init_dir'] + 'doc_ids.txt'
 
     trim_keywords(raw_keyword_file, keyword_file, embedding_file)
     print('Done trimming the keywords.')
@@ -129,8 +130,24 @@ def main(raw_dir, input_dir, init_dir):
 # input_dir = '/shared/data/czhang82/projects/local-embedding/sp/input/'
 # init_dir = '/shared/data/czhang82/projects/local-embedding/sp/init/'
 if __name__ == '__main__':
-    corpusName = sys.argv[1]
-    raw_dir = '../data/'+corpusName+'/raw/'
-    input_dir = '../data/'+corpusName+'/input/'
-    init_dir = '../data/'+corpusName+'/init/'
-    main(raw_dir, input_dir, init_dir)
+    if len(sys.argv) < 2:
+        print('Usage: python dir/file')
+
+    else:
+        print(sys.argv)
+        corpusPath = sys.argv[1]
+        print('Corpus path is: %s' % corpusPath)
+        tweet_paras = load_tweets_params_method(corpusPath)
+        print('Raw dir is: %s' % tweet_paras['raw_dir'])
+        input_dir = tweet_paras['input_dir']
+        print('Input dir is: %s' % input_dir)
+        init_dir = tweet_paras['init_dir']
+        print('Init dir is: %s' % init_dir)
+
+        if not os.path.exists(input_dir):
+            os.makedirs(input_dir)
+
+        if not os.path.exists(init_dir):
+            os.makedirs(init_dir)
+
+        main(tweet_paras)
