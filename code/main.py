@@ -167,8 +167,9 @@ if __name__ == '__main__':
             except:
                 logger.exception("*** print_exc:")
                 email_notif.send_email(to='lunanli3@illinois.edu', subject='Taxongen job throw error',
-                                       content='Please check the log file on server at ~/local_embedding/code/out_log.txt. Thanks.\n Best,\nLunan Li')
+                                       content='Job with n_cluster: %s, and n_expand: %s failed. Please check the log file on server at ~/local_embedding/code/out_log.txt. Thanks.\n Best,\nLunan Li'
+                                               % (n_cluster, n_expand))
             else:
                 email_notif.send_email(to='lunanli3@illinois.edu', subject='Taxongen job finished',
-                          content='Job with n_cluster: %s, and n_expand: %s is finished. Please check the result on server at /shared/data/lunanli3/local-embedding/taxonomies/our-tweets.txt. Thanks.\n Best,\nLunan Li'
+                          content='Job with n_cluster: %s, and n_expand: %s finished. Please check the result on server at /shared/data/lunanli3/local-embedding/taxonomies/our-tweets.txt. Thanks.\n Best,\nLunan Li'
                                        %(n_cluster, n_expand))
