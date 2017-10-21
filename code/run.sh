@@ -1,10 +1,10 @@
 #!/bin/bash
 ## Name of the input corpus
-corpusName=semantic_scholar
+corpusName=eecs
 ## Name of the taxonomy
-taxonName=l3-0.25
+taxonName=our-l3
 ## If need preprocessing from raw input, set it to be 1, otherwise, set 0
-FIRST_RUN=${FIRST_RUN:- 1}
+FIRST_RUN=${FIRST_RUN:- 0}
 
 if [ $FIRST_RUN -eq 1 ]; then
 	echo 'Start data preprocessing'
