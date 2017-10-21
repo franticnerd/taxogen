@@ -147,7 +147,7 @@ if __name__ == '__main__':
     # opt = load_sp_params()
     #opt = load_dblp_params_method()
 
-    n_clusters = [18, 20]
+    n_clusters = [18, 21]
     n_expands = [200]
 
     for n_cluster in n_clusters:
