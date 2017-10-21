@@ -48,9 +48,14 @@ level: the current level in the recursion
 
 def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
           n_expand, level, caseolap=True, local_embedding=True):
+
     logger = Logger.get_logger("MAIN LOG")
     if level > MAX_LEVEL:
         return
+
+    if level > 0:
+        n_expand = 5
+
     logger.info('============================= Running level: %s, and node: %s =============================' % (level, parent))
     start = time.time()
     df = DataFiles(input_dir, node_dir)
@@ -148,7 +153,10 @@ if __name__ == '__main__':
     logger.info("[Main] Finish load parameters: %s" % str(opt))
 
     try:
+        start = time.time()
         main(opt)
+        end = time.time()
+        logger.info("====================================job finished, take %s seconds==========================================="%(end-start))
     except:
         logger.exception("*** print_exc:")
         email_notif.send_email(to='lunanli3@illinois.edu', subject='Taxongen job throw error',
