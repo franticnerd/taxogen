@@ -107,7 +107,7 @@ def get_phrases(phrase_file, sep="\t", first_nrow=0):
   return phrases, phrases2score
 
 def main():
-  filepath = "../../data/semantic_scholar/keywords_segphrase_no_hypen.txt"
+  filepath = "/shared/data/jiaming/semantic_scholar/cs/keywords.txt"
   phrases, phrases2score = get_phrases(filepath, sep="\t", first_nrow=0)
   print("Number of phrases")
 

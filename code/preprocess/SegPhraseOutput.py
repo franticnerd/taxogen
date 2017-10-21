@@ -133,12 +133,14 @@ class SegPhraseOutput(object):
     def obtain_candidate_phrase_wiki(self, inputFile, outputFile):
         with open(inputFile, "r") as fin, open(outputFile, "w") as fout:
             for line in fin:
-              line = line.strip()
-              segs = line.split("\t")
-              phrase = "_".join(segs[0].split())
-              try:
-                score = int(segs[1])
-              except:
-                print(line)
-              if score != 0:
-                fout.write(phrase+"\n")
+                # fout.write(line)
+                # # print(line)
+                line = line.strip()
+                segs = line.split("\t")
+                phrase = "_".join(segs[0].split())
+                try:
+                    score = float(segs[1])
+                except:
+                    print(line)
+                if score != 0:
+                    fout.write(phrase+"\n")

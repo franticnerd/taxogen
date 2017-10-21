@@ -48,14 +48,16 @@ def rmTag_concat_segphrase(line, no_hypen = False, remove_noise=False):
         return '_'.join(phrase.split())
 
     res = re.sub("<phrase>(.*?)</phrase>", concat, line)
+
+
     return res
 
 
 def main():
     ### Step 1: obtain phrase_to_pos_sequence files
     # segphraseOutput = SegPhraseOutput()
-    # inputPath = "../../data/linked_results3.wiki.tsv"
-    # outputPath = "../../data/quality_NP.txt"
+    # inputPath = "/Users/shenjiaming/Desktop/linked_results.wiki.pos.txt"
+    # outputPath = "/Users/shenjiaming/Desktop/keywords.txt"
     # segphraseOutput.obtain_candidate_phrase_wiki(inputPath, outputPath)
 
 
@@ -93,8 +95,8 @@ def main():
 
     ### Step 3: lower case seged output
     cnt = 0
-    input_file_path = "/shared/data/jiaming/semantic_scholar/parsed_semantic_scholar_docs_segphrase.txt"
-    output_file_path = "/shared/data/jiaming/semantic_scholar/papers_segphrase_w_unigram_no_hypen.txt"
+    input_file_path = "/shared/data/jiaming/semantic_scholar/cs/parsed_semantic_scholar_docs.txt"
+    output_file_path = "/shared/data/jiaming/semantic_scholar/cs/papers.txt"
     with open(input_file_path, "r") as fin, open(output_file_path, "w") as fout:
         for line in fin:
             cnt += 1
@@ -114,8 +116,8 @@ def main():
     #     print(k, autophraseOutput.phrase_to_pos_sequence[k])
 
     ## Additional steps (deal with hypen)
-    # intput_keyword_path = "../../data/keywords_segphrase.txt"
-    # output_keyword_path = "../../data/keywords_segphrase_no_hypen.txt"
+    # intput_keyword_path = "/shared/data/jiaming/semantic_scholar/cs/salient.csv"
+    # output_keyword_path = "/shared/data/jiaming/semantic_scholar/cs/keywords.txt"
     # keyword2score = {}
     # with open(intput_keyword_path, "r") as fin:
     #     for line in fin:
@@ -123,7 +125,7 @@ def main():
     #         segs = line.split(",")
     #         phrase = re.sub(r"-","_", segs[0])
     #         score = float(segs[1])
-    #         if score >= 0.799999:
+    #         if score >= 0.75:
     #           keyword2score[phrase] = score
     #         else:
     #           break
