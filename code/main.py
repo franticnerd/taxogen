@@ -54,7 +54,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
         return
 
     if level > 0:
-        n_cluster = 5
+        n_cluster = 7
 
     logger.info('============================= Running level: %s, and node: %s =============================' % (level, parent))
     start = time.time()
@@ -147,8 +147,8 @@ if __name__ == '__main__':
     # opt = load_sp_params()
     #opt = load_dblp_params_method()
 
-    n_clusters = [15, 17, 19]
-    n_expands = [200, 300, 400, 500]
+    n_clusters = [18, 20]
+    n_expands = [200]
 
     for n_cluster in n_clusters:
         for n_expand in n_expands:
@@ -156,7 +156,7 @@ if __name__ == '__main__':
             opt = load_tweets_params_method('tweets/la')
             opt['n_cluster'] = n_cluster
             opt['n_expand'] = n_expand
-            logger = Logger("./out_log_%s_%s.txt"%(n_cluster, n_expands))
+            logger = Logger("./out_log_%s_%s.txt"%(n_cluster, n_expand))
             logger.info("[Main] Finish load parameters: %s" % str(opt))
 
             try:
@@ -164,6 +164,7 @@ if __name__ == '__main__':
                 main(opt)
                 end = time.time()
                 logger.info("====================================job finished, take %s seconds==========================================="%(end-start))
+                logger.clean_handler()
             except:
                 logger.exception("*** print_exc:")
                 email_notif.send_email(to='lunanli3@illinois.edu', subject='Taxongen job throw error',

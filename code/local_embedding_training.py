@@ -51,7 +51,9 @@ def relevant_phs(embs, cates, N):
         cate_ph = cate
 
         for ph in embs:
-            sim = utils.cossim(embs[cate_ph], embs[ph])
+            cate_emb = embs[cate_ph]
+            ph_embd = embs[ph]
+            sim = utils.cossim(cate_emb, ph_embd)
             if sim > worst:
                 for i in range(N):
                     if sim >= bestw[i]:

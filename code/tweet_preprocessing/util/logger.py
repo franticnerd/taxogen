@@ -19,6 +19,9 @@ class Logger:
     def exception(self, message):
         self.logger.exception(message)
 
+    def clean_handler(self):
+        self.logger.handlers = []
+
     @staticmethod
     def get_logger(logger_name):
         return logging.getLogger(logger_name)
