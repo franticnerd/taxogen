@@ -121,7 +121,7 @@ def main(opt):
     level = 0
 
     # our method
-    root_dir = opt['data_dir'] + 'our-tweets_%s_%s/'%(n_cluster, n_expand)
+    root_dir = opt['data_dir'] + 'our-tweets-hashtags_%s_%s/'%(n_cluster, n_expand)
     copy_tree(init_dir, root_dir)
     recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, True)
 
@@ -153,7 +153,7 @@ if __name__ == '__main__':
     for n_cluster in n_clusters:
         for n_expand in n_expands:
             email_notif = EmailNotification()
-            opt = load_tweets_params_method('tweets/la')
+            opt = load_tweets_hashtags_params_method('tweets/la')
             opt['n_cluster'] = n_cluster
             opt['n_expand'] = n_expand
             logger = Logger("./out_log_%s_%s.txt"%(n_cluster, n_expand))

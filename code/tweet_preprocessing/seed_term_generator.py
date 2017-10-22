@@ -120,7 +120,7 @@ class SeedTermGenerator:
         for word in keywords:
             word = preprocess_tweet(word)
             count += 1
-            if word in embed_dic and not word.startswith('#'):
+            if word in embed_dic and word.startswith('#'):
                 keywords_embed[word] = embed_dic[word]
 
             if count % 10000 == 0:
@@ -137,7 +137,7 @@ class SeedTermGenerator:
         for i in range(len(result)):
             cosine_cate[category_keywords_embed_keys[i]] = {}
             for j in range(len(result[i])):
-                if result[i][j] >= 0.6:
+                if result[i][j] >= 0.5:
                     cosine_cate[category_keywords_embed_keys[i]][keywords_embed_keys[j]] = result[i][j]
 
         result = []

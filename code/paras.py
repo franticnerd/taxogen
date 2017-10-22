@@ -127,3 +127,22 @@ def load_tweets_params_method(corpusPath):
     pd['n_expand'] = 300
     pd['n_cluster_iter'] = 3
     return pd
+
+
+def load_tweets_hashtags_params_method(corpusPath):
+    pd = dict()
+    pd['data_dir'] = '/shared/data/lunanli3/local-embedding/'
+    pd['raw_dir'] = pd['data_dir'] + 'raw/' + corpusPath + '/'
+    pd['input_dir'] = pd['data_dir'] + 'input_hash/' + corpusPath + '/'
+    pd['init_dir'] = pd['data_dir'] + 'init_hash/' + corpusPath + '/'
+
+    pd['doc_file'] = pd['raw_dir'] + 'pure_tweets.txt'
+    pd['doc_keyword_cnt_file'] = pd['raw_dir'] + 'seed_keywords.txt'
+    pd['doc_keyword_embedding_file'] = pd['raw_dir'] + 'embeddings.txt'
+
+    pd['root_node_dir'] = pd['data_dir'] + 'cluster/'
+    pd['n_cluster'] = 17
+    pd['filter_thre'] = 0.25
+    pd['n_expand'] = 300
+    pd['n_cluster_iter'] = 3
+    return pd
