@@ -24,6 +24,7 @@ class SeedTermGenerator:
         self.seed_keywords_dic = paras['seed_keywords_dic']
         self.seed_keywords = paras['seed_keywords']
         self.hashtags = paras['hashtags']
+        self.phrases = paras['phrases']
         self.pattern = re.compile("[^a-zA-Z0-9\s]+")
 
     def parse_pos_tweet(self, pos_tweet):
@@ -94,7 +95,7 @@ class SeedTermGenerator:
             keywords.extend(child_keywords)
         return keywords
 
-    def match_category_keyword(self):
+    def build_seed_keywords(self):
 
         with open(self.embeddings, 'r') as f:
             embedding_data = f.readlines()
@@ -145,14 +146,16 @@ class SeedTermGenerator:
             cosine_cate[key] = OrderedDict(sorted(cosine_cate[key].items(), key=lambda t: t[1], reverse=True))
             result.extend(cosine_cate[key].keys())
 
-        #with open(self.hashtags, 'r') as f:
-            #data = f.readlines()
+        with open(self.phrases, 'r') as f:
+            for line in f:
+                line = preprocess_tweet(line, lower=True)
+                line = line.split(',')
+                score = float(line[1])
 
-        #for line in data:
-            #line = preprocess_tweet(line, lower=False)
-            #result.append(line)
+                if score < 0.8:
+                    break
 
-        #result = list(set(result))
+                result.append(line[0])
 
         with open(self.seed_keywords_dic, 'w+') as fout:
             json.dump(cosine_cate, fout, indent=4)
@@ -173,4 +176,4 @@ if __name__ == '__main__':
     # gen.build_pos_tag_tweets()
     # gen.build_keyword()
     # gen.build_category_keywords()
-    gen.match_category_keyword()
+    gen.build_seed_keywords()

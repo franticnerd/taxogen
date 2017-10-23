@@ -16,6 +16,7 @@ def load_la_tweets_paras():
     # preprocess data
     ret['lexnorm_dic'] = ret['raw'] + 'lexnorm.txt'
     ret['pure_tweets'] = ret['raw'] + 'pure_tweets.txt'
+    ret['segmented_pure_tweets'] = ret['raw'] + 'segmented_pure_tweets.txt'
     ret['pos_tweets'] = ret['raw'] + 'pos_tag_tweets.txt'
     ret['keywords'] = ret['raw'] + 'keywords.txt'
     ret['category_keywords'] = ret['raw'] + 'category_keywords.txt'
@@ -23,6 +24,7 @@ def load_la_tweets_paras():
     ret['seed_keywords_dic'] = ret['raw'] + 'seed_keywords_dic.txt'
     ret['seed_keywords'] = ret['raw'] + 'seed_keywords.txt'
     ret['hashtags'] = ret['raw'] + 'hashtags.txt'
+    ret['phrases'] = ret['raw'] + 'phrases.csv'
 
     # log
     ret['log'] = ret['output'] + 'log/'
