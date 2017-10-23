@@ -96,6 +96,8 @@ class SeedTermGenerator:
         return keywords
 
     def build_seed_keywords(self):
+        print "embedding file is: %s"%self.embeddings
+        print "tweets file is: %s"%self.pure_tweets
 
         with open(self.embeddings, 'r') as f:
             embedding_data = f.readlines()
@@ -103,19 +105,24 @@ class SeedTermGenerator:
             category_keywords = preprocess_tweet(f.read()).split(' ')
         with open(self.output, 'r') as f:
             keywords = f.readlines()
+        with open(self.phrases, 'r') as f:
+            phrases = f.readlines()
 
+        # build embedding dictionary
         embed_dic = {}
         for line in embedding_data[1:]:
             line = preprocess_tweet(line, lower=False)
             line = line.split(' ')
             embed_dic[line[0].strip()] = [float(i) for i in line[1:]]
 
+        # build category dictionary
         category_keywords_embed = OrderedDict()
         for word in category_keywords:
             word = word.lower()
             if word in embed_dic:
                 category_keywords_embed[word] = embed_dic[word]
 
+        # build keywords dictionary
         count = 0
         keywords_embed = OrderedDict()
         for word in keywords:
@@ -127,30 +134,50 @@ class SeedTermGenerator:
             if count % 10000 == 0:
                 print "%s keywords processed" % count
 
+        # build phrases dictionary
+        phrases_embed = OrderedDict()
+        for phrase in phrases:
+            phrase = preprocess_tweet(phrase)
+            phrase = phrase.split(',')
+            score = float(phrase[1])
+            phrase = preprocess_tweet(phrase[0])
+
+            if score < 0.7:
+                break
+
+            if phrase in embed_dic:
+                phrases_embed[phrase] = embed_dic[phrase]
+
         keywords_embed_array = np.asarray(keywords_embed.values())
+        phrases_embed_array = np.asarray(phrases_embed.values())
         category_keywords_array = np.asarray(category_keywords_embed.values())
-        result = cosine_similarity(category_keywords_array, keywords_embed_array)
+        keywords_result = cosine_similarity(category_keywords_array, keywords_embed_array)
+        phrases_result = cosine_similarity(category_keywords_array, phrases_embed_array)
 
         keywords_embed_keys = keywords_embed.keys()
+        phrases_embed_keys = phrases_embed.keys()
         category_keywords_embed_keys = category_keywords_embed.keys()
 
         cosine_cate = {}
-        for i in range(len(result)):
+        for i in range(len(keywords_result)):
             cosine_cate[category_keywords_embed_keys[i]] = {}
-            for j in range(len(result[i])):
-                if result[i][j] >= 0.6:
-                    cosine_cate[category_keywords_embed_keys[i]][keywords_embed_keys[j]] = result[i][j]
+            for j in range(len(keywords_result[i])):
+                if keywords_result[i][j] >= 0.6:
+                    cosine_cate[category_keywords_embed_keys[i]][keywords_embed_keys[j]] = keywords_result[i][j]
+            for j in range(len(phrases_result[i])):
+                if phrases_result[i][j] >= 0.6:
+                    cosine_cate[category_keywords_embed_keys[i]][phrases_embed_keys[j]] = phrases_result[i][j]
 
-        result = []
+        keywords_result = []
         for key in cosine_cate:
             cosine_cate[key] = OrderedDict(sorted(cosine_cate[key].items(), key=lambda t: t[1], reverse=True))
-            result.extend(cosine_cate[key].keys())
+            keywords_result.extend(cosine_cate[key].keys())
 
         with open(self.seed_keywords_dic, 'w+') as fout:
             json.dump(cosine_cate, fout, indent=4)
 
         with open(self.seed_keywords, 'w+') as fout:
-            fout.write('\n'.join(result))
+            fout.write('\n'.join(keywords_result))
 
     def build_phrases(self):
         return
