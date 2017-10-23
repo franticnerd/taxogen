@@ -146,17 +146,6 @@ class SeedTermGenerator:
             cosine_cate[key] = OrderedDict(sorted(cosine_cate[key].items(), key=lambda t: t[1], reverse=True))
             result.extend(cosine_cate[key].keys())
 
-        with open(self.phrases, 'r') as f:
-            for line in f:
-                line = preprocess_tweet(line, lower=True)
-                line = line.split(',')
-                score = float(line[1])
-
-                if score < 0.8:
-                    break
-
-                result.append(line[0])
-
         with open(self.seed_keywords_dic, 'w+') as fout:
             json.dump(cosine_cate, fout, indent=4)
 
@@ -167,11 +156,9 @@ class SeedTermGenerator:
         return
 
 
-
-
 if __name__ == '__main__':
     start = datetime.utcnow()
-    la_paras = paras.load_la_tweets_paras()
+    la_paras = paras.load_la_tweets_paras(phrases=True)
     gen = SeedTermGenerator(la_paras, paras.MAIN_LOG)
     # gen.build_pos_tag_tweets()
     # gen.build_keyword()
