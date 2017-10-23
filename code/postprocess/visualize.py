@@ -125,11 +125,11 @@ img_dir = '../../experimental/'
 # prefix_list = ['*', '*/object_recognition', '*/object_recognition/face_recognition']
 # main(tax_dir + 'taxonomy_keywords_method.txt', img_dir + 'OR-FR-method', min_level=0, max_level=3, prefix=prefix_list)
 
-prefix_list = ['*', '*/machine_learning']
-main(tax_dir + 'DBLP_global_taxonomy_fake.txt', img_dir + 'DBLP_perfect_part', min_level=0, max_level=2, prefix=prefix_list)
+prefix_list = ['*', '*/machine_learning', '*/machine_learning/supervised_learning']
+main(tax_dir + 'DBLP_global_taxonomy_perfect2.txt', img_dir + 'DBLP_perfect_part2', min_level=0, max_level=3, prefix=prefix_list)
 
-prefix_list = ['*', '*/machine_learning']
-main(tax_dir + 'DBLP_global_taxonomy_fake2.txt', img_dir + 'DBLP_perfect_part4', min_level=0, max_level=2, prefix=prefix_list)
+# prefix_list = ['*', '*/machine_learning']
+# main(tax_dir + 'DBLP_global_taxonomy_fake2.txt', img_dir + 'DBLP_perfect_part4', min_level=0, max_level=2, prefix=prefix_list)
 
 
 # prefix_list = ['*', '*/human_action', '*/human_action/speech_recognition']

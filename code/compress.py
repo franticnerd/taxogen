@@ -37,7 +37,7 @@ def parse_reidx(reidx_f):
 		if len(pd_map[ph]) > 0:
 			ph_idf[ph] = math.log(float(d_cnt) / len(pd_map[ph]))
 
-	print 'Inverted Index file read.'
+	print('Inverted Index file read.')
 
 
 
@@ -81,7 +81,7 @@ def get_rep(folder, c_id, N):
 				break
 		
 	elif ph_idf == None:
-		print 'looking at embeddings for %s' % folder
+		print('looking at embeddings for %s' % folder)
 
 		ph_f = '%s/embeddings.txt' % par_folder
 		kw_f = '%s/keywords.txt' % par_folder
@@ -119,7 +119,7 @@ def get_rep(folder, c_id, N):
 				result_phrases.append(ph)
 	else:
 		# Using TF-IDF to generate
-		print 'looking at tf-idf for %s' % folder
+		print('looking at tf-idf for %s' % folder)
 		d_clus_f = '%s/paper_cluster.txt' % par_folder
 		kw_clus_f = '%s/cluster_keywords.txt' % par_folder
 		docs = []
@@ -191,7 +191,7 @@ def recursion(root, o_file, N):
 
 
 if __name__ == "__main__":
-  # python compress.py -root ../data/dblp/our-l3-0.15 -output ../data/dblp/taxonomies/l3-our-0.15.txt -N 200
+  # python compress.py -root ../data/eecs/our-l3 -output ../data/eecs/taxonomies/our-l3-200.txt -N 200
 	parser = argparse.ArgumentParser(prog='compress.py', \
 			description='')
 	parser.add_argument('-root', required=True, \
