@@ -153,10 +153,11 @@ if __name__ == '__main__':
     for n_cluster in n_clusters:
         for n_expand in n_expands:
             email_notif = EmailNotification()
-            opt = load_tweets_hashtags_params_method('tweets/la')
+            phrases = True
+            opt = load_tweets_params_method('tweets/la', phrase=phrases)
             opt['n_cluster'] = n_cluster
             opt['n_expand'] = n_expand
-            logger = Logger("./out_log_hashs_%s_%s.txt"%(n_cluster, n_expand))
+            logger = Logger("./out_log_%s_%s_%s.txt"%(phrases, n_cluster, n_expand))
             logger.info("[Main] Finish load parameters: %s" % str(opt))
 
             try:
