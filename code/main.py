@@ -147,8 +147,8 @@ if __name__ == '__main__':
     # opt = load_sp_params()
     #opt = load_dblp_params_method()
 
-    n_clusters = [18, 21]
-    n_expands = [200]
+    n_clusters = [10, 12, 15]
+    n_expands = [170]
 
     for n_cluster in n_clusters:
         for n_expand in n_expands:
@@ -156,7 +156,7 @@ if __name__ == '__main__':
             opt = load_tweets_hashtags_params_method('tweets/la')
             opt['n_cluster'] = n_cluster
             opt['n_expand'] = n_expand
-            logger = Logger("./out_log_%s_%s.txt"%(n_cluster, n_expand))
+            logger = Logger("./out_log_hashs_%s_%s.txt"%(n_cluster, n_expand))
             logger.info("[Main] Finish load parameters: %s" % str(opt))
 
             try:

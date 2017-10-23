@@ -138,7 +138,7 @@ class SeedTermGenerator:
         for i in range(len(result)):
             cosine_cate[category_keywords_embed_keys[i]] = {}
             for j in range(len(result[i])):
-                if result[i][j] >= 0.5:
+                if result[i][j] >= 0.45:
                     cosine_cate[category_keywords_embed_keys[i]][keywords_embed_keys[j]] = result[i][j]
 
         result = []
