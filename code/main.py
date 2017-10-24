@@ -121,7 +121,7 @@ def main(opt):
     level = 0
 
     # our method
-    root_dir = opt['data_dir'] + 'our-tweets-phrasess_%s_%s/'%(n_cluster, n_expand)
+    root_dir = opt['data_dir'] + 'our-tweets-phrases_%s_%s/'%(n_cluster, n_expand)
     copy_tree(init_dir, root_dir)
     recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, True)
 

@@ -140,7 +140,7 @@ class SeedTermGenerator:
             phrase = preprocess_tweet(phrase)
             phrase = phrase.split(',')
             score = float(phrase[1])
-            phrase = preprocess_tweet(phrase[0])
+            phrase = phrase[0]
 
             if score < 0.7:
                 break
@@ -165,7 +165,7 @@ class SeedTermGenerator:
                 if keywords_result[i][j] >= 0.6:
                     cosine_cate[category_keywords_embed_keys[i]][keywords_embed_keys[j]] = keywords_result[i][j]
             for j in range(len(phrases_result[i])):
-                if phrases_result[i][j] >= 0.6:
+                if phrases_result[i][j] >= 0.5:
                     cosine_cate[category_keywords_embed_keys[i]][phrases_embed_keys[j]] = phrases_result[i][j]
 
         keywords_result = []
