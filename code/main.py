@@ -121,7 +121,7 @@ def main(opt):
     level = 0
 
     # our method
-    root_dir = opt['data_dir'] + 'our-tweets-phrases_%s_%s/'%(n_cluster, n_expand)
+    root_dir = opt['data_dir'] + 'our-tweets-pure-phrases_%s_%s/'%(n_cluster, n_expand)
     copy_tree(init_dir, root_dir)
     recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, True)
 
@@ -148,7 +148,7 @@ if __name__ == '__main__':
     #opt = load_dblp_params_method()
 
     n_clusters = [10, 12, 15]
-    n_expands = [170]
+    n_expands = [200]
 
     for n_cluster in n_clusters:
         for n_expand in n_expands:
@@ -157,7 +157,7 @@ if __name__ == '__main__':
             opt = load_tweets_params_method('tweets/la', phrase=phrases)
             opt['n_cluster'] = n_cluster
             opt['n_expand'] = n_expand
-            logger = Logger("./out_log_%s_%s_%s.txt"%(phrases, n_cluster, n_expand))
+            logger = Logger("./out_log_phrases_%s_%s.txt"%(n_cluster, n_expand))
             logger.info("[Main] Finish load parameters: %s" % str(opt))
 
             try:
