@@ -5,14 +5,13 @@ import paras
 from seed_term_generator import SeedTermGenerator
 
 if __name__ == '__main__':
-    git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[0]
-    la_paras = paras.load_la_tweets_paras()
+    git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[0].strip('\n')
+    la_paras = paras.load_la_tweets_paras(dir=git_version)
 
-    dir = la_paras['log'] + git_version.strip('\n')
-    if not os.path.exists(dir):
-        os.mkdir(dir)
+    if not os.path.exists(la_paras['log']):
+        os.mkdir(la_paras['log'])
 
-    logger = Logger(dir + "/log.txt")
+    logger = Logger(la_paras['log'])
     # generate lexnorm.txt, pure_tweets.txt, embeddings.txt
     tweet_handler = TweetHandler(la_paras, paras.MAIN_LOG, paras.lexnorm)
     #tweet_handler.preprocess()

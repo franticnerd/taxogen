@@ -185,7 +185,8 @@ class SeedTermGenerator:
 
 if __name__ == '__main__':
     start = datetime.utcnow()
-    la_paras = paras.load_la_tweets_paras(phrases=True)
+    git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[0].strip('\n')
+    la_paras = paras.load_la_tweets_paras(dir=git_version, phrases=True)
     gen = SeedTermGenerator(la_paras, paras.MAIN_LOG)
     # gen.build_pos_tag_tweets()
     # gen.build_keyword()

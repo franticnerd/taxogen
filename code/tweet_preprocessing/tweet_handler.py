@@ -137,7 +137,8 @@ def preprocess_tweet(tweet, lower=True):
 
 
 if __name__ == '__main__':
-    la_paras = paras.load_la_tweets_paras()
+    git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[0].strip('\n')
+    la_paras = paras.load_la_tweets_paras(dir=git_version)
     test = TweetHandler(la_paras, paras.MAIN_LOG, paras.lexnorm)
     #test.preprocess()
     test.build_hashtags()
