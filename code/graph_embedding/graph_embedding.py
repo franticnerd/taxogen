@@ -1,4 +1,6 @@
 import subprocess, os
+from collections import OrderedDict
+
 from ..tweet_preprocessing.tweet_handler import preprocess_tweet
 from ..tweet_preprocessing.tweet_handler import Logger
 from ..tweet_preprocessing.paras import load_la_tweets_paras
@@ -26,7 +28,7 @@ class LINE:
         with open(self.input, 'r') as f:
             data = f.readlines()
 
-        word_co_occurrence = {}
+        word_co_occurrence = OrderedDict()
 
         count = 0
         for line in data:
