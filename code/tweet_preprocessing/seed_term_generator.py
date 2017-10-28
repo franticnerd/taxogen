@@ -135,27 +135,27 @@ class SeedTermGenerator:
                 print "%s keywords processed" % count
 
         # build phrases dictionary
-        phrases_embed = OrderedDict()
-        for phrase in phrases:
-            phrase = preprocess_tweet(phrase)
-            phrase = phrase.split(',')
-            score = float(phrase[1])
-            phrase = phrase[0]
-
-            if score < 0.7:
-                break
-
-            if phrase in embed_dic:
-                phrases_embed[phrase] = embed_dic[phrase]
+        # phrases_embed = OrderedDict()
+        # for phrase in phrases:
+        #     phrase = preprocess_tweet(phrase)
+        #     phrase = phrase.split(',')
+        #     score = float(phrase[1])
+        #     phrase = phrase[0]
+        #
+        #     if score < 0.7:
+        #         break
+        #
+        #     if phrase in embed_dic:
+        #         phrases_embed[phrase] = embed_dic[phrase]
 
         keywords_embed_array = np.asarray(keywords_embed.values())
-        phrases_embed_array = np.asarray(phrases_embed.values())
+        # phrases_embed_array = np.asarray(phrases_embed.values())
         category_keywords_array = np.asarray(category_keywords_embed.values())
         keywords_result = cosine_similarity(category_keywords_array, keywords_embed_array)
-        phrases_result = cosine_similarity(category_keywords_array, phrases_embed_array)
+        # phrases_result = cosine_similarity(category_keywords_array, phrases_embed_array)
 
         keywords_embed_keys = keywords_embed.keys()
-        phrases_embed_keys = phrases_embed.keys()
+        # phrases_embed_keys = phrases_embed.keys()
         category_keywords_embed_keys = category_keywords_embed.keys()
 
         cosine_cate = {}
