@@ -161,12 +161,12 @@ class SeedTermGenerator:
         cosine_cate = {}
         for i in range(len(keywords_result)):
             cosine_cate[category_keywords_embed_keys[i]] = {}
-            # for j in range(len(keywords_result[i])):
-            #     if keywords_result[i][j] >= 0.6:
-            #         cosine_cate[category_keywords_embed_keys[i]][keywords_embed_keys[j]] = keywords_result[i][j]
-            for j in range(len(phrases_result[i])):
-                if phrases_result[i][j] >= 0.4:
-                    cosine_cate[category_keywords_embed_keys[i]][phrases_embed_keys[j]] = phrases_result[i][j]
+            for j in range(len(keywords_result[i])):
+                if keywords_result[i][j] >= 0.6:
+                    cosine_cate[category_keywords_embed_keys[i]][keywords_embed_keys[j]] = keywords_result[i][j]
+            # for j in range(len(phrases_result[i])):
+            #     if phrases_result[i][j] >= 0.4:
+            #         cosine_cate[category_keywords_embed_keys[i]][phrases_embed_keys[j]] = phrases_result[i][j]
 
         keywords_result = []
         for key in cosine_cate:
@@ -186,7 +186,7 @@ class SeedTermGenerator:
 if __name__ == '__main__':
     start = datetime.utcnow()
     git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[0].strip('\n')
-    la_paras = paras.load_la_tweets_paras(dir=git_version, phrases=True)
+    la_paras = paras.load_la_tweets_paras(dir=git_version)
     gen = SeedTermGenerator(la_paras, paras.MAIN_LOG)
     # gen.build_pos_tag_tweets()
     # gen.build_keyword()

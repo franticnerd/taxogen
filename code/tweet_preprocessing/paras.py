@@ -1,4 +1,4 @@
-import time,os,datetime
+import os, datetime
 
 # logger name
 MAIN_LOG = "MAIN LOG"
