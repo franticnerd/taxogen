@@ -167,7 +167,6 @@ class SeedTermGenerator:
             # for j in range(len(phrases_result[i])):
             #     if phrases_result[i][j] >= 0.4:
             #         cosine_cate[category_keywords_embed_keys[i]][phrases_embed_keys[j]] = phrases_result[i][j]
-
         keywords_result = []
         for key in cosine_cate:
             cosine_cate[key] = OrderedDict(sorted(cosine_cate[key].items(), key=lambda t: t[1], reverse=True))

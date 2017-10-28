@@ -67,5 +67,5 @@ if __name__ == '__main__':
     paras = load_la_tweets_paras(dir=git_version)
     print paras['log']
     line = LINE(paras)
-    # line.build_train_file()
+    line.build_train_file()
 
