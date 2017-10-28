@@ -1,4 +1,4 @@
-import time
+import time,os,datetime
 
 # logger name
 MAIN_LOG = "MAIN LOG"
@@ -37,7 +37,10 @@ def load_la_tweets_paras(dir, phrases=False):
     ret['line_paras'] = load_line_paras()
 
     # log
-    ret['log'] = ret['output'] + 'log/' + dir + '/{}.txt'.format(time.localtime())
+    ret['log'] = ret['output'] + 'log/' + dir
+    if not os.path.exists(ret['log']):
+        os.makedirs(ret['log'])
+    ret['log'] = ret['log'] + '/{}.txt'.format(datetime.datetime.now().strftime("%I:%M%:%S_%B_%d_%Y"))
 
     return ret
 
