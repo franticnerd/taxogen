@@ -46,13 +46,5 @@ def load_la_tweets_paras(dir, phrases=False):
 
 
 def load_line_paras():
-    paras = {}
-
-    paras['size'] = 100
-    paras['order'] = 1
-    paras['negative'] = 5
-    paras['samples'] = 10000
-    paras['rho'] = 0.025
-    paras['thread'] = 20
-
+    paras = {'size': 100, 'order': 1, 'negative': 5, 'samples': 10000, 'rho': 0.025, 'thread': 20}
     return paras

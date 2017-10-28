@@ -8,12 +8,12 @@ class LINE:
         self.input = paras['pure_tweets']
         self.train = paras['train']
         self.output = paras['embeddings']
-        self.size = paras['size']
-        self.order = paras['order']
-        self.negative = paras['negative']
-        self.samples = paras['samples']
-        self.rho = paras['rho']
-        self.threads = paras['thread']
+        self.size = paras['line_paras']['size']
+        self.order = paras['line_paras']['order']
+        self.negative = paras['line_paras']['negative']
+        self.samples = paras['line_paras']['samples']
+        self.rho = paras['line_paras']['rho']
+        self.threads = paras['line_paras']['thread']
         self.logger = Logger(paras['log'])
         self.logger.info("test")
 
