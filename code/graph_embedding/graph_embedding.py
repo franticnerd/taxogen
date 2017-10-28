@@ -35,8 +35,8 @@ class LINE:
 
             for i in range(len(line)):
                 for j in range(i+1, len(line)):
-                    co_w1 = '{} {}'.format(line[i], line[j])
-                    co_w2 = '{} {}'.format(line[j], line[i])
+                    co_w1 = '{}\t{}'.format(line[i], line[j])
+                    co_w2 = '{}\t{}'.format(line[j], line[i])
 
                     if co_w1 not in word_co_occurrence:
                         word_co_occurrence[co_w1] = 0
@@ -55,7 +55,7 @@ class LINE:
 
         res_list = []
         for key, val in word_co_occurrence.iteritems():
-            res_list.append('{} {}'.format(key, val))
+            res_list.append('{}\t{}'.format(key, val))
 
         with open(self.train, 'wb') as outf:
             outf.write('\n'.join(res_list))
