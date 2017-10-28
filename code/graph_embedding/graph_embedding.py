@@ -16,6 +16,7 @@ class LINE:
         self.threads = paras['line_paras']['thread']
         self.logger = Logger(paras['log'])
         self.logger.info("test")
+        self.min_count = paras['line_paras']['min_count']
 
     def build_train_file(self):
 
@@ -34,8 +35,8 @@ class LINE:
 
             for i in range(len(line)):
                 for j in range(i+1, len(line)):
-                    co_w1 = '{}\t{}'.format(line[i], line[j])
-                    co_w2 = '{}\t{}'.format(line[j], line[i])
+                    co_w1 = '{} {}'.format(line[i], line[j])
+                    co_w2 = '{} {}'.format(line[j], line[i])
 
                     if co_w1 not in word_co_occurrence:
                         word_co_occurrence[co_w1] = 0
@@ -50,9 +51,11 @@ class LINE:
             if count % 10000 == 0:
                 self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__, '{} lines processed'.format(count)))
 
+        word_co_occurrence = {k: v for k, v in word_co_occurrence.iteritems() if v >= self.min_count}
+
         res_list = []
         for key, val in word_co_occurrence.iteritems():
-            res_list.append('{}\t{}'.format(key, val))
+            res_list.append('{} {}'.format(key, val))
 
         with open(self.train, 'wb') as outf:
             outf.write('\n'.join(res_list))
