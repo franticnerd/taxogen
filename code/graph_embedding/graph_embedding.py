@@ -28,7 +28,7 @@ class LINE:
         with open(self.input, 'r') as f:
             data = f.readlines()
 
-        word_co_occurrence = OrderedDict()
+        word_co_occurrence = {}
 
         count = 0
         for line in data:
@@ -53,7 +53,7 @@ class LINE:
             if count % 10000 == 0:
                 self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__, '{} lines processed'.format(count)))
 
-        word_co_occurrence = OrderedDict((k, v) for k, v in word_co_occurrence.iteritems() if v >= self.min_count)
+        word_co_occurrence = {(k, v) for k, v in word_co_occurrence.iteritems() if v >= self.min_count}
 
         res_list = []
         for key, val in word_co_occurrence.iteritems():
