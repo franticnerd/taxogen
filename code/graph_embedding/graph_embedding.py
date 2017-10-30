@@ -60,7 +60,8 @@ class LINE:
         word_set = set()
         for key, val in word_co_occurrence.iteritems():
             res_list.append('{}\t{}\t{}'.format(key, val, 'e'))
-            word_set.add(key.split('\t'))
+            for word in key.split('\t'):
+                word_set.add(word)
         with open(self.train_edges, 'wb') as outf:
             outf.write('\n'.join(res_list))
         with open(self.train_nodes, 'wb') as outf:
