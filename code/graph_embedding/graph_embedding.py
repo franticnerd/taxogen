@@ -8,7 +8,8 @@ from ..tweet_preprocessing.paras import load_la_tweets_paras
 class LINE:
     def __init__(self, paras):
         self.input = paras['pure_tweets']
-        self.train = paras['train']
+        self.train_nodes = paras['train_nodes']
+        self.train_edges = paras['train_edges']
         self.output = paras['embeddings']
         self.size = paras['line_paras']['size']
         self.order = paras['line_paras']['order']
@@ -56,13 +57,22 @@ class LINE:
         word_co_occurrence = {k: v for k, v in word_co_occurrence.iteritems() if v >= self.min_count}
 
         res_list = []
+        word_set = set()
         for key, val in word_co_occurrence.iteritems():
-            res_list.append('{}\t{}'.format(key, val))
-
-        with open(self.train, 'wb') as outf:
+            res_list.append('{}\t{}\t{}'.format(key, val, 'e'))
+            word_set.add(key.split('\t'))
+        with open(self.train_edges, 'wb') as outf:
             outf.write('\n'.join(res_list))
+        with open(self.train_nodes, 'wb') as outf:
+            outf.write('\n'.join(list(word_set)))
 
     def run(self):
+
+        if not os.path.exists('word2vec'):
+            subprocess.call([''],
+                            shell=True)
+
+
         return
 
 
