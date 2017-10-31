@@ -130,10 +130,11 @@ class TweetHandler:
         dic[hastag] += 1
 
 def preprocess_tweet(tweet, lower=True):
+    tweet = re.sub(' +', ' ', tweet)
     if lower:
-        return tweet.replace('\n', '').strip().lower()
+        return tweet.strip('\n').strip().lower()
     else:
-        return tweet.replace('\n', '').strip()
+        return tweet.strip('\n').strip()
 
 
 if __name__ == '__main__':
