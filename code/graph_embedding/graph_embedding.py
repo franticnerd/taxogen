@@ -42,7 +42,7 @@ class LINE:
                     co_w1 = '{}\t{}'.format(stweet[i], stweet[j])
                     co_w2 = '{}\t{}'.format(stweet[j], stweet[i])
                     if stweet[i] == '' or stweet[j] == '':
-                        print tweet
+                        print stweet
                     if co_w1 not in word_co_occurrence:
                         word_co_occurrence[co_w1] = 0
                     if co_w2 not in word_co_occurrence:
