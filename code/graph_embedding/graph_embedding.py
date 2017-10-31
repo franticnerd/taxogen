@@ -35,13 +35,14 @@ class LINE:
 
         for tweet in data:
             tweet = preprocess_tweet(tweet, lower=True)
-            tweet = tweet.split(' ')
+            stweet = tweet.split(' ')
 
-            for i in range(len(tweet)-1):
-                for j in range(i+1, len(tweet)):
-                    co_w1 = '{}\t{}'.format(tweet[i], tweet[j])
-                    co_w2 = '{}\t{}'.format(tweet[j], tweet[i])
-
+            for i in range(len(stweet)):
+                for j in range(i+1, len(stweet)):
+                    co_w1 = '{}\t{}'.format(stweet[i], stweet[j])
+                    co_w2 = '{}\t{}'.format(stweet[j], stweet[i])
+                    if stweet[i] == '' or stweet[j] == '':
+                        print tweet
                     if co_w1 not in word_co_occurrence:
                         word_co_occurrence[co_w1] = 0
                     if co_w2 not in word_co_occurrence:
