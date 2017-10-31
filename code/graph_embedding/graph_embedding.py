@@ -32,14 +32,15 @@ class LINE:
         word_co_occurrence = {}
 
         count = 0
-        for line in data:
-            line = preprocess_tweet(line, lower=True)
-            line = line.split(' ')
 
-            for i in range(len(line)):
-                for j in range(i+1, len(line)):
-                    co_w1 = '{}\t{}'.format(line[i], line[j])
-                    co_w2 = '{}\t{}'.format(line[j], line[i])
+        for tweet in data:
+            tweet = preprocess_tweet(tweet, lower=True)
+            tweet = tweet.split(' ')
+
+            for i in range(len(tweet)-1):
+                for j in range(i+1, len(tweet)):
+                    co_w1 = '{}\t{}'.format(tweet[i], tweet[j])
+                    co_w2 = '{}\t{}'.format(tweet[j], tweet[i])
 
                     if co_w1 not in word_co_occurrence:
                         word_co_occurrence[co_w1] = 0
