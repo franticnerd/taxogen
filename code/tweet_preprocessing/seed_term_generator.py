@@ -25,28 +25,36 @@ class SeedTermGenerator:
         self.seed_keywords = paras['seed_keywords']
         self.hashtags = paras['hashtags']
         self.phrases = paras['phrases']
+        self.graph_embedding_tweets = paras['graph_embedding_tweets.txt']
         self.pattern = re.compile("[^a-zA-Z0-9\s]+")
 
     def parse_pos_tweet(self, pos_tweet):
         pos_tweet = preprocess_tweet(pos_tweet, lower=False)
         pos_tweet = pos_tweet.split(' ')
-
+        new_tweet = []
         for segment in pos_tweet:
             segment = segment.strip().split('/')
 
             if segment[2] in self.noun_tag:
                 self.keywords.add(segment[0] + "\n")
+                new_tweet.append(segment[0])
 
-    def build_keyword(self):
+        return ' '.join(new_tweet)
+
+
+    def build_keyword(self, graph_embedding=False):
 
         self.logger.info(
             Logger.build_log_message(self.__class__.__name__, self.build_keyword.__name__, 'Start building keywords'))
+
+        graph_embedding_tweets = []
 
         with open(self.pos_tweets, 'r') as f:
             data = f.readlines()
             count = 0
             for pos_tweet in data:
-                self.parse_pos_tweet(pos_tweet)
+                noun_tweet = self.parse_pos_tweet(pos_tweet)
+                graph_embedding_tweets.append(noun_tweet)
                 count += 1
 
                 if count % 10000 == 0:
@@ -61,6 +69,13 @@ class SeedTermGenerator:
 
         self.logger.info(
             Logger.build_log_message(self.__class__.__name__, self.build_keyword.__name__, 'Finish building keywords'))
+
+        if graph_embedding:
+            with open(self.graph_embedding_tweets, 'w') as f:
+                f.write('\n'.join(graph_embedding_tweets))
+            self.logger.info(
+                Logger.build_log_message(self.__class__.__name__, self.build_keyword.__name__,
+                                         'Finish building graph embedding tweets'))
 
     def build_pos_tag_tweets(self):
 
@@ -96,8 +111,6 @@ class SeedTermGenerator:
         return keywords
 
     def build_seed_keywords(self):
-        print "embedding file is: %s"%self.embeddings
-        print "tweets file is: %s"%self.pure_tweets
 
         with open(self.embeddings, 'r') as f:
             embedding_data = f.readlines()
@@ -188,6 +201,6 @@ if __name__ == '__main__':
     la_paras = paras.load_la_tweets_paras(dir=git_version)
     gen = SeedTermGenerator(la_paras, paras.MAIN_LOG)
     # gen.build_pos_tag_tweets()
-    # gen.build_keyword()
+    gen.build_keyword()
     # gen.build_category_keywords()
-    gen.build_seed_keywords()
+    # gen.build_seed_keywords()

@@ -36,6 +36,10 @@ class DataSet:
         return word_to_vec
 
     def load_documents(self, document_file):
+        '''
+        :param document_file: papers.txt tweet
+        :return: list of documents
+        '''
         documents = []
         with open(document_file, 'r') as fin:
             for line in fin:
@@ -62,6 +66,12 @@ class DataSet:
 class SubDataSet:
 
     def __init__(self, full_data, doc_id_file, keyword_file):
+        """
+
+        :param full_data: Dataset object
+        :param doc_id_file: doc_ids.txt doc_id1
+        :param keyword_file: keywords.txt keyword1
+        """
         self.keywords = self.load_keywords(keyword_file, full_data)
         self.keyword_to_id = self.gen_keyword_id()
         self.keyword_set = set(self.keywords)
@@ -70,10 +80,17 @@ class SubDataSet:
         self.keyword_idf = self.build_keyword_idf()
 
     def load_keywords(self, keyword_file, full_data):
+        """
+        load keywords that have embeddings
+        :param keyword_file: keywords.txt keyword1
+        :param full_data: Dataset object
+        :return: [keyword1, keyword2, ...]
+        """
         keywords = []
         logger = Logger.get_logger("MAIN LOG")
         with open(keyword_file, 'r') as fin:
             for line in fin:
+                # TODO: filter nouns if use graph embedding
                 keyword = line.strip()
                 if keyword in full_data.embeddings:
                     keywords.append(keyword)
@@ -82,12 +99,21 @@ class SubDataSet:
         return keywords
 
     def gen_keyword_id(self):
+        """
+        build a dictionary of keyword and index
+        :return: {keyword: idx}
+        """
         keyword_to_id = {}
         for idx, keyword in enumerate(self.keywords):
             keyword_to_id[keyword] = idx
         return keyword_to_id
 
     def load_embeddings(self, full_data):
+        """
+        select embeddings for keywords, in the same order
+        :param full_data:
+        :return: array([embedding1, embedding2, ...])
+        """
         embeddings = full_data.embeddings
         ret = []
         for word in self.keywords:
@@ -96,11 +122,12 @@ class SubDataSet:
         return np.array(ret)
 
     def load_documents(self, full_data, doc_id_file):
-        '''
-        :param full_data:
-        :param doc_id_file:
+        """
+        remove docs that don't contain keywords at current sub-topic
+        :param full_data: Dataset object
+        :param doc_id_file: doc_ids.txt doc_id1
         :return: trimmed documents along with its corresponding ids
-        '''
+        """
         doc_ids = self.load_doc_ids(doc_id_file)
         trimmed_doc_ids, trimmed_docs = [], []
         for doc_id in doc_ids:
@@ -112,6 +139,7 @@ class SubDataSet:
         return trimmed_docs, trimmed_doc_ids
 
     def load_doc_ids(self, doc_id_file):
+
         doc_ids = []
         with open(doc_id_file, 'r') as fin:
             for line in fin:
@@ -133,6 +161,13 @@ class SubDataSet:
 
     # output_file: one integrated file;
     def write_cluster_members(self, clus, cluster_file, parent_dir):
+        """
+        write keywords and clusters to file
+        :param clus:
+        :param cluster_file: cluster_keywords.txt cluster_id \t keyword
+        :param parent_dir:
+        :return:
+        """
         n_cluster = clus.n_cluster
         clusters = clus.clusters  # a dict: cluster id -> keywords
         with open(cluster_file, 'w') as fout:
@@ -154,6 +189,13 @@ class SubDataSet:
                     fout.write(keyword + '\n')
 
     def write_cluster_centers(self, clus, parent_description, output_file):
+        """
+        Get center keyword of each cluster
+        :param clus:
+        :param parent_description:
+        :param output_file: hierarchy.txt current label parent label
+        :return:
+        """
         clus_centers = clus.center_ids
         center_names = []
         with open(output_file, 'w') as fout:
@@ -165,6 +207,13 @@ class SubDataSet:
 
 
     def write_document_membership(self, clus, output_file, parent_dir):
+        """
+
+        :param clus:
+        :param output_file: paper_cluster.txt doc_id cluster_id
+        :param parent_dir:
+        :return:
+        """
         n_cluster = clus.n_cluster
         keyword_membership = clus.membership  # an array containing the membership of the keywords
         cluster_document_map = defaultdict(list)  # key: cluster id, value: document list

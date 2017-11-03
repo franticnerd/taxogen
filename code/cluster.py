@@ -60,6 +60,20 @@ class Clusterer:
 
 def run_clustering(full_data, doc_id_file, filter_keyword_file, n_cluster, parent_direcotry, parent_description,\
                    cluster_keyword_file, hierarchy_file, doc_membership_file):
+    """
+
+    :param full_data: Dataset object
+    :param doc_id_file: doc_ids.txt doc_id1
+    :param filter_keyword_file: keywords.txt keyword1
+    :param n_cluster: number of minimum clusters
+    :param parent_direcotry:
+    :param parent_description: parent keyword
+    :param cluster_keyword_file: cluster_keywords.txt cluster_id \t keyword
+    :param hierarchy_file: hierarchy.txt cluster_center_word parent_word
+    :param doc_membership_file: paper_cluster.txt doc_id cluster_id
+    :return:
+    """
+    # TODO: Need to use WordNet to decide parent
     logger = Logger.get_logger("MAIN LOG")
     dataset = SubDataSet(full_data, doc_id_file, filter_keyword_file)
     logger.info('\n')

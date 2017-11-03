@@ -28,6 +28,7 @@ def load_la_tweets_paras(dir, phrases=False):
         ret['pure_tweets'] = ret['raw'] + 'pure_tweets.txt'
         ret['embeddings'] = ret['raw'] + 'embeddings.txt'
 
+    ret['graph_embedding_tweets'] = ret['raw'] + 'graph_embedding_tweets.txt'
     ret['pos_tweets'] = ret['raw'] + 'pos_tag_tweets.txt'
     ret['keywords'] = ret['raw'] + 'keywords.txt'
     ret['category_keywords'] = ret['raw'] + 'category_keywords.txt'
