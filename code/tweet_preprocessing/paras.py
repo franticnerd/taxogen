@@ -43,7 +43,7 @@ def load_la_tweets_paras(dir, phrases=False):
     if not os.path.exists(ret['log']):
         os.makedirs(ret['log'])
     ret['log'] = ret['log'] + '/{}.txt'.format(datetime.datetime.now().strftime("%I:%M:%S_%B_%d_%Y"))
-
+    print 'log: {}'.format(ret['log'])
     return ret
 
 
