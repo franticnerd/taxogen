@@ -17,7 +17,7 @@ class LINE:
         self.samples = paras['line_paras']['samples']
         self.rho = paras['line_paras']['rho']
         self.threads = paras['line_paras']['thread']
-        self.logger = Logger(paras['log'])
+        self.logger = Logger.get_logger("MAIN LOG")
         self.min_count = paras['line_paras']['min_count']
         self.co_occurrence_tweets = paras['co_occurrence_tweets']
 
@@ -80,7 +80,8 @@ class LINE:
             with open(self.co_occurrence_tweets+co_word+".txt", 'w') as outf:
                 outf.write('\n'.join(word_co_occurrence_tweets[co_word]))
             count += 1
-            self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__, '{} co_occurrence_words processed'.format(count)))
+            if count % 10000 == 0:
+                self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__, '{} co_occurrence_words processed'.format(count)))
 
 
     def run(self):
@@ -96,7 +97,6 @@ if __name__ == '__main__':
     git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[0].strip('\n')
 
     paras = load_la_tweets_paras(dir=git_version)
-    print paras['log']
     line = LINE(paras)
     line.build_train_file()
 
