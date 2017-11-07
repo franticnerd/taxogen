@@ -42,18 +42,16 @@ class LINE:
                 for j in range(i+1, len(stweet)):
                     co_w1 = '{}\t{}'.format(stweet[i], stweet[j])
                     co_w2 = '{}\t{}'.format(stweet[j], stweet[i])
-
+                    co_w = '{}_{}'.format(stweet[i], stweet[j])
                     if co_w1 not in word_co_occurrence:
                         word_co_occurrence[co_w1] = 0
-                        word_co_occurrence_tweets[co_w1] = []
+                        word_co_occurrence_tweets[co_w] = []
                     if co_w2 not in word_co_occurrence:
                         word_co_occurrence[co_w2] = 0
-                        word_co_occurrence_tweets[co_w2] = []
 
                     word_co_occurrence[co_w1] += 1
                     word_co_occurrence[co_w2] += 1
-                    word_co_occurrence_tweets[co_w1].append(tweet)
-                    word_co_occurrence_tweets[co_w2].append(tweet)
+                    word_co_occurrence_tweets[co_w].append(tweet)
 
             count += 1
 
@@ -68,8 +66,6 @@ class LINE:
             res_list.append('{}\t{}\t{}'.format(key, val, 'e'))
             for word in key.split('\t'):
                 word_set.add(word)
-                if word == '':
-                    print key
         with open(self.train_edges, 'wb') as outf:
             outf.write('\n'.join(res_list))
         with open(self.train_nodes, 'wb') as outf:
@@ -77,12 +73,12 @@ class LINE:
 
         count = 0
         for co_word in word_co_occurrence_tweets:
-            with open(self.co_occurrence_tweets+co_word+".txt", 'w') as outf:
-                outf.write('\n'.join(word_co_occurrence_tweets[co_word]))
-            count += 1
-            if count % 10000 == 0:
-                self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__, '{} co_occurrence_words processed'.format(count)))
-
+            if len(word_co_occurrence_tweets[co_word]) >= self.min_count:
+                with open(self.co_occurrence_tweets+co_word+".txt", 'w') as outf:
+                    outf.write('\n'.join(word_co_occurrence_tweets[co_word]))
+                count += 1
+                if count % 10000 == 0:
+                    self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__, '{} co_occurrence_words processed'.format(count)))
 
     def run(self):
 
