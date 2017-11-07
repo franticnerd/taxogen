@@ -47,7 +47,7 @@ class SeedTermGenerator:
         self.logger.info(
             Logger.build_log_message(self.__class__.__name__, self.build_keyword.__name__, 'Start building keywords'))
 
-        graph_embedding_tweets = []
+        graph_embedding_tweets = set()
 
         with open(self.pos_tweets, 'r') as f:
             data = f.readlines()
@@ -205,6 +205,6 @@ if __name__ == '__main__':
     la_paras = paras.load_la_tweets_paras(dir=git_version)
     gen = SeedTermGenerator(la_paras, paras.MAIN_LOG)
     # gen.build_pos_tag_tweets()
-    # gen.build_keyword(graph_embedding=True)
+    gen.build_keyword(graph_embedding=True)
     # gen.build_category_keywords()
-    gen.build_seed_keywords()
+    # gen.build_seed_keywords()
