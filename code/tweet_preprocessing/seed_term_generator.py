@@ -53,7 +53,7 @@ class SeedTermGenerator:
             data = f.readlines()
             count = 0
             for pos_tweet in data:
-                # noun_tweet = preprocess_tweet(self.parse_pos_tweet(pos_tweet))
+                noun_tweet = preprocess_tweet(self.parse_pos_tweet(pos_tweet))
                 #
                 # if len(noun_tweet) > 0:
                 graph_embedding_tweets.add(pos_tweet.strip('\n'))
