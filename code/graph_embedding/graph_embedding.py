@@ -7,7 +7,7 @@ from ..tweet_preprocessing.paras import load_la_tweets_paras
 
 class LINE:
     def __init__(self, paras):
-        self.input = paras['graph_embedding_tweets.txt']
+        self.input = paras['graph_embedding_tweets']
         self.train_nodes = paras['train_nodes']
         self.train_edges = paras['train_edges']
         self.output = paras['embeddings']
