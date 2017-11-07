@@ -48,7 +48,7 @@ class LINE:
                     if co_w2 not in word_co_occurrence:
                         word_co_occurrence[co_w2] = 0
                     if co_w not in word_co_occurrence_tweets:
-                        word_co_occurrence_tweets[co_w] = []
+                         word_co_occurrence_tweets[co_w] = []
 
                     word_co_occurrence[co_w1] += 1
                     word_co_occurrence[co_w2] += 1
@@ -72,14 +72,14 @@ class LINE:
         with open(self.train_nodes, 'wb') as outf:
             outf.write('\n'.join(list(word_set)))
 
-        count = 0
-        for co_word in word_co_occurrence_tweets:
-            if len(word_co_occurrence_tweets[co_word]) >= self.min_count:
-                with open(self.co_occurrence_tweets+co_word+".txt", 'w') as outf:
-                    outf.write('\n'.join(word_co_occurrence_tweets[co_word]))
-                count += 1
-                if count % 10000 == 0:
-                    self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__, '{} co_occurrence_words processed'.format(count)))
+        # count = 0
+        # for co_word in word_co_occurrence_tweets:
+        #     if len(word_co_occurrence_tweets[co_word]) >= self.min_count:
+        #         with open(self.co_occurrence_tweets+co_word+".txt", 'w') as outf:
+        #             outf.write('\n'.join(word_co_occurrence_tweets[co_word]))
+        #         count += 1
+        #         if count % 10000 == 0:
+        #             self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__, '{} co_occurrence_words processed'.format(count)))
 
     def run(self):
 

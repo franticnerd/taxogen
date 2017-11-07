@@ -49,14 +49,14 @@ class SeedTermGenerator:
 
         graph_embedding_tweets = set()
 
-        with open(self.pos_tweets, 'r') as f:
+        with open(self.pure_tweets, 'r') as f:
             data = f.readlines()
             count = 0
             for pos_tweet in data:
                 noun_tweet = preprocess_tweet(self.parse_pos_tweet(pos_tweet))
 
                 if len(noun_tweet) > 0:
-                    graph_embedding_tweets.add(noun_tweet)
+                    graph_embedding_tweets.add(pos_tweet)
                 count += 1
 
                 if count % 10000 == 0:
