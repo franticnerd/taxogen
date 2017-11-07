@@ -56,7 +56,7 @@ class SeedTermGenerator:
                 # noun_tweet = preprocess_tweet(self.parse_pos_tweet(pos_tweet))
                 #
                 # if len(noun_tweet) > 0:
-                graph_embedding_tweets.add(pos_tweet)
+                graph_embedding_tweets.add(pos_tweet.strip('\n'))
                 count += 1
 
                 if count % 10000 == 0:
