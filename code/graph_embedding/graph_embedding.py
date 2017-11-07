@@ -45,9 +45,10 @@ class LINE:
                     co_w = '{}_{}'.format(stweet[i], stweet[j])
                     if co_w1 not in word_co_occurrence:
                         word_co_occurrence[co_w1] = 0
-                        word_co_occurrence_tweets[co_w] = []
                     if co_w2 not in word_co_occurrence:
                         word_co_occurrence[co_w2] = 0
+                    if co_w not in word_co_occurrence_tweets:
+                        word_co_occurrence_tweets[co_w] = []
 
                     word_co_occurrence[co_w1] += 1
                     word_co_occurrence[co_w2] += 1
