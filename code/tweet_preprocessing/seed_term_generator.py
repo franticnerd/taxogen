@@ -56,7 +56,7 @@ class SeedTermGenerator:
                 noun_tweet = preprocess_tweet(self.parse_pos_tweet(pos_tweet))
 
                 if len(noun_tweet) > 0:
-                    graph_embedding_tweets.append(noun_tweet)
+                    graph_embedding_tweets.add(noun_tweet)
                 count += 1
 
                 if count % 10000 == 0:
@@ -74,7 +74,7 @@ class SeedTermGenerator:
 
         if graph_embedding:
             with open(self.graph_embedding_tweets, 'w') as f:
-                f.write('\n'.join(graph_embedding_tweets))
+                f.write('\n'.join(list(graph_embedding_tweets)))
             self.logger.info(
                 Logger.build_log_message(self.__class__.__name__, self.build_keyword.__name__,
                                          'Finish building graph embedding tweets'))
