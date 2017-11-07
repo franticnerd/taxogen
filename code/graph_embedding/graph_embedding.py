@@ -45,8 +45,10 @@ class LINE:
 
                     if co_w1 not in word_co_occurrence:
                         word_co_occurrence[co_w1] = 0
+                        word_co_occurrence_tweets[co_w1] = []
                     if co_w2 not in word_co_occurrence:
                         word_co_occurrence[co_w2] = 0
+                        word_co_occurrence_tweets[co_w2] = []
 
                     word_co_occurrence[co_w1] += 1
                     word_co_occurrence[co_w2] += 1
