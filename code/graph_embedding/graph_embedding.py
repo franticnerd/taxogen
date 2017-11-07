@@ -18,8 +18,8 @@ class LINE:
         self.rho = paras['line_paras']['rho']
         self.threads = paras['line_paras']['thread']
         self.logger = Logger(paras['log'])
-        self.logger.info("test")
         self.min_count = paras['line_paras']['min_count']
+        self.co_occurrence_tweets = paras['co_occurrence_tweets']
 
     def build_train_file(self):
 
@@ -30,6 +30,7 @@ class LINE:
             data = f.readlines()
 
         word_co_occurrence = {}
+        word_co_occurrence_tweets = {}
 
         count = 0
 
@@ -41,8 +42,7 @@ class LINE:
                 for j in range(i+1, len(stweet)):
                     co_w1 = '{}\t{}'.format(stweet[i], stweet[j])
                     co_w2 = '{}\t{}'.format(stweet[j], stweet[i])
-                    if stweet[i] == '' or stweet[j] == '':
-                        print stweet
+
                     if co_w1 not in word_co_occurrence:
                         word_co_occurrence[co_w1] = 0
                     if co_w2 not in word_co_occurrence:
@@ -50,6 +50,8 @@ class LINE:
 
                     word_co_occurrence[co_w1] += 1
                     word_co_occurrence[co_w2] += 1
+                    word_co_occurrence_tweets[co_w1].append(tweet)
+                    word_co_occurrence_tweets[co_w2].append(tweet)
 
             count += 1
 
@@ -71,11 +73,18 @@ class LINE:
         with open(self.train_nodes, 'wb') as outf:
             outf.write('\n'.join(list(word_set)))
 
+        count = 0
+        for co_word in word_co_occurrence_tweets:
+            with open(self.co_occurrence_tweets+co_word+".txt", 'w') as outf:
+                outf.write('\n'.join(word_co_occurrence_tweets[co_word]))
+            count += 1
+            self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__, '{} co_occurrence_words processed'.format(count)))
+
+
     def run(self):
 
         if not os.path.exists('word2vec'):
-            subprocess.call([''],
-                            shell=True)
+            subprocess.call([''], shell=True)
 
 
         return

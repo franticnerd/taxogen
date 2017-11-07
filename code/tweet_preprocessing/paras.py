@@ -1,5 +1,5 @@
 import os, datetime
-
+from util.logger import Logger
 # logger name
 MAIN_LOG = "MAIN LOG"
 # normalization dictionary
@@ -37,6 +37,7 @@ def load_la_tweets_paras(dir, phrases=False):
     ret['hashtags'] = ret['raw'] + 'hashtags.txt'
     ret['phrases'] = ret['raw'] + 'phrases.csv'
     ret['line_paras'] = load_line_paras()
+    ret['co_occurrence_tweets'] = ret['raw'] + 'co_word/'
 
     # log
     ret['log'] = ret['output'] + 'log/' + dir
@@ -44,6 +45,7 @@ def load_la_tweets_paras(dir, phrases=False):
         os.makedirs(ret['log'])
     ret['log'] = ret['log'] + '/{}.txt'.format(datetime.datetime.now().strftime("%I:%M:%S_%B_%d_%Y"))
     print 'log: {}'.format(ret['log'])
+    logger = Logger(ret['log'])
     return ret
 
 

@@ -25,7 +25,7 @@ class SeedTermGenerator:
         self.seed_keywords = paras['seed_keywords']
         self.hashtags = paras['hashtags']
         self.phrases = paras['phrases']
-        self.graph_embedding_tweets = paras['graph_embedding_tweets.txt']
+        self.graph_embedding_tweets = paras['graph_embedding_tweets']
         self.pattern = re.compile("[^a-zA-Z0-9\s]+")
 
     def parse_pos_tweet(self, pos_tweet):
@@ -147,7 +147,9 @@ class SeedTermGenerator:
                 keywords_embed[word] = embed_dic[word]
 
             if count % 10000 == 0:
-                print "%s keywords processed" % count
+                self.logger.info(
+                    Logger.build_log_message(self.__class__.__name__, self.build_seed_keywords.__name__,
+                                             "%s keywords processed" % count))
 
         # build phrases dictionary
         # phrases_embed = OrderedDict()
@@ -205,4 +207,4 @@ if __name__ == '__main__':
     # gen.build_pos_tag_tweets()
     gen.build_keyword(graph_embedding=True)
     # gen.build_category_keywords()
-    # gen.build_seed_keywords()
+    gen.build_seed_keywords()
