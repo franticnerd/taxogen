@@ -64,7 +64,7 @@ class LINE:
         res_list = []
         word_set = set()
         for key, val in word_co_occurrence.iteritems():
-            res_list.append('{}\t{}'.format(key, val))
+            res_list.append('{}\t{}'.format(key, float(val)))
             #res_list.append('{}\t{}\t{}'.format(key, val, 'e'))
             for word in key.split('\t'):
                 word_set.add(word)
@@ -82,13 +82,17 @@ class LINE:
         #         if count % 10000 == 0:
         #             self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__, '{} co_occurrence_words processed'.format(count)))
 
-    def run(self):
+    def run(self, train_file=None, output_file=None):
 
-        if not os.path.exists('word2vec'):
-            subprocess.call([''], shell=True)
+        if train_file == None:
+            train_file = self.train_edges
+        if output_file == None:
+            output_file = self.output
 
-
-        return
+        if not os.path.exists('./line'):
+            return
+        else:
+            subprocess.call(['./line', '-train', train_file,  '-output', output_file, '-size', self.size,  '-order', self.order,  '-negative', self.negative, '-samples', self.samples, '-rho', self.rho, '-threads', self.threads], shell=True)
 
 
 if __name__ == '__main__':
