@@ -34,20 +34,12 @@ class SeedTermGenerator:
         new_tweet = []
         for segment in pos_tweet:
             segment = segment.strip().split('/')
+            new_tweet.append(segment[0])
 
             if segment[2] in self.noun_tag:
                 self.keywords.add(segment[0] + '\n')
-                new_tweet.append(segment[0])
 
         return ' '.join(new_tweet)
-
-    def parse_pure_tweets(self, pure_tweet):
-        pure_tweet = preprocess_tweet(pure_tweet, lower=False)
-        pure_tweet = pure_tweet.split(' ')
-
-        for word in pure_tweet:
-            self.keywords.add(word + '\n')
-
 
     def build_keyword(self, graph_embedding=False):
 
@@ -56,14 +48,13 @@ class SeedTermGenerator:
 
         graph_embedding_tweets = set()
 
-        with open(self.pure_tweets, 'r') as f:
+        with open(self.pos_tweets, 'r') as f:
             data = f.readlines()
             count = 0
             for pos_tweet in data:
-                # noun_tweet = self.parse_pos_tweet(pos_tweet)
+                noun_tweet = self.parse_pos_tweet(pos_tweet)
                 #
                 # if len(noun_tweet) > 0:
-                self.parse_pure_tweets(pos_tweet)
                 graph_embedding_tweets.add(pos_tweet.strip('\n'))
                 count += 1
 
