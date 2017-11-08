@@ -55,7 +55,7 @@ class SeedTermGenerator:
                 noun_tweet = self.parse_pos_tweet(pos_tweet)
                 #
                 # if len(noun_tweet) > 0:
-                graph_embedding_tweets.add(pos_tweet.strip('\n'))
+                graph_embedding_tweets.add(noun_tweet)
                 count += 1
 
                 if count % 10000 == 0:
@@ -204,6 +204,6 @@ if __name__ == '__main__':
     la_paras = paras.load_la_tweets_paras(dir=git_version)
     gen = SeedTermGenerator(la_paras, paras.MAIN_LOG)
     # gen.build_pos_tag_tweets()
-    gen.build_keyword(graph_embedding=True)
+    # gen.build_keyword(graph_embedding=True)
     # gen.build_category_keywords()
-    # gen.build_seed_keywords()
+    gen.build_seed_keywords()
