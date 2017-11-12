@@ -158,24 +158,23 @@ def run_line(pd_map, docs, cates, folder):
         with open(input_f, 'w+') as g:
             for d in c_docs:
                 g.write(docs[d])
-
+        train_file = sub_folder + "train_edges.txt"
+        git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[
+            0].strip('\n')
+        paras = load_la_tweets_paras(dir=git_version, create_log=False)
         line = LINE(paras)
-        line.build_train_file()
-        line.run()
         logger.info('[Local-embedding] starting generating input for line')
-        line = LINE
-        # print(input_f)
-        # print(output_f)
-        # embed_proc = subprocess.Popen(["./word2vec", "-threads", "20", "-train", input_f, "-output", output_f], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        # embed_proc.wait()
-        subprocess.call(["./word2vec", "-threads", "20", "-train", input_f, "-output", output_f])
+        line.build_train_file(input_file=input_f, train_file=train_file)
+        logger.info('[Local-embedding] line starts generating embedding')
+        line.run(train_file=train_file, output_file=output_f)
         logger.info('[Local-embedding] done training word2vec')
 
 def main_local_embedding(folder, doc_file, reidx, parent, N):
     embs, keywords, cates = read_files(folder, parent)
     cates = relevant_phs(embs, cates, int(N))
     pd_map, docs = revevant_docs(doc_file, reidx, cates)
-    run_word2vec(pd_map, docs, cates, folder)
+    run_line(pd_map, docs, cates, folder)
+    #run_word2vec(pd_map, docs, cates, folder)
 
 
 if __name__ == "__main__":

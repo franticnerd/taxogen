@@ -6,7 +6,7 @@ MAIN_LOG = "MAIN LOG"
 lexnorm = './../../lib/emnlp2012-lexnorm/emnlp_dict.txt'
 
 
-def load_la_tweets_paras(dir, phrases=False):
+def load_la_tweets_paras(dir, phrases=False, create_log=True):
     ret = {}
     ret['raw'] = '/shared/data/lunanli3/local-embedding/raw/tweets/la/'
     ret['input'] = '/shared/data/lunanli3/local-embedding/input/tweets/la/'
@@ -40,14 +40,16 @@ def load_la_tweets_paras(dir, phrases=False):
 
     # log
     ret['log'] = ret['output'] + 'log/' + dir
-    if not os.path.exists(ret['log']):
-        os.makedirs(ret['log'])
-    ret['log'] = ret['log'] + '/{}.txt'.format(datetime.datetime.now().strftime("%I:%M:%S_%B_%d_%Y"))
-    print 'log: {}'.format(ret['log'])
-    logger = Logger(ret['log'])
+
+    if create_log:
+        if not os.path.exists(ret['log']):
+            os.makedirs(ret['log'])
+        ret['log'] = ret['log'] + '/{}.txt'.format(datetime.datetime.now().strftime("%I:%M:%S_%B_%d_%Y"))
+        print 'log: {}'.format(ret['log'])
+        logger = Logger(ret['log'])
     return ret
 
 
 def load_line_paras():
-    paras = {'size': 100, 'order': 1, 'negative': 5, 'samples': 100, 'rho': 0.025, 'thread': 20, 'min_count': 5, }
+    paras = {'size': 100, 'order': 1, 'negative': 5, 'samples': 100, 'rho': 0.025, 'thread': 20, 'min_count': 15}
     return paras

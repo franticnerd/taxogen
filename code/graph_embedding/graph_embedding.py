@@ -21,12 +21,17 @@ class LINE:
         self.min_count = paras['line_paras']['min_count']
         self.co_occurrence_tweets = paras['co_occurrence_tweets']
 
-    def build_train_file(self):
+    def build_train_file(self, input_file=None, train_file=None):
 
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__,
                                                   'Start building training file'))
 
-        with open(self.input, 'r') as f:
+        if input_file == None:
+            input_file = self.input
+        if train_file == None:
+            train_file = self.train_edges
+
+        with open(input_file, 'r') as f:
             data = f.readlines()
 
         word_co_occurrence = {}
@@ -69,10 +74,11 @@ class LINE:
             # res_list.append('{}\t{}\t{}'.format(key, val, 'e'))
             for word in key.split('\t'):
                 word_set.add(word)
-        with open(self.train_edges, 'wb') as outf:
+        with open(train_file, 'w') as outf:
             outf.write('\n'.join(res_list))
-        with open(self.train_nodes, 'wb') as outf:
-            outf.write('\n'.join(list(word_set)))
+
+        # with open(self.train_nodes, 'wb') as outf:
+        #     outf.write('\n'.join(list(word_set)))
 
             # count = 0
             # for co_word in word_co_occurrence_tweets:
@@ -92,7 +98,7 @@ class LINE:
         if output_file == None:
             output_file = self.output
 
-        if not os.path.exists('./line'):
+        if not os.path.exists('line'):
             self.logger.info(Logger.build_log_message(self.__class__.__name__, self.run.__name__,
                                                       'Please download LINE package and put the executable under the current path.'))
         else:
@@ -103,6 +109,7 @@ class LINE:
 
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.run.__name__,
                                                   'Finish graph embedding training'))
+
 if __name__ == '__main__':
     git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[0].strip('\n')
 
