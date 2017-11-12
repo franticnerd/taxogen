@@ -121,7 +121,7 @@ def load_tweets_params_method(corpusPath, phrase=False):
         pd['doc_file'] = pd['raw_dir'] + 'segmented_pure_tweets.txt'
         pd['doc_keyword_embedding_file'] = pd['raw_dir'] + 'segmented_embeddings.txt'
     else:
-        pd['doc_file'] = pd['raw_dir'] + 'pure_tweets.txt'
+        pd['doc_file'] = pd['raw_dir'] + 'graph_embedding_tweets.txt'
         pd['doc_keyword_embedding_file'] = pd['raw_dir'] + 'embeddings.txt'
 
     pd['doc_keyword_cnt_file'] = pd['raw_dir'] + 'seed_keywords.txt'
