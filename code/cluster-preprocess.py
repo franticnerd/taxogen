@@ -137,7 +137,7 @@ if __name__ == '__main__':
         print(sys.argv)
         corpusPath = sys.argv[1]
         print('Corpus path is: %s' % corpusPath)
-        tweet_paras = load_tweets_params_method(corpusPath, phrase=True)
+        tweet_paras = load_tweets_params_method(corpusPath)
         print('Raw dir is: %s' % tweet_paras['raw_dir'])
         input_dir = tweet_paras['input_dir']
         print('Input dir is: %s' % input_dir)

@@ -153,7 +153,7 @@ if __name__ == '__main__':
     for n_cluster in n_clusters:
         for n_expand in n_expands:
             email_notif = EmailNotification()
-            phrases = True
+            phrases = False
             opt = load_tweets_params_method('tweets/la', phrase=phrases)
             opt['n_cluster'] = n_cluster
             opt['n_expand'] = n_expand
