@@ -104,8 +104,7 @@ class LINE:
         else:
             subprocess.call(
                 ['./line', '-train', train_file, '-output', output_file, '-size', self.size, '-order', self.order,
-                 '-negative', self.negative, '-samples', self.samples, '-rho', self.rho, '-threads', self.threads],
-                shell=True)
+                 '-negative', self.negative, '-samples', self.samples, '-rho', self.rho, '-threads', self.threads])
 
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.run.__name__,
                                                   'Finish graph embedding training'))
