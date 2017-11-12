@@ -121,7 +121,7 @@ def main(opt):
     level = 0
 
     # our method
-    root_dir = opt['data_dir'] + 'our-tweets-pure-phrases_%s_%s/'%(n_cluster, n_expand)
+    root_dir = opt['data_dir'] + 'our-tweets-graph-embedding_%s_%s/'%(n_cluster, n_expand)
     copy_tree(init_dir, root_dir)
     recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, True)
 
@@ -157,7 +157,7 @@ if __name__ == '__main__':
             opt = load_tweets_params_method('tweets/la', phrase=phrases)
             opt['n_cluster'] = n_cluster
             opt['n_expand'] = n_expand
-            logger = Logger("./out_log_phrases_%s_%s.txt"%(n_cluster, n_expand))
+            logger = Logger.get_logger("./out_log_graph_embedding_%s_%s.txt"%(n_cluster, n_expand))
             logger.info("[Main] Finish load parameters: %s" % str(opt))
 
             try:
