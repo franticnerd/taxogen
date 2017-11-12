@@ -145,6 +145,6 @@ ENV/
 #local log file
 code/tweet_preprocessing/log.txt
 code/tweet_preprocessing/test.txt
-
+*line
 *word2vec
 *client_secret.json
