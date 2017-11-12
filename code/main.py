@@ -157,7 +157,7 @@ if __name__ == '__main__':
             opt = load_tweets_params_method('tweets/la', phrase=phrases)
             opt['n_cluster'] = n_cluster
             opt['n_expand'] = n_expand
-            logger = Logger.get_logger("./out_log_graph_embedding_%s_%s.txt"%(n_cluster, n_expand))
+            logger = Logger("./out_log_graph_embedding_%s_%s.txt"%(n_cluster, n_expand))
             logger.info("[Main] Finish load parameters: %s" % str(opt))
 
             try:
