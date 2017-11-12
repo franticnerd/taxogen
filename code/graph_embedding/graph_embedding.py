@@ -5,10 +5,10 @@ from ..tweet_preprocessing.tweet_handler import preprocess_tweet
 from ..tweet_preprocessing.tweet_handler import Logger
 from ..tweet_preprocessing.paras import load_la_tweets_paras
 
+
 class LINE:
     def __init__(self, paras):
         self.input = paras['graph_embedding_tweets']
-        self.train_nodes = paras['train_nodes']
         self.train_edges = paras['train_edges']
         self.output = paras['embeddings']
         self.size = paras['line_paras']['size']
@@ -24,7 +24,7 @@ class LINE:
     def build_train_file(self):
 
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__,
-                                             'Start building training file'))
+                                                  'Start building training file'))
 
         with open(self.input, 'r') as f:
             data = f.readlines()
@@ -39,7 +39,7 @@ class LINE:
             stweet = tweet.split(' ')
 
             for i in range(len(stweet)):
-                for j in range(i+1, len(stweet)):
+                for j in range(i + 1, len(stweet)):
                     co_w1 = '{}\t{}'.format(stweet[i], stweet[j])
                     co_w2 = '{}\t{}'.format(stweet[j], stweet[i])
                     co_w = '{}_{}'.format(stweet[i], stweet[j])
@@ -48,7 +48,7 @@ class LINE:
                     if co_w2 not in word_co_occurrence:
                         word_co_occurrence[co_w2] = 0
                     if co_w not in word_co_occurrence_tweets:
-                         word_co_occurrence_tweets[co_w] = []
+                        word_co_occurrence_tweets[co_w] = []
 
                     word_co_occurrence[co_w1] += 1
                     word_co_occurrence[co_w2] += 1
@@ -57,7 +57,8 @@ class LINE:
             count += 1
 
             if count % 10000 == 0:
-                self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__, '{} lines processed'.format(count)))
+                self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__,
+                                                          '{} lines processed'.format(count)))
 
         word_co_occurrence = {k: v for k, v in word_co_occurrence.iteritems() if v >= self.min_count}
 
@@ -65,7 +66,7 @@ class LINE:
         word_set = set()
         for key, val in word_co_occurrence.iteritems():
             res_list.append('{}\t{}'.format(key, float(val)))
-            #res_list.append('{}\t{}\t{}'.format(key, val, 'e'))
+            # res_list.append('{}\t{}\t{}'.format(key, val, 'e'))
             for word in key.split('\t'):
                 word_set.add(word)
         with open(self.train_edges, 'wb') as outf:
@@ -73,16 +74,18 @@ class LINE:
         with open(self.train_nodes, 'wb') as outf:
             outf.write('\n'.join(list(word_set)))
 
-        # count = 0
-        # for co_word in word_co_occurrence_tweets:
-        #     if len(word_co_occurrence_tweets[co_word]) >= self.min_count:
-        #         with open(self.co_occurrence_tweets+co_word+".txt", 'w') as outf:
-        #             outf.write('\n'.join(word_co_occurrence_tweets[co_word]))
-        #         count += 1
-        #         if count % 10000 == 0:
-        #             self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__, '{} co_occurrence_words processed'.format(count)))
+            # count = 0
+            # for co_word in word_co_occurrence_tweets:
+            #     if len(word_co_occurrence_tweets[co_word]) >= self.min_count:
+            #         with open(self.co_occurrence_tweets+co_word+".txt", 'w') as outf:
+            #             outf.write('\n'.join(word_co_occurrence_tweets[co_word]))
+            #         count += 1
+            #         if count % 10000 == 0:
+            #             self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__, '{} co_occurrence_words processed'.format(count)))
 
     def run(self, train_file=None, output_file=None):
+        self.logger.info(Logger.build_log_message(self.__class__.__name__, self.run.__name__,
+                                                  'Start graph embedding training'))
 
         if train_file == None:
             train_file = self.train_edges
@@ -90,15 +93,20 @@ class LINE:
             output_file = self.output
 
         if not os.path.exists('./line'):
-            return
+            self.logger.info(Logger.build_log_message(self.__class__.__name__, self.run.__name__,
+                                                      'Please download LINE package and put the executable under the current path.'))
         else:
-            subprocess.call(['./line', '-train', train_file,  '-output', output_file, '-size', self.size,  '-order', self.order,  '-negative', self.negative, '-samples', self.samples, '-rho', self.rho, '-threads', self.threads], shell=True)
+            subprocess.call(
+                ['./line', '-train', train_file, '-output', output_file, '-size', self.size, '-order', self.order,
+                 '-negative', self.negative, '-samples', self.samples, '-rho', self.rho, '-threads', self.threads],
+                shell=True)
 
-
+        self.logger.info(Logger.build_log_message(self.__class__.__name__, self.run.__name__,
+                                                  'Finish graph embedding training'))
 if __name__ == '__main__':
     git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[0].strip('\n')
 
     paras = load_la_tweets_paras(dir=git_version)
     line = LINE(paras)
     line.build_train_file()
-
+    line.run()

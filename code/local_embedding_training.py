@@ -9,6 +9,8 @@ import subprocess
 import utils
 import os
 from tweet_preprocessing.util.logger import Logger
+from graph_embedding.graph_embedding import LINE
+from tweet_preprocessing.paras import load_la_tweets_paras
 
 def read_files(folder, parent):
     logger = Logger.get_logger("MAIN LOG")
@@ -134,6 +136,40 @@ def run_word2vec(pd_map, docs, cates, folder):
         subprocess.call(["./word2vec", "-threads", "20", "-train", input_f, "-output", output_f])
         logger.info('[Local-embedding] done training word2vec')
 
+def run_line(pd_map, docs, cates, folder):
+    logger = Logger.get_logger("MAIN LOG")
+    for cate in cates:
+
+        c_docs = set()
+        for ph in cates[cate]:
+            c_docs = c_docs.union(pd_map[ph])
+
+        logger.info('Starting cell %s with %d docs.' % (cate, len(c_docs)))
+
+        # save file
+        # sub_folder = '%s/%s' % (folder, cate)
+        # input_f = '%s/text' % sub_folder
+        # output_f = '%s/embeddings.txt' % sub_folder
+        sub_folder = folder + cate + '/'
+        input_f = sub_folder + 'text'
+        output_f = sub_folder + 'embeddings.txt'
+        if not os.path.exists(sub_folder):
+            os.makedirs(sub_folder)
+        with open(input_f, 'w+') as g:
+            for d in c_docs:
+                g.write(docs[d])
+
+        line = LINE(paras)
+        line.build_train_file()
+        line.run()
+        logger.info('[Local-embedding] starting generating input for line')
+        line = LINE
+        # print(input_f)
+        # print(output_f)
+        # embed_proc = subprocess.Popen(["./word2vec", "-threads", "20", "-train", input_f, "-output", output_f], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # embed_proc.wait()
+        subprocess.call(["./word2vec", "-threads", "20", "-train", input_f, "-output", output_f])
+        logger.info('[Local-embedding] done training word2vec')
 
 def main_local_embedding(folder, doc_file, reidx, parent, N):
     embs, keywords, cates = read_files(folder, parent)

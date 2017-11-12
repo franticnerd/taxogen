@@ -19,7 +19,6 @@ def load_la_tweets_paras(dir, phrases=False):
     # preprocess data
     ret['lexnorm_dic'] = ret['raw'] + 'lexnorm.txt'
     ret['train_edges'] = ret['raw'] + 'train_edges.txt'
-    ret['train_nodes'] = ret['raw'] + 'train_nodes.txt'
 
     if phrases:
         ret['pure_tweets'] = ret['raw'] + 'segmented_pure_tweets.txt'
@@ -50,5 +49,5 @@ def load_la_tweets_paras(dir, phrases=False):
 
 
 def load_line_paras():
-    paras = {'size': 100, 'order': 1, 'negative': 5, 'samples': 10000, 'rho': 0.025, 'thread': 20, 'min_count': 25}
+    paras = {'size': 100, 'order': 1, 'negative': 5, 'samples': 100, 'rho': 0.025, 'thread': 20, 'min_count': 5, }
     return paras
