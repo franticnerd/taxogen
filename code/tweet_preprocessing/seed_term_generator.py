@@ -34,15 +34,14 @@ class SeedTermGenerator:
         new_tweet = []
         for segment in pos_tweet:
             segment = segment.strip().split('/')
-            new_tweet.append(segment[0])
 
             if segment[2] in self.noun_tag:
                 self.keywords.add(segment[0] + '\n')
+                new_tweet.append(segment[0])
 
         return ' '.join(new_tweet)
 
     def build_keyword(self, graph_embedding=False):
-
         self.logger.info(
             Logger.build_log_message(self.__class__.__name__, self.build_keyword.__name__, 'Start building keywords'))
 
@@ -178,7 +177,7 @@ class SeedTermGenerator:
         for i in range(len(keywords_result)):
             cosine_cate[category_keywords_embed_keys[i]] = {}
             for j in range(len(keywords_result[i])):
-                if keywords_result[i][j] >= 0.7:
+                if keywords_result[i][j] >= 0.6:
                     cosine_cate[category_keywords_embed_keys[i]][keywords_embed_keys[j]] = keywords_result[i][j]
             # for j in range(len(phrases_result[i])):
             #     if phrases_result[i][j] >= 0.4:
