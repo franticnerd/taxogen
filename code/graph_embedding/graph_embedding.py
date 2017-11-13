@@ -139,11 +139,11 @@ class LINE:
                                                   'Finish graph embedding training'))
 
 if __name__ == '__main__':
-    # git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[0].strip('\n')
-    #
-    # paras = load_la_tweets_paras(dir=git_version)
-    # line = LINE(paras)
-    # line.build_train_file()
-    # line.run()
-    logger = Logger('log.txt')
-    LINE.word_word_co_occurrence_1("pure_tweets.txt", 'train_edges.txt', logger, 10)
+    git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[0].strip('\n')
+
+    paras = load_la_tweets_paras(dir=git_version)
+    line = LINE(paras)
+    line.build_train_file()
+    line.run()
+    #logger = Logger('log.txt')
+    #LINE.word_word_co_occurrence_1("pure_tweets.txt", 'train_edges.txt', logger, 10)
