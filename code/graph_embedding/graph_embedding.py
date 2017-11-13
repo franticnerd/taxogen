@@ -1,5 +1,6 @@
 import subprocess, os
-from collections import OrderedDict
+from sklearn.feature_extraction.text import CountVectorizer
+import time
 
 from ..tweet_preprocessing.tweet_handler import preprocess_tweet
 from ..tweet_preprocessing.tweet_handler import Logger
@@ -31,14 +32,16 @@ class LINE:
         if train_file == None:
             train_file = self.train_edges
 
+        self.word_word_co_occurrence_2(input_file, train_file, self.logger, self.min_count)
+
+    @staticmethod
+    def word_word_co_occurrence_1(input_file, train_file, logger, min_count):
+        t1 = time.time()
         with open(input_file, 'r') as f:
             data = f.readlines()
-
         word_co_occurrence = {}
         # word_co_occurrence_tweets = {}
-
         count = 0
-
         for tweet in data:
             tweet = preprocess_tweet(tweet, lower=True)
             stweet = tweet.split(' ')
@@ -62,11 +65,9 @@ class LINE:
             count += 1
 
             if count % 10000 == 0:
-                self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__,
+                logger.info(Logger.build_log_message("LINE", "word_word_co_occurrence_1",
                                                           '{} lines processed'.format(count)))
-
-        word_co_occurrence = {k: v for k, v in word_co_occurrence.iteritems() if v >= self.min_count}
-
+        word_co_occurrence = {k: v for k, v in word_co_occurrence.iteritems() if v >= min_count}
         res_list = []
         word_set = set()
         for key, val in word_co_occurrence.iteritems():
@@ -77,8 +78,8 @@ class LINE:
         with open(train_file, 'w') as outf:
             outf.write('\n'.join(res_list))
 
-        # with open(self.train_nodes, 'wb') as outf:
-        #     outf.write('\n'.join(list(word_set)))
+            # with open(self.train_nodes, 'wb') as outf:
+            #     outf.write('\n'.join(list(word_set)))
 
             # count = 0
             # for co_word in word_co_occurrence_tweets:
@@ -88,6 +89,32 @@ class LINE:
             #         count += 1
             #         if count % 10000 == 0:
             #             self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__, '{} co_occurrence_words processed'.format(count)))
+        t2 = time.time()
+        logger.info("word_word_co_occurrence_1 takes {}".format(t2-t1))
+
+    @staticmethod
+    def word_word_co_occurrence_2(input_file, train_file, logger, min_count):
+        t1 = time.time()
+        with open(input_file, 'r') as f:
+            data = f.readlines()
+
+        count_vec = CountVectorizer(decode_error='ignore', analyzer='word', max_df=0.9)
+        x = count_vec.fit_transform(data)
+        features = count_vec.get_feature_names()
+        xc = x.T * x
+        xc.setdiag(0)
+        xc = xc.tocoo()
+        result = []
+        for i, j, v in zip(xc.row, xc.col, xc.data):
+            if v >= min_count:
+                result.append('{}\t{}\t{}'.format(features[i], features[j], v))
+        with open(train_file, 'w') as outf:
+            outf.write('\n'.join(result))
+        t2 = time.time()
+
+        print "word_word_co_occurrence_2 takes {}".format(t2-t1)
+
+
 
     def run(self, train_file=None, output_file=None):
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.run.__name__,
@@ -110,9 +137,11 @@ class LINE:
                                                   'Finish graph embedding training'))
 
 if __name__ == '__main__':
-    git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[0].strip('\n')
-
-    paras = load_la_tweets_paras(dir=git_version)
-    line = LINE(paras)
-    line.build_train_file()
-    line.run()
+    # git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[0].strip('\n')
+    #
+    # paras = load_la_tweets_paras(dir=git_version)
+    # line = LINE(paras)
+    # line.build_train_file()
+    # line.run()
+    logger = Logger('log.txt')
+    LINE.word_word_co_occurrence_1("pure_tweets.txt", 'train_edges.txt', logger, 10)
