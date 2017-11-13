@@ -34,10 +34,10 @@ class SeedTermGenerator:
         new_tweet = []
         for segment in pos_tweet:
             segment = segment.strip().split('/')
+            new_tweet.append(segment[0])
 
             if segment[2] in self.noun_tag:
                 self.keywords.add(segment[0] + '\n')
-                new_tweet.append(segment[0])
 
         return ' '.join(new_tweet)
 
@@ -204,6 +204,6 @@ if __name__ == '__main__':
     la_paras = paras.load_la_tweets_paras(dir=git_version)
     gen = SeedTermGenerator(la_paras, paras.MAIN_LOG)
     # gen.build_pos_tag_tweets()
-    # gen.build_keyword(graph_embedding=True)
+    gen.build_keyword(graph_embedding=True)
     # gen.build_category_keywords()
     gen.build_seed_keywords()
