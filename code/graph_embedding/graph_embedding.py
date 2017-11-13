@@ -33,6 +33,8 @@ class LINE:
             train_file = self.train_edges
 
         self.word_word_co_occurrence_2(input_file, train_file, self.logger, self.min_count)
+        self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__,
+                                                  'Finish building training file'))
 
     @staticmethod
     def word_word_co_occurrence_1(input_file, train_file, logger, min_count):
@@ -112,7 +114,7 @@ class LINE:
             outf.write('\n'.join(result))
         t2 = time.time()
 
-        print "word_word_co_occurrence_2 takes {}".format(t2-t1)
+        logger.info("word_word_co_occurrence_2 takes {}".format(t2-t1))
 
 
 
