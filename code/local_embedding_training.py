@@ -159,8 +159,7 @@ def run_line(pd_map, docs, cates, folder):
             for d in c_docs:
                 g.write(docs[d])
         train_file = sub_folder + "train_edges.txt"
-        git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[
-            0].strip('\n')
+        git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[0].strip('\n')
         paras = load_la_tweets_paras(dir=git_version, create_log=False)
         line = LINE(paras)
         logger.info('[Local-embedding] starting generating input for line')

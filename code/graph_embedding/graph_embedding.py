@@ -8,7 +8,7 @@ from ..tweet_preprocessing.paras import load_la_tweets_paras
 
 class LINE:
     def __init__(self, paras):
-        self.input = paras['graph_embedding_tweets']
+        self.input = paras['pure_tweets']
         self.train_edges = paras['train_edges']
         self.output = paras['embeddings']
         self.size = paras['line_paras']['size']
@@ -35,7 +35,7 @@ class LINE:
             data = f.readlines()
 
         word_co_occurrence = {}
-        word_co_occurrence_tweets = {}
+        # word_co_occurrence_tweets = {}
 
         count = 0
 
@@ -47,17 +47,17 @@ class LINE:
                 for j in range(i + 1, len(stweet)):
                     co_w1 = '{}\t{}'.format(stweet[i], stweet[j])
                     co_w2 = '{}\t{}'.format(stweet[j], stweet[i])
-                    co_w = '{}_{}'.format(stweet[i], stweet[j])
+                    # co_w = '{}_{}'.format(stweet[i], stweet[j])
                     if co_w1 not in word_co_occurrence:
                         word_co_occurrence[co_w1] = 0
                     if co_w2 not in word_co_occurrence:
                         word_co_occurrence[co_w2] = 0
-                    if co_w not in word_co_occurrence_tweets:
-                        word_co_occurrence_tweets[co_w] = []
+                    # if co_w not in word_co_occurrence_tweets:
+                    #     word_co_occurrence_tweets[co_w] = []
 
                     word_co_occurrence[co_w1] += 1
                     word_co_occurrence[co_w2] += 1
-                    word_co_occurrence_tweets[co_w].append(tweet)
+                    # word_co_occurrence_tweets[co_w].append(tweet)
 
             count += 1
 
