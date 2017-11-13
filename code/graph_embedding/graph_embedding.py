@@ -100,7 +100,7 @@ class LINE:
         with open(input_file, 'r') as f:
             data = f.readlines()
 
-        count_vec = CountVectorizer(decode_error='ignore', analyzer='word', max_df=0.9)
+        count_vec = CountVectorizer(decode_error='ignore', analyzer='word')
         x = count_vec.fit_transform(data)
         features = count_vec.get_feature_names()
         xc = x.T * x
