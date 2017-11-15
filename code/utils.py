@@ -184,16 +184,12 @@ def count_word_frequency(file_name):
 
     word_cnt = CountVectorizer(analyzer='word', stop_words='english')
     doc_word = word_cnt.fit_transform(data)
-    row, col = doc_word.shape
-    print doc_word.shape
-    word_freq_sum = np.asarray(np.sum(doc_word.todense(), axis=0)).reshape(-1)
-    print type(word_freq_sum)
-    print word_freq_sum.shape
+    doc_word = doc_word.sum(axis = 0).T
     word_freq_dic = {}
 
     i = 0
     for word in word_cnt.get_feature_names():
-        word_freq_dic[word] = word_freq_sum[i]
+        word_freq_dic[word] = np.asarray(doc_word[i]).reshape(-1)[0]
         i+=1
 
     word_freq_dic = sorted(word_freq_dic.items(), key=operator.itemgetter(1), reverse=True)
