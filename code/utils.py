@@ -184,7 +184,7 @@ def count_word_frequency(file_name):
 
     word_cnt = CountVectorizer(analyzer='word', stop_words='english')
     doc_word = word_cnt.fit_transform(data)
-    word_freq_sum = doc_word.toarray().sum(axis = 0)
+    word_freq_sum = doc_word.todense().sum(axis = 0)
     word_freq_dic = {}
     i = 0
     for word in word_cnt.get_feature_names():
