@@ -2,7 +2,7 @@ import os, sys
 import math
 import operator
 from sklearn.feature_extraction.text import CountVectorizer
-
+import numpy as np
 
 def load_embeddings(embedding_file):
     if embedding_file is None:
@@ -184,8 +184,13 @@ def count_word_frequency(file_name):
 
     word_cnt = CountVectorizer(analyzer='word', stop_words='english')
     doc_word = word_cnt.fit_transform(data)
-    word_freq_sum = doc_word.todense().sum(axis = 0)
+    row, col = doc_word.shape
+    print doc_word.shape
+    word_freq_sum = np.asarray(np.sum(doc_word.todense(), axis=0)).reshape(-1)
+    print type(word_freq_sum)
+    print word_freq_sum.shape
     word_freq_dic = {}
+
     i = 0
     for word in word_cnt.get_feature_names():
         word_freq_dic[word] = word_freq_sum[i]
