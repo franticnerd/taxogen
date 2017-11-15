@@ -191,6 +191,7 @@ def count_word_frequency(file_name):
         word_freq_dic[word] = word_freq_sum[i]
         i+=1
 
+    word_freq_dic = sorted(word_freq_dic.items(), key=operator.itemgetter(1))
     return word_freq_dic
 
 if __name__ == '__main__':
@@ -198,4 +199,3 @@ if __name__ == '__main__':
         print('Usage: python utils.py file')
     ret = count_word_frequency(sys.argv[1])
     print ret
-    
