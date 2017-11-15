@@ -8,6 +8,7 @@ import json
 from tweet_handler import preprocess_tweet
 from collections import OrderedDict
 import re
+from ..ark_tweet_nlp_wrapper.CMUTweetTagger import check_script_is_present, runtagger_parse, RUN_TAGGER_CMD
 
 
 class SeedTermGenerator:
@@ -85,6 +86,44 @@ class SeedTermGenerator:
         p.communicate()
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_pos_tag_tweets.__name__,
                                                   'Finish building pos tag tweets'))
+
+    def ark_pos_tag_tweets(self):
+        self.logger.info(Logger.build_log_message(self.__class__.__name__, self.ark_pos_tag_tweets.__name__,
+                                                  'Start building pos tag tweets by ark-tweet-nlp'))
+
+        self.logger.info(Logger.build_log_message(self.__class__.__name__, self.ark_pos_tag_tweets.__name__,
+                                              "Checking that we can see \"{}\", this will crash if we can't").format(RUN_TAGGER_CMD))
+
+        success = check_script_is_present()
+
+        if success:
+            self.logger.info(Logger.build_log_message(self.__class__.__name__, self.ark_pos_tag_tweets.__name__,
+                                                      'ark-tweet-nlp starts pos tagging tweets'))
+
+            with open(self.pure_tweets, 'r') as f:
+                data = f.readlines()
+            data = ['this is a message', 'and a second message']
+            result = runtagger_parse(data)
+
+            pos_tweets = []
+
+            for res in result:
+                new_tweet = ''
+                for element in res:
+                    word = element[0]
+                    tag = element[1]
+                    score = float(element[2])
+
+                    if score >= 0.5 and (tag == 'N' or tag == '^'):
+                        new_tweet += ' ' + word
+
+                pos_tweets.append(new_tweet)
+
+            with open(self.pos_tweets, 'w') as outf:
+                outf.write('\n'.join(pos_tweets))
+
+            self.logger.info(Logger.build_log_message(self.__class__.__name__, self.ark_pos_tag_tweets.__name__,
+                                                      'Finish building pos tag tweets by ark-tweet-nlp'))
 
     def build_category_keywords(self):
         with open(self.category, 'r') as f:
