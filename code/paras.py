@@ -149,5 +149,5 @@ def load_tweets_hashtags_params_method(corpusPath):
     pd['n_cluster'] = 17
     pd['filter_thre'] = 0.25
     pd['n_expand'] = 300
-    pd['n_cluster_iter'] = 3
+    pd['n_cluster_iter'] = 2
     return pd

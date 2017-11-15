@@ -101,8 +101,7 @@ class SeedTermGenerator:
                                                       'ark-tweet-nlp starts pos tagging tweets'))
 
             with open(self.pure_tweets, 'r') as f:
-                data = f.readlines()
-            data = ['this is a message', 'and a second message']
+               data = f.readlines()
             result = runtagger_parse(data)
 
             pos_tweets = []
@@ -118,7 +117,6 @@ class SeedTermGenerator:
                         new_tweet += ' ' + word
 
                 pos_tweets.append(new_tweet)
-
             with open(self.pos_tweets, 'w') as outf:
                 outf.write('\n'.join(pos_tweets))
 
@@ -242,6 +240,7 @@ if __name__ == '__main__':
     la_paras = paras.load_la_tweets_paras(dir=git_version)
     gen = SeedTermGenerator(la_paras, paras.MAIN_LOG)
     # gen.build_pos_tag_tweets()
-    gen.build_keyword(graph_embedding=True)
+    gen.ark_pos_tag_tweets()
+    # gen.build_keyword(graph_embedding=True)
     # gen.build_category_keywords()
     # gen.build_seed_keywords()
