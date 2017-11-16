@@ -9,7 +9,7 @@ from tweet_handler import preprocess_tweet
 from collections import OrderedDict
 import re
 from ..ark_tweet_nlp_wrapper.CMUTweetTagger import check_script_is_present, runtagger_parse, RUN_TAGGER_CMD
-
+from ..utils import count_word_frequency
 
 class SeedTermGenerator:
     def __init__(self, paras, logger_name):
@@ -172,6 +172,9 @@ class SeedTermGenerator:
             if word in embed_dic:
                 category_keywords_embed[word] = embed_dic[word]
 
+        # build word frequency dictionary
+        word_freq = count_word_frequency(self.pure_tweets)
+
         # build keywords dictionary
         count = 0
         keywords_embed = OrderedDict()
@@ -214,7 +217,7 @@ class SeedTermGenerator:
         for i in range(len(keywords_result)):
             cosine_cate[category_keywords_embed_keys[i]] = {}
             for j in range(len(keywords_result[i])):
-                if keywords_result[i][j] >= 0.6:
+                if keywords_result[i][j] >= 0.6 and word_freq[keywords_embed_keys[j]] >= 500:
                     cosine_cate[category_keywords_embed_keys[i]][keywords_embed_keys[j]] = keywords_result[i][j]
             # for j in range(len(phrases_result[i])):
             #     if phrases_result[i][j] >= 0.4:
@@ -240,7 +243,7 @@ if __name__ == '__main__':
     la_paras = paras.load_la_tweets_paras(dir=git_version)
     gen = SeedTermGenerator(la_paras, paras.MAIN_LOG)
     # gen.build_pos_tag_tweets()
-    gen.ark_pos_tag_tweets()
+    # gen.ark_pos_tag_tweets()
     # gen.build_keyword(graph_embedding=True)
     # gen.build_category_keywords()
-    # gen.build_seed_keywords()
+    gen.build_seed_keywords()

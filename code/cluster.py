@@ -21,6 +21,8 @@ class Clusterer:
         self.membership = None  # a list contain the membership of the data points
         self.center_ids = None  # a list contain the ids of the cluster centers
         self.inertia_scores = None
+        self.label_cosine = {}
+        self.similarity_rank = {}
 
     def fit(self):
         self.clus.fit(self.data)
@@ -41,14 +43,17 @@ class Clusterer:
             ret.append((cluster_id, center_idx))
         return ret
 
-
     def find_center_idx_for_one_cluster(self, cluster_id):
         query_vec = self.clus.cluster_centers_[cluster_id]
         members = self.clusters[cluster_id]
+        self.similarity_rank[cluster_id] = {}
+        self.label_cosine[cluster_id] = {}
         best_similarity, ret = -1, -1
         for member_idx in members:
             member_vec = self.data[member_idx]
             cosine_sim = self.calc_cosine(query_vec, member_vec)
+            self.label_cosine[cluster_id][member_idx] = member_vec
+            self.similarity_rank[cluster_id][member_idx] = cosine_sim
             if cosine_sim > best_similarity:
                 best_similarity = cosine_sim
                 ret = member_idx
@@ -59,7 +64,7 @@ class Clusterer:
 
 
 def run_clustering(full_data, doc_id_file, filter_keyword_file, n_cluster, parent_direcotry, parent_description,\
-                   cluster_keyword_file, hierarchy_file, doc_membership_file):
+                   cluster_keyword_file, hierarchy_file, doc_membership_file, simi_rank, label_cosine):
     """
 
     :param full_data: Dataset object
@@ -86,6 +91,7 @@ def run_clustering(full_data, doc_id_file, filter_keyword_file, n_cluster, paren
     dataset.write_cluster_members(clus, cluster_keyword_file, parent_direcotry)
     center_names = dataset.write_cluster_centers(clus, parent_description, hierarchy_file)
     dataset.write_document_membership(clus, doc_membership_file, parent_direcotry)
+    dataset.write_cluster_info(clus.similarity_rank, clus.label_cosine, simi_rank, label_cosine)
     logger.info('\n')
     logger.info('Done saving cluster results for %s keywords under parent: %s'%(len(dataset.keywords), parent_description))
     logger.info('\n')

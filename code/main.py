@@ -34,6 +34,8 @@ class DataFiles:
         self.caseolap_keyword_file = node_dir + 'caseolap.txt'
         self.filtered_keyword_file = node_dir + 'keywords.txt'
 
+        self.simi_rank = node_dir + 'simi_rank'
+        self.label_cosine = node_dir + 'label_cosine'
 
 '''
 input_dir: the directory for storing the input files that do not change
@@ -68,7 +70,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
     if caseolap is False:
         try:
             children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent, \
-                                      df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file)
+                                      df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file, df.simi_rank, df.label_cosine)
         except:
             logger.info("\n")
             logger.exception("Clustering not finished.")
@@ -81,7 +83,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
                 df.seed_keyword_file = df.filtered_keyword_file
             try:
                 children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent,\
-                               df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file)
+                               df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file, df.simi_rank, df.label_cosine)
             except:
                 logger.info("\n")
                 logger.exception("Clustering not finished.")

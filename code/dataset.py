@@ -4,11 +4,12 @@ __description__: Construct Full dataset and sub dataset objects.
   Currently, the document hard clustering is written in the file
 __latest_updates__: 09/25/2017
 '''
-import numpy as np
 from collections import defaultdict
 from math import log
 from utils import ensure_directory_exist
 from tweet_preprocessing.util.logger import Logger
+import json
+import operator
 
 # the complete data set
 class DataSet:
@@ -75,7 +76,7 @@ class SubDataSet:
         self.keywords = self.load_keywords(keyword_file, full_data)
         self.keyword_to_id = self.gen_keyword_id()
         self.keyword_set = set(self.keywords)
-        self.embeddings = self.load_embeddings(full_data)
+        self.embeddings, self.labels = self.load_embeddings(full_data)
         self.documents, self.original_doc_ids = self.load_documents(full_data, doc_id_file)
         self.keyword_idf = self.build_keyword_idf()
 
@@ -116,10 +117,12 @@ class SubDataSet:
         """
         embeddings = full_data.embeddings
         ret = []
+        labels = []
         for word in self.keywords:
+            labels.append(word)
             vec = embeddings[word]
             ret.append(vec)
-        return np.array(ret)
+        return np.array(ret), labels
 
     def load_documents(self, full_data, doc_id_file):
         """
@@ -254,7 +257,28 @@ class SubDataSet:
                 best_idx, max_score = idx, score
         return best_idx
 
+    def write_cluster_info(self, similarity_rank, label_cosine, simi_rank_prefix, label_cosine_prefix):
 
+        for cluster_id in similarity_rank:
+            simi_file = '{}_{}.txt'.format(simi_rank_prefix, cluster_id)
+            label_cosine_file = '{}_{}.txt'.format(label_cosine_prefix, cluster_id)
+
+            simi = {}
+            cosine = {}
+
+            for member_idx in similarity_rank[cluster_id]:
+                simi[self.labels[member_idx]] = similarity_rank[cluster_id][member_idx]
+                cosine[self.labels[member_idx]] = label_cosine[cluster_id][member_idx]
+
+            simi = sorted(simi.items(), key=operator.itemgetter(1), reverse=True)
+
+            with open(simi_file, 'w') as f:
+                json.dump(simi, f)
+
+            with open(label_cosine_file, 'w') as f:
+                json.dump(cosine, f)
+
+        return
 if __name__ == '__main__':
     data_dir = '/Users/chao/data/projects/local-embedding/toy/'
     document_file = data_dir + 'input/papers.txt'
