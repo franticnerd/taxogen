@@ -169,10 +169,13 @@ if __name__ == '__main__':
     #logger = Logger('log.txt')
     #LINE.word_word_co_occurrence_1("pure_tweets.txt", 'train_edges.txt', logger, 10)
 
-    if(len(sys.argv) < 3):
+    if(len(sys.argv) < 4):
         print "python -m code.graph_embedding.graph_embedding fin fout"
 
-    fin = sys.argv[1]
-    fout = sys.argv[2]
+    fin = sys.argv[2]
+    fout = sys.argv[3]
+
+    print fin
+    print fout
 
     LINE.build_co_occurrence_dic(fin, fout)
