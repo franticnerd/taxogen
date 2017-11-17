@@ -56,7 +56,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
         return
 
     if level > 0:
-        n_cluster = 6
+        n_cluster = 5
 
     logger.info('============================= Running level: %s, and node: %s =============================' % (level, parent))
     start = time.time()
@@ -149,8 +149,8 @@ if __name__ == '__main__':
     # opt = load_sp_params()
     #opt = load_dblp_params_method()
 
-    n_clusters = [10, 12]
-    n_expands = [250]
+    n_clusters = [12]
+    n_expands = [200]
 
     for n_cluster in n_clusters:
         for n_expand in n_expands:

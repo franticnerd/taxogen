@@ -4,6 +4,7 @@ __description__: Construct Full dataset and sub dataset objects.
   Currently, the document hard clustering is written in the file
 __latest_updates__: 09/25/2017
 '''
+import numpy as np
 from collections import defaultdict
 from math import log
 from utils import ensure_directory_exist
@@ -268,7 +269,7 @@ class SubDataSet:
 
             for member_idx in similarity_rank[cluster_id]:
                 simi[self.labels[member_idx]] = similarity_rank[cluster_id][member_idx]
-                cosine[self.labels[member_idx]] = label_cosine[cluster_id][member_idx]
+                cosine[self.labels[member_idx]] = label_cosine[cluster_id][member_idx].tolist()
 
             simi = sorted(simi.items(), key=operator.itemgetter(1), reverse=True)
 
