@@ -1,7 +1,7 @@
 import subprocess, os
 from sklearn.feature_extraction.text import CountVectorizer
 import time
-
+import json
 from ..tweet_preprocessing.tweet_handler import preprocess_tweet
 from ..tweet_preprocessing.tweet_handler import Logger
 from ..tweet_preprocessing.paras import load_la_tweets_paras
@@ -137,6 +137,24 @@ class LINE:
 
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.run.__name__,
                                                   'Finish graph embedding training'))
+    @staticmethod
+    def build_co_occurrence_dic(fin, fout):
+        with open(fin, 'r') as f:
+            data = f.readlines()
+
+        co_occurrence_dic = {}
+        curr_word = None
+        for line in data:
+            line = line.split('\t')
+
+            if curr_word == None or curr_word != line[1]:
+                curr_word = line[1]
+                co_occurrence_dic[curr_word] = 0
+
+            co_occurrence_dic[curr_word] += 1
+
+        with open(fout, 'w') as f:
+            json.dump(co_occurrence_dic, f)
 
 if __name__ == '__main__':
     git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[0].strip('\n')
