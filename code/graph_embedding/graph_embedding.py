@@ -1,4 +1,6 @@
 import subprocess, os
+
+import sys
 from sklearn.feature_extraction.text import CountVectorizer
 import time
 import json
@@ -157,11 +159,20 @@ class LINE:
             json.dump(co_occurrence_dic, f)
 
 if __name__ == '__main__':
-    git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[0].strip('\n')
+    #git_version = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdout=subprocess.PIPE).communicate()[0].strip('\n')
 
-    paras = load_la_tweets_paras(dir=git_version)
-    line = LINE(paras)
-    line.build_train_file()
-    line.run()
+    #paras = load_la_tweets_paras(dir=git_version)
+    #line = LINE(paras)
+    #line.build_train_file()
+
+    #line.run()
     #logger = Logger('log.txt')
     #LINE.word_word_co_occurrence_1("pure_tweets.txt", 'train_edges.txt', logger, 10)
+
+    if(len(sys.argv) < 3):
+        print "python -m code.graph_embedding.graph_embedding fin fout"
+
+    fin = sys.argv[1]
+    fout = sys.argv[2]
+
+    LINE.build_co_occurrence_dic(fin, fout)
