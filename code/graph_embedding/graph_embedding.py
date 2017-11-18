@@ -155,6 +155,7 @@ class LINE:
 
             co_occurrence_dic[curr_word] += 1
 
+        co_occurrence_dic = sorted(co_occurrence_dic.items(), key=lambda t: t[1], reverse=True)
         with open(fout, 'w') as f:
             json.dump(co_occurrence_dic, f)
 
