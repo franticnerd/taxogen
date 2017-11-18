@@ -172,8 +172,8 @@ if __name__ == '__main__':
     if(len(sys.argv) < 3):
         print "python -m code.graph_embedding.graph_embedding fin fout"
 
-    fin = sys.argv[2]
-    fout = sys.argv[3]
+    fin = sys.argv[1]
+    fout = sys.argv[2]
 
     print fin
     print fout
