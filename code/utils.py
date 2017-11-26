@@ -1,6 +1,8 @@
 import os, sys
 import math
 import operator
+from collections import OrderedDict
+
 from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 
@@ -185,14 +187,17 @@ def count_word_frequency(file_name):
     word_cnt = CountVectorizer(analyzer='word', stop_words='english')
     doc_word = word_cnt.fit_transform(data)
     doc_word = doc_word.sum(axis = 0).T
-    word_freq_dic = {}
+    word_freq_dic = dict()
 
     i = 0
     for word in word_cnt.get_feature_names():
         word_freq_dic[word] = np.asarray(doc_word[i]).reshape(-1)[0]
         i+=1
+    # print type(word_freq_dic)
 
-    word_freq_dic = sorted(word_freq_dic.items(), key=operator.itemgetter(1), reverse=True)
+    # word_freq_dic = OrderedDict(sorted(word_freq_dic.items(), key=operator.itemgetter(1), reverse=True))
+    # print type(word_freq_dic)
+
     return word_freq_dic
 
 if __name__ == '__main__':
