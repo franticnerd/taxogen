@@ -184,7 +184,7 @@ def count_word_frequency(file_name):
     with open(file_name, 'r') as f:
         data = f.readlines()
 
-    word_cnt = CountVectorizer(analyzer='word', stop_words='english')
+    word_cnt = CountVectorizer(analyzer='word')
     doc_word = word_cnt.fit_transform(data)
     doc_word = doc_word.sum(axis = 0).T
     word_freq_dic = dict()
