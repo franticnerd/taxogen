@@ -34,70 +34,12 @@ class LINE:
         if train_file == None:
             train_file = self.train_edges
 
-        self.word_word_co_occurrence_2(input_file, train_file, self.logger, self.min_count)
+        self.word_word_co_occurrence(input_file, train_file, self.logger, self.min_count)
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__,
                                                   'Finish building training file'))
 
     @staticmethod
-    def word_word_co_occurrence_1(input_file, train_file, logger, min_count):
-        t1 = time.time()
-        with open(input_file, 'r') as f:
-            data = f.readlines()
-        word_co_occurrence = {}
-        # word_co_occurrence_tweets = {}
-        count = 0
-        for tweet in data:
-            tweet = preprocess_tweet(tweet, lower=True)
-            stweet = tweet.split(' ')
-
-            for i in range(len(stweet)):
-                for j in range(i + 1, len(stweet)):
-                    co_w1 = '{}\t{}'.format(stweet[i], stweet[j])
-                    co_w2 = '{}\t{}'.format(stweet[j], stweet[i])
-                    # co_w = '{}_{}'.format(stweet[i], stweet[j])
-                    if co_w1 not in word_co_occurrence:
-                        word_co_occurrence[co_w1] = 0
-                    if co_w2 not in word_co_occurrence:
-                        word_co_occurrence[co_w2] = 0
-                    # if co_w not in word_co_occurrence_tweets:
-                    #     word_co_occurrence_tweets[co_w] = []
-
-                    word_co_occurrence[co_w1] += 1
-                    word_co_occurrence[co_w2] += 1
-                    # word_co_occurrence_tweets[co_w].append(tweet)
-
-            count += 1
-
-            if count % 10000 == 0:
-                logger.info(Logger.build_log_message("LINE", "word_word_co_occurrence_1",
-                                                          '{} lines processed'.format(count)))
-        word_co_occurrence = {k: v for k, v in word_co_occurrence.iteritems() if v >= min_count}
-        res_list = []
-        word_set = set()
-        for key, val in word_co_occurrence.iteritems():
-            res_list.append('{}\t{}'.format(key, float(val)))
-            # res_list.append('{}\t{}\t{}'.format(key, val, 'e'))
-            for word in key.split('\t'):
-                word_set.add(word)
-        with open(train_file, 'w') as outf:
-            outf.write('\n'.join(res_list))
-
-            # with open(self.train_nodes, 'wb') as outf:
-            #     outf.write('\n'.join(list(word_set)))
-
-            # count = 0
-            # for co_word in word_co_occurrence_tweets:
-            #     if len(word_co_occurrence_tweets[co_word]) >= self.min_count:
-            #         with open(self.co_occurrence_tweets+co_word+".txt", 'w') as outf:
-            #             outf.write('\n'.join(word_co_occurrence_tweets[co_word]))
-            #         count += 1
-            #         if count % 10000 == 0:
-            #             self.logger.info(Logger.build_log_message(self.__class__.__name__, self.build_train_file.__name__, '{} co_occurrence_words processed'.format(count)))
-        t2 = time.time()
-        logger.info("word_word_co_occurrence_1 takes {}".format(t2-t1))
-
-    @staticmethod
-    def word_word_co_occurrence_2(input_file, train_file, logger, min_count):
+    def word_word_co_occurrence(input_file, train_file, logger, min_count):
         t1 = time.time()
         with open(input_file, 'r') as f:
             data = f.readlines()
@@ -141,6 +83,9 @@ class LINE:
                                                   'Finish graph embedding training'))
     @staticmethod
     def build_co_occurrence_dic(fin, fout):
+
+        stop_words = set(['los', 'ca', 'angles', 'la', 'losangeles', 'tonight'])
+
         with open(fin, 'r') as f:
             data = f.readlines()
 
@@ -148,6 +93,9 @@ class LINE:
         curr_word = None
         for line in data:
             line = line.split('\t')
+
+            if line[1] in stop_words:
+                continue
 
             if curr_word == None or curr_word != line[1]:
                 curr_word = line[1]
