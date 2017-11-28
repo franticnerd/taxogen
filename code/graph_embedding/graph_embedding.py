@@ -84,9 +84,6 @@ class LINE:
 
     @staticmethod
     def build_co_occurrence_dic(fin, fout):
-
-        stop_words = {'los', 'ca', 'angles', 'la', 'losangeles', 'tonight'}
-
         with open(fin, 'r') as f:
             data = f.readlines()
 
@@ -94,9 +91,6 @@ class LINE:
         curr_word = None
         for line in data:
             line = line.split('\t')
-            if line[1] in stop_words:
-                continue
-
             if curr_word == None or curr_word != line[1]:
                 curr_word = line[1]
                 co_occurrence_dic[curr_word] = 0
