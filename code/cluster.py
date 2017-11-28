@@ -71,6 +71,7 @@ class Clusterer:
         members = self.clusters[cluster_id]
         self.similarity_rank[cluster_id] = {}
         self.label_cosine[cluster_id] = {}
+        self.word_co_occurrence_rank[cluster_id] = {}
         best_co_occurrence, ret = -1, -1
         for member_idx in members:
             member_vec = self.data[member_idx]
