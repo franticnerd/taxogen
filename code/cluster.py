@@ -76,7 +76,9 @@ class Clusterer:
         for member_idx in members:
             member_vec = self.data[member_idx]
             cosine_sim = self.calc_cosine(query_vec, member_vec)
-            co_occurrence_count = co_occurrence_dic[self.labels[member_idx]]
+            co_occurrence_count = 0
+            if self.labels[member_idx] in co_occurrence_dic:
+                co_occurrence_count = co_occurrence_dic[self.labels[member_idx]]
             self.label_cosine[cluster_id][member_idx] = member_vec
             self.similarity_rank[cluster_id][member_idx] = cosine_sim
             self.word_co_occurrence_rank[cluster_id][member_idx] = co_occurrence_count
