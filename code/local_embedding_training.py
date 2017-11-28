@@ -13,6 +13,12 @@ from graph_embedding.graph_embedding import LINE
 from tweet_preprocessing.paras import load_la_tweets_paras
 
 def read_files(folder, parent):
+    """
+
+    :param folder: current folder
+    :param parent: parent keyword
+    :return: embs - keyowrds embedding keywords - keywords cates - cluster dictionary
+    """
     logger = Logger.get_logger("MAIN LOG")
     logger.info("[Local-embedding] Reading file: %s"%parent)
     emb_file = '%s/embeddings.txt' % folder
@@ -27,6 +33,7 @@ def read_files(folder, parent):
         for line in f:
             keywords.add(line.strip('\r\n'))
 
+    # select keywords that have embeddings
     tmp_embs = {}
     for k in keywords:
         if k in embs:
@@ -44,6 +51,13 @@ def read_files(folder, parent):
     return embs, keywords, cates
 
 def relevant_phs(embs, cates, N):
+    """
+    Find the closest N phrases for each cluster
+    :param embs: keywords embeddings
+    :param cates: clusters
+    :param N: n_expand
+    :return:
+    """
     logger = Logger.get_logger("MAIN LOG")
     for cate in cates:
         worst = -100
@@ -136,6 +150,7 @@ def run_word2vec(pd_map, docs, cates, folder):
         subprocess.call(["./word2vec", "-threads", "20", "-train", input_f, "-output", output_f])
         logger.info('[Local-embedding] done training word2vec')
 
+
 def run_line(pd_map, docs, cates, folder):
     logger = Logger.get_logger("MAIN LOG")
     for cate in cates:
@@ -166,9 +181,22 @@ def run_line(pd_map, docs, cates, folder):
         line.build_train_file(input_file=input_f, train_file=train_file)
         logger.info('[Local-embedding] line starts generating embedding')
         line.run(train_file=train_file, output_file=output_f)
-        logger.info('[Local-embedding] done training word2vec')
+        logger.info('[Local-embedding] done training line')
+        word_co_occurrence = sub_folder + "keyword_co_occurrence.txt"
+        line.build_co_occurrence_dic(train_file, word_co_occurrence)
+        logger.info('[Local-embedding] done generating keyword co-occurrences')
 
 def main_local_embedding(folder, doc_file, reidx, parent, N):
+    """
+
+    :param word_co_occurrence:
+    :param folder: current folder
+    :param doc_file: papers.txt tweet1 \n tweet2 \n tweet3 ...
+    :param reidx: index.txt word doc_num1 doc_num2 ...
+    :param parent: parent keyword
+    :param N: n_expand
+    :return:
+    """
     embs, keywords, cates = read_files(folder, parent)
     cates = relevant_phs(embs, cates, int(N))
     pd_map, docs = revevant_docs(doc_file, reidx, cates)

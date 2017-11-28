@@ -36,6 +36,9 @@ class DataFiles:
 
         self.simi_rank = node_dir + 'simi_rank'
         self.label_cosine = node_dir + 'label_cosine'
+        self.word_co_occurrence_rank = node_dir + 'word_co_occurrence_rank'
+
+        self.keyword_co_occurrence = node_dir + 'keyword_co_occurrence.txt'
 
 '''
 input_dir: the directory for storing the input files that do not change
@@ -69,8 +72,9 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
     # filter the keywords
     if caseolap is False:
         try:
-            children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent, \
-                                      df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file, df.simi_rank, df.label_cosine)
+            children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent,
+                                      df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file, df.simi_rank,
+                                      df.label_cosine, df.keyword_co_occurrence, df.word_co_occurrence_rank)
         except:
             logger.info("\n")
             logger.exception("Clustering not finished.")
@@ -82,8 +86,9 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
             if iter > 0:
                 df.seed_keyword_file = df.filtered_keyword_file
             try:
-                children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent,\
-                               df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file, df.simi_rank, df.label_cosine)
+                children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent,
+                                          df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file,
+                                          df.simi_rank, df.label_cosine, df.keyword_co_occurrence, df.word_co_occurrence_rank)
             except:
                 logger.info("\n")
                 logger.exception("Clustering not finished.")

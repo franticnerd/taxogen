@@ -258,20 +258,23 @@ class SubDataSet:
                 best_idx, max_score = idx, score
         return best_idx
 
-    def write_cluster_info(self, similarity_rank, label_cosine, simi_rank_prefix, label_cosine_prefix):
+    def write_cluster_info(self, similarity_rank, label_cosine, word_co_occurrence_rank, simi_rank_prefix, label_cosine_prefix, word_co_occurrence_rank_prefix):
 
         for cluster_id in similarity_rank:
             simi_file = '{}_{}.txt'.format(simi_rank_prefix, cluster_id)
             label_cosine_file = '{}_{}.txt'.format(label_cosine_prefix, cluster_id)
-
+            word_co_occurrence_rank_file = '{}_{}.txt'.format(word_co_occurrence_rank_prefix, cluster_id)
             simi = {}
             cosine = {}
+            co_occurrence = {}
 
             for member_idx in similarity_rank[cluster_id]:
                 simi[self.labels[member_idx]] = similarity_rank[cluster_id][member_idx]
                 cosine[self.labels[member_idx]] = label_cosine[cluster_id][member_idx].tolist()
+                co_occurrence[self.labels[member_idx]] = word_co_occurrence_rank[cluster_id][member_idx]
 
             simi = sorted(simi.items(), key=operator.itemgetter(1), reverse=True)
+            co_occurrence = sorted(co_occurrence.items(), key=operator.itemgetter(1), reverse=True)
 
             with open(simi_file, 'w') as f:
                 json.dump(simi, f)
@@ -279,8 +282,13 @@ class SubDataSet:
             with open(label_cosine_file, 'w') as f:
                 json.dump(cosine, f)
 
+            with open(word_co_occurrence_rank_file, 'w') as f:
+                json.dump(co_occurrence, f)
+
         return
 if __name__ == '__main__':
+
+
     data_dir = '/Users/chao/data/projects/local-embedding/toy/'
     document_file = data_dir + 'input/papers.txt'
     keyword_file = data_dir + 'input/candidates.txt'

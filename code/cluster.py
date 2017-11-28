@@ -9,11 +9,11 @@ from scipy.spatial.distance import cosine
 from spherecluster import SphericalKMeans
 from dataset import SubDataSet
 from tweet_preprocessing.util.logger import Logger
-
+import json
 
 class Clusterer:
 
-    def __init__(self, data, n_cluster):
+    def __init__(self, data, n_cluster, word_co_occurrence, labels):
         self.data = data
         self.n_cluster = n_cluster
         self.clus = SphericalKMeans(n_cluster)
@@ -23,6 +23,10 @@ class Clusterer:
         self.inertia_scores = None
         self.label_cosine = {}
         self.similarity_rank = {}
+        self.word_co_occurrence_rank = {}
+        self.word_co_occurrence = word_co_occurrence
+        self.labels = labels
+        self.center_distance_threshold = 0.6
 
     def fit(self):
         self.clus.fit(self.data)
@@ -37,25 +41,46 @@ class Clusterer:
 
     # find the idx of each cluster center
     def gen_center_idx(self):
+        with open(self.word_co_occurrence, 'r') as f:
+            co_occurrence_dic = json.load(f)
+
         ret = []
         for cluster_id in range(self.n_cluster):
-            center_idx = self.find_center_idx_for_one_cluster(cluster_id)
+            center_idx = self.find_center_idx_for_one_cluster(cluster_id, co_occurrence_dic)
             ret.append((cluster_id, center_idx))
         return ret
+    #
+    # def find_center_idx_for_one_cluster(self, cluster_id):
+    #     query_vec = self.clus.cluster_centers_[cluster_id]
+    #     members = self.clusters[cluster_id]
+    #     self.similarity_rank[cluster_id] = {}
+    #     self.label_cosine[cluster_id] = {}
+    #     best_similarity, ret = -1, -1
+    #     for member_idx in members:
+    #         member_vec = self.data[member_idx]
+    #         cosine_sim = self.calc_cosine(query_vec, member_vec)
+    #         self.label_cosine[cluster_id][member_idx] = member_vec
+    #         self.similarity_rank[cluster_id][member_idx] = cosine_sim
+    #         if cosine_sim > best_similarity:
+    #             best_similarity = cosine_sim
+    #             ret = member_idx
+    #     return ret
 
-    def find_center_idx_for_one_cluster(self, cluster_id):
+    def find_center_idx_for_one_cluster(self, cluster_id, co_occurrence_dic):
         query_vec = self.clus.cluster_centers_[cluster_id]
         members = self.clusters[cluster_id]
         self.similarity_rank[cluster_id] = {}
         self.label_cosine[cluster_id] = {}
-        best_similarity, ret = -1, -1
+        best_co_occurrence, ret = -1, -1
         for member_idx in members:
             member_vec = self.data[member_idx]
             cosine_sim = self.calc_cosine(query_vec, member_vec)
+            co_occurrence_count = co_occurrence_dic[self.labels[member_idx]]
             self.label_cosine[cluster_id][member_idx] = member_vec
             self.similarity_rank[cluster_id][member_idx] = cosine_sim
-            if cosine_sim > best_similarity:
-                best_similarity = cosine_sim
+            self.word_co_occurrence_rank[cluster_id][member_idx] = co_occurrence_count
+            if cosine_sim >= self.center_distance_threshold and co_occurrence_count > best_co_occurrence:
+                best_co_occurrence = co_occurrence_count
                 ret = member_idx
         return ret
 
@@ -63,10 +88,12 @@ class Clusterer:
         return 1 - cosine(vec_a, vec_b)
 
 
-def run_clustering(full_data, doc_id_file, filter_keyword_file, n_cluster, parent_direcotry, parent_description,\
-                   cluster_keyword_file, hierarchy_file, doc_membership_file, simi_rank, label_cosine):
+def run_clustering(full_data, doc_id_file, filter_keyword_file, n_cluster, parent_direcotry, parent_description,
+                   cluster_keyword_file, hierarchy_file, doc_membership_file, simi_rank, label_cosine,
+                   word_co_occurrence,  word_co_occurrence_rank):
     """
 
+    :param word_co_occurrence:
     :param full_data: Dataset object
     :param doc_id_file: doc_ids.txt doc_id1
     :param filter_keyword_file: keywords.txt keyword1
@@ -84,14 +111,14 @@ def run_clustering(full_data, doc_id_file, filter_keyword_file, n_cluster, paren
     logger.info('\n')
     logger.info('Start clustering for %s keywords under parent: %s' % (len(dataset.keywords), parent_description))
     ## TODO: change later here for n_cluster selection from a range
-    clus = Clusterer(dataset.embeddings, n_cluster)
+    clus = Clusterer(dataset.embeddings, n_cluster, word_co_occurrence, dataset.labels)
     clus.fit()
     logger.info('\n')
     logger.info('Done clustering for %s keywords under parent: %s'%(len(dataset.keywords), parent_description))
     dataset.write_cluster_members(clus, cluster_keyword_file, parent_direcotry)
     center_names = dataset.write_cluster_centers(clus, parent_description, hierarchy_file)
     dataset.write_document_membership(clus, doc_membership_file, parent_direcotry)
-    dataset.write_cluster_info(clus.similarity_rank, clus.label_cosine, simi_rank, label_cosine)
+    dataset.write_cluster_info(clus.similarity_rank, clus.label_cosine, simi_rank, label_cosine, word_co_occurrence_rank)
     logger.info('\n')
     logger.info('Done saving cluster results for %s keywords under parent: %s'%(len(dataset.keywords), parent_description))
     logger.info('\n')

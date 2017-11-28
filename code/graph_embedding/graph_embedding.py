@@ -81,10 +81,11 @@ class LINE:
 
         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.run.__name__,
                                                   'Finish graph embedding training'))
+
     @staticmethod
     def build_co_occurrence_dic(fin, fout):
 
-        stop_words = set(['los', 'ca', 'angles', 'la', 'losangeles', 'tonight'])
+        stop_words = {'los', 'ca', 'angles', 'la', 'losangeles', 'tonight'}
 
         with open(fin, 'r') as f:
             data = f.readlines()
@@ -93,7 +94,6 @@ class LINE:
         curr_word = None
         for line in data:
             line = line.split('\t')
-
             if line[1] in stop_words:
                 continue
 
@@ -103,7 +103,7 @@ class LINE:
 
             co_occurrence_dic[curr_word] += 1
 
-        co_occurrence_dic = sorted(co_occurrence_dic.items(), key=lambda t: t[1], reverse=True)
+        # co_occurrence_dic = sorted(co_occurrence_dic.items(), key=lambda t: t[1], reverse=True)
         with open(fout, 'w') as f:
             json.dump(co_occurrence_dic, f)
 
