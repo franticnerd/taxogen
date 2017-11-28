@@ -93,6 +93,7 @@ def run_clustering(full_data, doc_id_file, filter_keyword_file, n_cluster, paren
                    word_co_occurrence,  word_co_occurrence_rank):
     """
 
+    :param word_co_occurrence_rank:
     :param word_co_occurrence:
     :param full_data: Dataset object
     :param doc_id_file: doc_ids.txt doc_id1
@@ -118,7 +119,7 @@ def run_clustering(full_data, doc_id_file, filter_keyword_file, n_cluster, paren
     dataset.write_cluster_members(clus, cluster_keyword_file, parent_direcotry)
     center_names = dataset.write_cluster_centers(clus, parent_description, hierarchy_file)
     dataset.write_document_membership(clus, doc_membership_file, parent_direcotry)
-    dataset.write_cluster_info(clus.similarity_rank, clus.label_cosine, simi_rank, label_cosine, word_co_occurrence_rank)
+    dataset.write_cluster_info(clus.similarity_rank, clus.label_cosine, clus.word_co_occurrence_rank, simi_rank, label_cosine, word_co_occurrence_rank)
     logger.info('\n')
     logger.info('Done saving cluster results for %s keywords under parent: %s'%(len(dataset.keywords), parent_description))
     logger.info('\n')
