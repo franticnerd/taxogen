@@ -217,7 +217,7 @@ class SeedTermGenerator:
         for i in range(len(keywords_result)):
             cosine_cate[category_keywords_embed_keys[i]] = {}
             for j in range(len(keywords_result[i])):
-                if keywords_result[i][j] >= 0.6 and word_freq[keywords_embed_keys[j]] >= 500:
+                if keywords_result[i][j] >= 0.6:
                     cosine_cate[category_keywords_embed_keys[i]][keywords_embed_keys[j]] = keywords_result[i][j]
             # for j in range(len(phrases_result[i])):
             #     if phrases_result[i][j] >= 0.4:
