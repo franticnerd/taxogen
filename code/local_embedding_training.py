@@ -21,11 +21,14 @@ def read_files(folder, parent):
     """
     logger = Logger.get_logger("MAIN LOG")
     logger.info("[Local-embedding] Reading file: %s"%parent)
+    logger.info("[Local-embedding] Folder: {}".format(folder))
     emb_file = '%s/embeddings.txt' % folder
     hier_file = '%s/hierarchy.txt' % folder
     keyword_file = '%s/keywords.txt' % folder ## here only consider those remaining keywords
 
+
     embs = utils.load_embeddings(emb_file)
+    logger.info("[Local-embedding] Embedding is: {}".format(embs))
     keywords = set()
     cates = {}
 
