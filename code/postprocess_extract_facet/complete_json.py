@@ -9,38 +9,64 @@ import json
 from collections import defaultdict
 
 def main(args):
+  ### docID -> [taxonID]
   docID2taxonIDs = {}
   with open(args.doc_assign_in, "r") as fin:
     for line in fin:
       line = line.strip()
       if line:
         segs = line.split("\t")
-        docID2taxonIDs[segs[0]] = segs[1]
+        docID2taxonIDs[segs[0]] = segs[1].split(",")
+  print("Finish loading docID2taxonID")
 
-  doc_ids = []
-  with open(args.doc_cnt2doc_id, "r") as fin:
+  ### sid -> [docID]
+  sid2docIDs = defaultdict(list)
+  with open(args.sid2docID, "r") as fin:
     for line in fin:
       line = line.strip()
-      doc_ids.append(line)
+      if line:
+        segs = line.split("\t")
+        sid2docIDs[segs[1]].append(segs[0])
+  print("Finish loading sid2docIDs")
+  print("Number of unique sid = %s" % len(sid2docIDs))
+
+  ### sid -> [taxonID]
+  sid2taxonID = {}
+  for sid in sid2docIDs:
+    taxonID = []
+    for docID in sid2docIDs[sid]:
+      if docID in docID2taxonIDs:
+        taxonID.extend(docID2taxonIDs[docID])
+
+    taxonID_sorted = sorted(list(set(taxonID)))
+    ## add root node to all documents
+    sid2taxonID[sid] = "0_0_0,"+",".join(taxonID_sorted)
+  print("Finish processing sid2taxonID")
+
+
+  # doc_ids = []
+  # with open(args.doc_cnt2doc_id, "r") as fin:
+  #   for line in fin:
+  #     line = line.strip()
+  #     doc_ids.append(line)
 
   cnt = 0
   with open(args.json_in, "r") as fin, open(args.json_out, "w") as fout:
     for line in fin:
       line = line.strip()
-      new_doc_id = doc_ids[cnt]
       cnt += 1
-      if cnt % 10000 == 0:
+      if cnt % 100000 == 0:
         print("Processed %s documents" % cnt)
 
       paper = json.loads(line)
-      if (new_doc_id == "-1") or (new_doc_id not in docID2taxonIDs): # not appear in taxonGen interested documents
-        taxonIDs = "0_0_0"
+      sid = paper["id"]
+      if sid not in sid2taxonID:
+        continue
       else:
-        taxonIDs = "0_0_0," +  docID2taxonIDs[new_doc_id]
-
-      paper["taxonIDs"] = taxonIDs
-      json.dump(paper, fout)
-      fout.write("\n")
+        taxonIDs = sid2taxonID[sid]
+        paper["taxonIDs"] = taxonIDs
+        json.dump(paper, fout)
+        fout.write("\n")
 
 
 if __name__ == '__main__':
@@ -50,8 +76,9 @@ if __name__ == '__main__':
                                                '\'s matched taxonID')
   parser.add_argument('-json_in', required=True, help='Input path of JSON')
   parser.add_argument('-json_out', required=True, help='Output path of JSON')
-  parser.add_argument('-doc_assign_in', required=True, help='Input path of documnet assignment file')
+  parser.add_argument('-doc_assign_in', required=False, help='Input path of documnet assignment file')
   parser.add_argument('-doc_cnt2doc_id', required=False, help='Mapping file of raw document id to new document id')
+  parser.add_argument('-sid2docID', required=False, help='Mapping file of raw document id to semantic scholar id')
   args = parser.parse_args()
 
   start = time.time()

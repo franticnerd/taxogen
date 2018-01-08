@@ -47,7 +47,7 @@ def main(args):
 
 
 if __name__ == '__main__':
-  # python3 generate_taxon_ids.py -hier_in ../../data/eecs/taxonomies/our-l3.txt -hier_out ../../data/eecs/taxonomies/our-l3-ids.txt  -doc_assign_in ../../data/eecs/doc_assignments.txt -doc_assign_out ../../data/eecs/doc_assignments-ids.txt
+  # python3 generate_taxon_ids.py -hier_in ../../data/eecs/taxonomies/our-l3.txt -hier_out ../../data/eecs/taxonomies/sample_taxonomy.txt  -doc_assign_in ../../data/eecs/doc_assignments.txt -doc_assign_out ../../data/eecs/doc_assignments-ids.txt
   parser = argparse.ArgumentParser(prog='generate_taxon_ids.py',
                                    description='Obtain a unified id for each taxon in the hierarchy and return each document'
                                                '\'s matched taxonID')

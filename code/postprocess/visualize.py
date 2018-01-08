@@ -86,8 +86,8 @@ def main(node_file, output_file, min_level, max_level, prefix='*'):
     edges = gen_edges(nodes)
     draw(nodes, edges, output_file)
 
-tax_dir = '../../experimental/'
-img_dir = '../../experimental/'
+tax_dir = '../../experimental/eecs/'
+img_dir = '../../experimental/eecs/'
 
 # main(tax_dir + 'toy.txt', img_dir + 'toy', min_level=2, max_level=4, prefix='*/computer_science')
 
@@ -125,8 +125,28 @@ img_dir = '../../experimental/'
 # prefix_list = ['*', '*/object_recognition', '*/object_recognition/face_recognition']
 # main(tax_dir + 'taxonomy_keywords_method.txt', img_dir + 'OR-FR-method', min_level=0, max_level=3, prefix=prefix_list)
 
-prefix_list = ['*', '*/machine_learning', '*/machine_learning/supervised_learning']
-main(tax_dir + 'DBLP_global_taxonomy_perfect2.txt', img_dir + 'DBLP_perfect_part2', min_level=0, max_level=3, prefix=prefix_list)
+prefix_list = ['*']
+main(tax_dir + 'our-l3.txt', img_dir + 'first_level_only', min_level=0, max_level=3, prefix=prefix_list)
+
+prefix_list = ['*/decision_tree_learning', ]
+main(tax_dir + 'our-l3.txt', img_dir + 'decision_tree', min_level=0, max_level=3, prefix=prefix_list)
+
+prefix_list = ['*/large_scale_distributed_systems', ]
+main(tax_dir + 'our-l3.txt', img_dir + 'large_scale_distributed_systems', min_level=0, max_level=3, prefix=prefix_list)
+
+prefix_list = ['*/decision_tree_learning/actor_critic', ]
+main(tax_dir + 'our-l3.txt', img_dir + 'actor_critic', min_level=0, max_level=3, prefix=prefix_list)
+
+prefix_list = ['*/large_scale_distributed_systems/software_development', ]
+main(tax_dir + 'our-l3.txt', img_dir + 'software_development', min_level=0, max_level=3, prefix=prefix_list)
+
+
+# prefix_list = ['*', '*/decision_tree_learning', ]
+# main(tax_dir + 'our-l3.txt', img_dir + 'decision_tree', min_level=0, max_level=3, prefix=prefix_list)
+#
+#
+# prefix_list = ['*', '*/machine_learning', '*/machine_learning/supervised_learning']
+# main(tax_dir + 'DBLP_global_taxonomy_perfect2.txt', img_dir + 'DBLP_perfect_part2', min_level=0, max_level=3, prefix=prefix_list)
 
 # prefix_list = ['*', '*/machine_learning']
 # main(tax_dir + 'DBLP_global_taxonomy_fake2.txt', img_dir + 'DBLP_perfect_part4', min_level=0, max_level=2, prefix=prefix_list)

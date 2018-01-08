@@ -156,7 +156,7 @@ function update(source) {
             console.log(d);
             if(d["keywords"][0]){
               tooltipHtml = ''
-              for(var i=0; i<5 && i<d["keywords"].length; i++){
+              for(var i=0; i<10 && i<d["keywords"].length; i++){
                 tooltipHtml = tooltipHtml + d["keywords"][i] + "<br />"
               }
               tooltipHtml = tooltipHtml + "<hr />" + "US:70% <br />" + "non-US:30% <br />"

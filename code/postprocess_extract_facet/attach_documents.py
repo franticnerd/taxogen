@@ -35,7 +35,7 @@ def main(args):
 if __name__ == '__main__':
   # python3 attach_documents.py -input ../../data/eecs/taxonomies/our-l3.txt -output ../../data/eecs/doc_assignments.txt -root ../../data/eecs/our-l3 -N -1
   parser = argparse.ArgumentParser(prog='attach_documents.py',
-                                   description='Obtain top-ranked documents for each node in faceted taxonomy.')
+                                   description='Obtain documents for each node in faceted taxonomy.')
   parser.add_argument('-input', required=True, help='Input path of taxonomy')
   parser.add_argument('-output', required=True, help='Output path of documents')
   parser.add_argument('-root', required=True, help='The root path of taxonomy, no slash in the end')
