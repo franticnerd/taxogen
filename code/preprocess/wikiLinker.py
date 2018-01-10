@@ -107,8 +107,9 @@ def get_phrases(phrase_file, sep="\t", first_nrow=0):
   return phrases, phrases2score
 
 def main():
-  filepath = "/shared/data/jiaming/semantic_scholar/cs/keywords.txt"
-  phrases, phrases2score = get_phrases(filepath, sep="\t", first_nrow=0)
+  # filepath = "/shared/data/jiaming/semantic_scholar/cs/keywords.txt"
+  filepath = "/shared/data/jiaming/local-embedding/SegPhrase/results/salient.csv"
+  phrases, phrases2score = get_phrases(filepath, sep=",", first_nrow=0)
   print("Number of phrases")
 
   w = WikiLinker()
