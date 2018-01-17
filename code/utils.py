@@ -57,7 +57,7 @@ def cossim(p, q):
 
 def euclidean_distance(p, q):
 	if len(p) != len(q):
-		print 'Euclidean distance error: p, q have different length'
+		print('Euclidean distance error: p, q have different length')
 	
 	distance = 0
 
@@ -69,7 +69,7 @@ def euclidean_distance(p, q):
 
 def euclidean_cluster(ps, c):
 	if len(ps) == 0 or c == None:
-		print 'Cluster is empty'
+		print('Cluster is empty')
 
 	distance = 0
 
@@ -83,7 +83,7 @@ def euclidean_cluster(ps, c):
 
 def dot_product(p, q):
 	if len(p) != len(q):
-		print 'KL divergence error: p, q have different length'
+		print('KL divergence error: p, q have different length')
 	
 	p_len = q_len = mix_len = 0
 

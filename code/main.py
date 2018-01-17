@@ -14,7 +14,7 @@ from shutil import copyfile
 from distutils.dir_util import copy_tree
 from os import symlink
 
-MAX_LEVEL = 3
+MAX_LEVEL = 2
 
 class DataFiles:
     def __init__(self, input_dir, node_dir):
@@ -112,9 +112,9 @@ def main(opt):
     level = 0
 
     # our method
-    root_dir = opt['data_dir'] + 'our-l3/'
-    copy_tree(init_dir, root_dir)
-    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, True)
+    # root_dir = opt['data_dir'] + 'our-l3/'
+    # copy_tree(init_dir, root_dir)
+    # recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, True)
 
     # without caseolap
     # root_dir = opt['data_dir'] + 'ablation-no-caseolap-l3/'
@@ -122,9 +122,9 @@ def main(opt):
     # recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, False, True)
 
     # # without local embedding
-    # root_dir = opt['data_dir'] + 'ablation-no-local-embedding-l3-0.15/'
-    # copy_tree(init_dir, root_dir)
-    # recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, False)
+    root_dir = opt['data_dir'] + 'l3-no-local-emb/'
+    copy_tree(init_dir, root_dir)
+    recur(input_dir, root_dir, n_cluster, '*', n_cluster_iter, filter_thre, n_expand, level, True, False)
 
     # without caseolap and local embedding
     # root_dir = opt['data_dir'] + 'hc-l3/'
@@ -136,6 +136,7 @@ if __name__ == '__main__':
     # opt = load_toy_params()
     # opt = load_dblp_params()
     # opt = load_sp_params()
-    opt = load_semantic_scholar_params()
+    # opt = load_semantic_scholar_params()
+    opt = load_quantum_params()
     main(opt)
 

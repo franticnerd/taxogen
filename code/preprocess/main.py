@@ -95,8 +95,8 @@ def main():
 
     ### Step 3: lower case seged output
     cnt = 0
-    input_file_path = "/shared/data/jiaming/semantic_scholar/cs/parsed_semantic_scholar_docs.txt"
-    output_file_path = "/shared/data/jiaming/semantic_scholar/cs/papers.txt"
+    input_file_path = "/Users/shenjiaming/Desktop/local-embedding/SegPhrase/small/seged_corpus.txt"
+    output_file_path = "/Users/shenjiaming/Desktop/local-embedding/SegPhrase/small/papers.txt"
     with open(input_file_path, "r") as fin, open(output_file_path, "w") as fout:
         for line in fin:
             cnt += 1

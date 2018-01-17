@@ -1,10 +1,10 @@
 #!/bin/bash
 ## Name of the input corpus
-corpusName=eecs
+corpusName=ql
 ## Name of the taxonomy
-taxonName=our-l3
+taxonName=l3-no-local-emb
 ## If need preprocessing from raw input, set it to be 1, otherwise, set 0
-FIRST_RUN=${FIRST_RUN:- 0}
+FIRST_RUN=${FIRST_RUN:- 1}
 
 if [ $FIRST_RUN -eq 1 ]; then
 	echo 'Start data preprocessing'
@@ -32,10 +32,10 @@ if [ ! -d ../data/$corpusName/$taxonName ]; then
 fi
 
 echo 'Start TaxonGen'
-python main.py
+python2 main.py
 
 echo 'Generate compressed taxonomy'
 if [ ! -d ../data/$corpusName/taxonomies ]; then
 	mkdir ../data/$corpusName/taxonomies
 fi
-python compress.py -root ../data/$corpusName/$taxonName -output ../data/$corpusName/taxonomies/$taxonName.txt
+python2 compress.py -root ../data/$corpusName/$taxonName -output ../data/$corpusName/taxonomies/$taxonName.txt

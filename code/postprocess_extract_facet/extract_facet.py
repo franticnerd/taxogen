@@ -9,7 +9,7 @@ def main(global_taxonomy, faceted_keyword_list, outputPath, topK=10):
   with open(faceted_keyword_list, "r") as fin:
     for line in fin:
       line = line.strip()
-      keywords.add(line)
+      keywords.add(line.split(",")[0])
 
   with open(global_taxonomy, "r") as fin, open(outputPath, "w") as fout:
     for line in fin:
@@ -34,12 +34,12 @@ def main(global_taxonomy, faceted_keyword_list, outputPath, topK=10):
 
 
 if __name__ == "__main__":
-  corpusName = "sp"
-  taxonName = "global_taxonomy"
-  facetName = "keywords_method_sp"
+  corpusName = "quantum"
+  taxonName = "taxonomies-200"
+  # facetName = "keywords_method_sp"
 
   global_taxonomy = "../../data/"+corpusName+"/taxonomies/"+taxonName+".txt"
-  faceted_keyword_list = "../../data/"+corpusName+"/facets/"+facetName+".txt"
-  outputPath = "../../data/"+corpusName+"/taxonomies/taxonomy_"+facetName+".txt"
+  faceted_keyword_list = "../../data/"+corpusName+"/facets/salient.csv"
+  outputPath = "../../data/"+corpusName+"/taxonomies/taxonomy_small.txt"
 
   main(global_taxonomy, faceted_keyword_list, outputPath)
