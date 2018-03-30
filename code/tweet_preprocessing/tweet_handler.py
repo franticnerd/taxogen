@@ -65,6 +65,7 @@ class TweetHandler:
                 for line in f:
                     count += 1
                     tweet_content = line.split('\x01')
+                    tweet_id = tweet_content[0]
                     raw_tweet = tweet_content[7]
                     raw_tweet = preprocess_tweet(raw_tweet)
 
@@ -82,14 +83,14 @@ class TweetHandler:
                     clean_tweet = clean_tweet.strip(' ')
                     if clean_tweet == '':
                         continue
-                    outf.write('{0}\n'.format(clean_tweet))
+                    outf.write('{} {}\n'.format(clean_tweet, tweet_id))
 
                     if count%100000 == 0:
                         self.logger.info(Logger.build_log_message(self.__class__.__name__, self.preprocess.__name__, '%s tweets processed')%count)
 
-        self.logger.info(Logger.build_log_message(self.__class__.__name__, self.preprocess.__name__,
-                                                  'Embedding tweets'))
-        self.run_word2vec()
+        # self.logger.info(Logger.build_log_message(self.__class__.__name__, self.preprocess.__name__,
+        #                                           'Embedding tweets'))
+        # self.run_word2vec()
 
     def remove_non_alphanumeric(self, tweet):
         """ Only keeps letter, digit and # in tweets, remove all other chars
@@ -128,6 +129,7 @@ class TweetHandler:
         if hastag not in dic:
             dic[hastag] = 0
         dic[hastag] += 1
+
 
 def preprocess_tweet(tweet, lower=True):
     tweet = re.sub(' +', ' ', tweet)
