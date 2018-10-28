@@ -31,5 +31,7 @@ https://drive.google.com/file/d/1GbxKrxrmFrKt5vgDHP1xe1Qr_rfvR1jh/view?usp=shari
 
 # How to run?
 
-Execute run.sh
+You can use "python main.py" to run TaxoGen.
+
+A full pipeline is included in run.sh, including how we preprocess the corpus, run TaxoGen, and postproces the results for visualization.
 
