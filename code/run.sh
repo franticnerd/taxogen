@@ -9,7 +9,7 @@ FIRST_RUN=${FIRST_RUN:- 0}
 if [ $FIRST_RUN -eq 1 ]; then
 	echo 'Start data preprocessing'
 	## compile word2vec for embedding learning
-	gcc word2vec.c -o word2veec -lm -pthread -O2 -Wall -funroll-loops -Wno-unused-result
+	gcc word2vec.c -o word2vec -lm -pthread -O2 -Wall -funroll-loops -Wno-unused-result
 
 	## create initial folder if not exist
 	if [ ! -d ../data/$corpusName/init ]; then
