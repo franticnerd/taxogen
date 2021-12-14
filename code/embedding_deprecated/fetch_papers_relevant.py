@@ -21,19 +21,19 @@ import numpy as np
 
 def fetch_paper(thread, N, term, relevant_dict, tp_map):
     targets, target_set = [term], set([term])
-    for i in xrange(N):
+    for i in range(N):
         q, s = relevant_dict[term][i][0], relevant_dict[term][i][1]
         if s > thread and q not in target_set:
             targets.append(q)
             target_set.add(q)
     paper_set = set()
-    print "Query :", term, len(targets), "---"
+    print("Query :", term, len(targets), "---")
     for t in targets:
         if t not in tp_map:
-            print "(%s)" % t,
+            print("(%s)" % t, end=' ')
             continue
         paper_set = paper_set | tp_map[t]
-        print "(%s, %d) " % (t, len(paper_set)), 
+        print("(%s, %d) " % (t, len(paper_set)), end=' ') 
     return paper_set
     
 
@@ -71,15 +71,15 @@ if __name__ == "__main__":
     
     for term in query_terms:
         relevant_dict[term] = []
-        print "%s/%s" % (args.relevant, term)
+        print("%s/%s" % (args.relevant, term))
         data = open("%s/%s" % (args.relevant, term))
-        print term 
+        print(term) 
         for line in data:
             values = line.strip().split()
             relevant_dict[term].append((values[0], float(values[1])))
-            print values[0],  
+            print(values[0], end=' ')  
             all_terms.add(values[0])
-        print "\n" 
+        print("\n") 
         
     # read paper-term 
     term_paper_map = dict()
@@ -93,13 +93,13 @@ if __name__ == "__main__":
         if term not in term_paper_map:
             term_paper_map[term] = set()
         term_paper_map[term].add(paper)
-    print "Finish reading paper_term.net"
+    print("Finish reading paper_term.net")
 
     data = open(args.query)
     for line in data:
         queries = line.strip().split("#")
         paper_set = None 
-        for i in xrange(len(queries)):
+        for i in range(len(queries)):
             if i == 0:
                 paper_set = fetch_paper(threshold, N,
                         queries[i], relevant_dict, term_paper_map)
@@ -107,9 +107,9 @@ if __name__ == "__main__":
                 paper_set = paper_set | fetch_paper(threshold, N, 
                         queries[i], relevant_dict, term_paper_map)
             
-            print "For query :", queries[i],
-            print "Before :", len(term_paper_map[queries[i]]),        
-            print "After :", len(paper_set)
+            print("For query :", queries[i], end=' ')
+            print("Before :", len(term_paper_map[queries[i]]), end=' ')        
+            print("After :", len(paper_set))
         
         
         path = "%s/%s" % (args.output, "_".join(queries))

@@ -1,7 +1,7 @@
 import argparse
 import utils
 import operator
-import Queue
+import queue
 import math
 from os import listdir
 from os.path import isfile, join, isdir, abspath, dirname, basename, exists
@@ -28,7 +28,7 @@ def compare(a_f, b_f):
 	b_emb_f = '%s/%s' % (b_f, emb_f)
 
 	if not exists(a_emb_f) or not exists(b_emb_f):
-		print 'Embedding file not found'
+		print('Embedding file not found')
 		exit(1)
 
 	embs_a = load_embeddings(a_emb_f)
@@ -37,9 +37,9 @@ def compare(a_f, b_f):
 	embs_groups = [embs_a, embs_b]
 
 	while 1:
-		n_name = raw_input("Enter your node: ")
+		n_name = input("Enter your node: ")
 		if n_name not in embs_a or n_name not in embs_b:
-			print '%s not found' % n_name
+			print('%s not found' % n_name)
 
 		for embs in embs_groups:
 			t_emb = embs[n_name]
@@ -47,11 +47,11 @@ def compare(a_f, b_f):
 			for key in embs:
 				sim_map[key] = utils.cossim(t_emb, embs[key])
 			
-			sim_map = sorted(sim_map.items(), key=operator.itemgetter(1), reverse=True)
+			sim_map = sorted(list(sim_map.items()), key=operator.itemgetter(1), reverse=True)
 			output_str = '\n'.join([sim_map[i][0] + '\t' + str(sim_map[i][1]) for i in range(10)])
 			# print sim_map[:10]
-			print output_str
-			print 'group finished\n'
+			print(output_str)
+			print('group finished\n')
 
 
 

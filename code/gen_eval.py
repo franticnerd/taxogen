@@ -59,11 +59,11 @@ def gen_isa_pairs(tax, isa_N, case_N):
 		p_phs = '|'.join(p_node.ph_list[:isa_N])
 		rmd_phs = '|'.join(rmd_node.ph_list[:isa_N])
 		if len(p_phs) == 0 or len(rmd_phs) == 0:
-			print tax
-			print n_phs
-			print node.name
-			print p_node.name
-			print rmd_node.name
+			print(tax)
+			print(n_phs)
+			print(node.name)
+			print(p_node.name)
+			print(rmd_node.name)
 			exit(1)
 		order = random.choice([0, 1])
 		p_id = 0
@@ -122,7 +122,7 @@ def handler(folder, output, N, isa_N, case_N):
 	subdomain_map = {}
 
 	for tax_name in taxs:
-		print tax_name
+		print(tax_name)
 		# generate intrusion pairs
 		# intru_f = '%s/%s.intrusion' % (output, tax_name)
 		intru_maps[tax_name] = gen_intrusion_pairs(taxs[tax_name], N, case_N)

@@ -87,7 +87,7 @@ def gen_doc_keyword_cnt_file(doc_file, keyword_cnt_file):
 
 def counter_to_string(counter):
     elements = []
-    for k, v in counter.items():
+    for k, v in list(counter.items()):
         elements.append(k)
         elements.append(v)
     return '\t'.join([str(e) for e in elements])
@@ -129,7 +129,7 @@ def main(raw_dir, input_dir, init_dir):
 # input_dir = '/shared/data/czhang82/projects/local-embedding/sp/input/'
 # init_dir = '/shared/data/czhang82/projects/local-embedding/sp/init/'
 if __name__ == '__main__':
-    corpusName = sys.argv[1]
+    corpusName = 'dblp'
     raw_dir = '../data/'+corpusName+'/raw/'
     input_dir = '../data/'+corpusName+'/input/'
     init_dir = '../data/'+corpusName+'/init/'

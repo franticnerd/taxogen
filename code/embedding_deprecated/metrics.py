@@ -29,23 +29,23 @@ def precision(candidates, ground_truth):
 
     p_5, p_10, p_20 = 0, 0, 0
     true_positive = 0
-    for i in xrange(5):
+    for i in range(5):
         if i < len(candidates) and candidates[i] in ground_truth:
             true_positive += 1
     p_5 = float(true_positive) / 5.0
 
-    for i in xrange(5, 10):
+    for i in range(5, 10):
         if i < len(candidates) and candidates[i] in ground_truth:
             true_positive += 1
     p_10 = float(true_positive) / 10.0
 
-    for i in xrange(10, 20):
+    for i in range(10, 20):
         if i < len(candidates) and candidates[i] in ground_truth:
             true_positive += 1
     p_20 = float(true_positive) / 20.0
 
     true_positive = 0
-    for i in xrange(min(R, C)):
+    for i in range(min(R, C)):
         if i < len(candidates) and candidates[i] in ground_truth:
             true_positive += 1
             
@@ -58,7 +58,7 @@ def MAP(candidates, ground_truth):
     C = len(candidates)
     R = len(ground_truth)
     true_positive, precision, total_precision = 0, 0, 0
-    for n in xrange(1, min(C, R) + 1):
+    for n in range(1, min(C, R) + 1):
         if candidates[n - 1] in ground_truth:
             true_positive += 1
             precision = float(true_positive) / float(n)
@@ -68,7 +68,7 @@ def MAP(candidates, ground_truth):
 def RR(candidates, ground_truth):
     result = 0
     nCandidates = len(candidates)
-    for n in xrange(nCandidates):
+    for n in range(nCandidates):
         if candidates[n] in ground_truth:
             result = n + 1
             break 
@@ -77,7 +77,7 @@ def RR(candidates, ground_truth):
 def NDCG(candidates, ground_truth, K = 20):
     DCG, IDCG = 0, 0
     ndcg_5, ndcg_10, ndcg_20 = 0, 0, 0
-    for i in xrange(K):
+    for i in range(K):
         x = 1.0 / log(i + 2, 2)
         IDCG += x
         if i < len(candidates) and candidates[i] in ground_truth:
@@ -93,7 +93,7 @@ def NDCG(candidates, ground_truth, K = 20):
 def bpref(candidates, ground_truth):
     R = len(candidates)
     false_positive, bpref, k = 0, 0, 0
-    for n in xrange(R):
+    for n in range(R):
         if candidates[n] not in ground_truth:
             false_positive += 1
         else:
@@ -104,11 +104,11 @@ def bpref(candidates, ground_truth):
     return bpref / float(k)
 
 def printResults(name, result):
-    print name,
-    print "%.4f" % (np.mean(result)),
+    print(name, end=' ')
+    print("%.4f" % (np.mean(result)), end=' ')
     for res in result:
-        print "%.4f" % res,
-    print
+        print("%.4f" % res, end=' ')
+    print()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='metrics.py', \
@@ -131,11 +131,11 @@ if __name__ == "__main__":
     for line in query_data:
         query = line.split("\n")[0].replace(" ", "_")
         queries.append(query)
-    print "measure overall", " ".join(queries)
+    print("measure overall", " ".join(queries))
     
     Precision_5, Precision_10, Precision_20, Precision_R, l_MAP, l_MRR, l_bpref = \
-            list([[] for i in xrange(7)])
-    NDCG_5, NDCG_10, NDCG_20 = list([[] for i in xrange(3)])
+            list([[] for i in range(7)])
+    NDCG_5, NDCG_10, NDCG_20 = list([[] for i in range(3)])
 
     for query in queries:
         candidate_file = input_folder + "/" + query + "/author.weights"
@@ -145,7 +145,7 @@ if __name__ == "__main__":
         for line in data:
             value = line.split("\n")[0].split()
             scores[value[0]] = float(value[1])
-        scores = sorted(scores.items(), key=lambda x:x[1], reverse=True)
+        scores = sorted(list(scores.items()), key=lambda x:x[1], reverse=True)
 
         candidates = [x[0] for x in scores]
         

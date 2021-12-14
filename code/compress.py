@@ -1,7 +1,7 @@
 import argparse
 import utils
 import operator
-import Queue
+import queue
 import math
 from os import listdir
 from os.path import isfile, join, isdir, abspath, dirname, basename, exists
@@ -37,12 +37,12 @@ def parse_reidx(reidx_f):
 		if len(pd_map[ph]) > 0:
 			ph_idf[ph] = math.log(float(d_cnt) / len(pd_map[ph]))
 
-	print 'Inverted Index file read.'
+	print('Inverted Index file read.')
 
 
 
 def get_rep(folder, c_id, N):
-	print('Start get representative phrases for %s, %s ========================' % (folder, c_id))
+	print(('Start get representative phrases for %s, %s ========================' % (folder, c_id)))
 	# print folder
 	par_folder = dirname(folder)
 	cur_label = basename(folder)
@@ -72,7 +72,7 @@ def get_rep(folder, c_id, N):
 			emb_dist = utils.cossim(embs[ph], embs[cur_label])
 			ph_scores[ph] = score * emb_dist
 
-		ph_scores = sorted(ph_scores.items(), key=operator.itemgetter(1), reverse=True)
+		ph_scores = sorted(list(ph_scores.items()), key=operator.itemgetter(1), reverse=True)
 
 		for (ph, score) in ph_scores:
 			if ph not in result_phrases and ph in kws:
@@ -81,7 +81,7 @@ def get_rep(folder, c_id, N):
 				break
 		
 	elif ph_idf == None:
-		print 'looking at embeddings for %s' % folder
+		print('looking at embeddings for %s' % folder)
 
 		ph_f = '%s/embeddings.txt' % par_folder
 		kw_f = '%s/keywords.txt' % par_folder
@@ -119,7 +119,7 @@ def get_rep(folder, c_id, N):
 				result_phrases.append(ph)
 	else:
 		# Using TF-IDF to generate
-		print 'looking at tf-idf for %s' % folder
+		print('looking at tf-idf for %s' % folder)
 		d_clus_f = '%s/paper_cluster.txt' % par_folder
 		kw_clus_f = '%s/cluster_keywords.txt' % par_folder
 		docs = []
@@ -148,7 +148,7 @@ def get_rep(folder, c_id, N):
 				continue
 			ph_scores[ph] = 1 + math.log(ph_scores[ph])
 			ph_scores[ph] *= ph_idf[ph]
-		ph_scores = sorted(ph_scores.items(), key=operator.itemgetter(1), reverse=True)
+		ph_scores = sorted(list(ph_scores.items()), key=operator.itemgetter(1), reverse=True)
 
 		for (ph, score) in ph_scores:
 			if ph not in result_phrases:
@@ -161,7 +161,7 @@ def get_rep(folder, c_id, N):
 
 def recursion(root, o_file, N):
 
-	q = Queue.Queue()
+	q = queue.Queue()
 	q.put((root, -1, '*'))
 
 	g = open(o_file, 'w+')

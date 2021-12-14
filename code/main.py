@@ -49,20 +49,22 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
           n_expand, level, caseolap=True, local_embedding=True):
     if level > MAX_LEVEL:
         return
-    print('============================= Running level ', level, ' and node ', parent, '=============================')
+    print(('============================= Running level ', level, ' and node ', parent, '============================='))
     start = time.time()
     df = DataFiles(input_dir, node_dir)
     ## TODO: Everytime we need to read-in the whole corpus, which can be slow.
     full_data = DataSet(df.embedding_file, df.doc_file)
     end = time.time()
-    print('[Main] Done reading the full data using time %s seconds' % (end-start))
+    print(('[Main] Done reading the full data using time %s seconds' % (end-start)))
 
     # filter the keywords
     if caseolap is False:
         try:
             children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent, \
                                       df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file)
-        except:
+        except Exception as e:
+            print(e)
+            print(e)
             print('Clustering not finished.')
             return
         copyfile(df.seed_keyword_file, df.filtered_keyword_file)
@@ -74,7 +76,8 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
             try:
                 children = run_clustering(full_data, df.doc_id_file, df.seed_keyword_file, n_cluster, node_dir, parent,\
                                df.cluster_keyword_file, df.hierarchy_file, df.doc_membership_file)
-            except:
+            except Exception as e:
+                print(e)
                 print('Clustering not finished.')
                 return
 
@@ -82,7 +85,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
             main_caseolap(df.link_file, df.doc_membership_file, df.cluster_keyword_file, df.caseolap_keyword_file)
             main_rank_phrase(df.caseolap_keyword_file, df.filtered_keyword_file, filter_thre)
             end = time.time()
-            print("[Main] Finish running CaseOALP using %s (seconds)" % (end - start))
+            print(("[Main] Finish running CaseOALP using %s (seconds)" % (end - start)))
 
     # prepare the embedding for child level
     if level < MAX_LEVEL:
@@ -96,7 +99,7 @@ def recur(input_dir, node_dir, n_cluster, parent, n_cluster_iter, filter_thre,\
             start = time.time()
             main_local_embedding(node_dir, df.doc_file, df.index_file, parent, n_expand)
             end = time.time()
-            print("[Main] Finish running local embedding training using %s (seconds)" % (end - start))
+            print(("[Main] Finish running local embedding training using %s (seconds)" % (end - start)))
 
     for child in children:
         recur(input_dir, node_dir + child + '/', n_cluster, child, n_cluster_iter, \

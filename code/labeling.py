@@ -1,13 +1,13 @@
 import argparse
 import utils
 import operator
-import Queue
+import queue
 from os import listdir
 from os.path import isfile, join, isdir, abspath, dirname, basename
 from case_ranker import read_caseolap_result, rank_phrase
 
 def label_emb_centric(folder, c_id):
-	print 'Start labeling for %s, %s ========================' % (folder, c_id)
+	print('Start labeling for %s, %s ========================' % (folder, c_id))
 	# print folder
 	par_folder = dirname(folder)
 	cur_label = basename(folder)
@@ -18,7 +18,7 @@ def label_emb_centric(folder, c_id):
 	# generate word2vec phrases
 	embs = utils.load_embeddings(emb_f)
 	if cur_label not in embs:
-		print 'Error!!!'
+		print('Error!!!')
 		exit(1)
 	N = 100
 	worst = -100
@@ -58,8 +58,8 @@ def label_emb_centric(folder, c_id):
 
 		label_cands[ph] = score
 
-	ranked_list = sorted(label_cands.items(), key=operator.itemgetter(1), reverse=True)
-	print ranked_list
+	ranked_list = sorted(list(label_cands.items()), key=operator.itemgetter(1), reverse=True)
+	print(ranked_list)
 
 	return ranked_list[0][0]
 
@@ -129,7 +129,7 @@ def label_emb_centric(folder, c_id):
 
 def recursion(root):
 
-	q = Queue.Queue()
+	q = queue.Queue()
 	q.put((root, -1))
 
 	label_map = {}
@@ -149,10 +149,10 @@ def recursion(root):
 				l = label_emb_centric(c_folder, str(c_id))
 				cur_label = basename(c_folder)
 				label_map[cur_label] = l
-				print 'label for %s is: %s\n' % (c_folder, l)
+				print('label for %s is: %s\n' % (c_folder, l))
 	except:
-		for (o_l, l) in label_map.items():
-			print '%s ==> %s' % (o_l, l)
+		for (o_l, l) in list(label_map.items()):
+			print('%s ==> %s' % (o_l, l))
 
 
 if __name__ == "__main__":

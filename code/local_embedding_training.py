@@ -10,7 +10,7 @@ import utils
 import os
 
 def read_files(folder, parent):
-    print("[Local-embedding] Reading file:", parent)
+    print(("[Local-embedding] Reading file:", parent))
     emb_file = '%s/embeddings.txt' % folder
     hier_file = '%s/hierarchy.txt' % folder
     keyword_file = '%s/keywords.txt' % folder ## here only consider those remaining keywords
@@ -106,7 +106,7 @@ def run_word2vec(pd_map, docs, cates, folder):
         for ph in cates[cate]:
             c_docs = c_docs.union(pd_map[ph])
 
-        print('Starting cell %s with %d docs.' % (cate, len(c_docs)))
+        print(('Starting cell %s with %d docs.' % (cate, len(c_docs))))
         
         # save file
         # sub_folder = '%s/%s' % (folder, cate)

@@ -13,7 +13,7 @@ def load_nodes(node_file, min_level=1, max_level=3, prefix_list=['*']):
                 node_content = []
             nodes[node_id] = node_content
     prune_nodes = {}
-    for node_id, node_content in nodes.items():
+    for node_id, node_content in list(nodes.items()):
         # prune nodes
         if not has_one_prefix(node_id, prefix_list):
             continue
@@ -43,11 +43,11 @@ def is_exact_prefix(s, prefix):
 
 
 def gen_edges(nodes):
-    node_ids = nodes.keys()
+    node_ids = list(nodes.keys())
     node_ids.sort(key=lambda x: len(x))
     edges = []
-    for i in xrange(len(nodes) - 1):
-        for j in xrange(i+1, len(nodes)):
+    for i in range(len(nodes) - 1):
+        for j in range(i+1, len(nodes)):
             if is_parent(node_ids[i], node_ids[j]):
                 edges.append([node_ids[i], node_ids[j]])
     return edges
@@ -75,7 +75,7 @@ def gen_node_label(node_id, node_content):
 
 def draw(nodes, edges, output_file):
     d = Digraph(node_attr={'shape': 'record'})
-    for node_id, node_content in nodes.items():
+    for node_id, node_content in list(nodes.items()):
         d.node(node_id, gen_node_label(node_id, node_content))
     for e in edges:
         d.edge(e[0], e[1])

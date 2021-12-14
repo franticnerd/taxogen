@@ -13,7 +13,7 @@ def handler(folder):
 
 	if True:
 		files = ['%s/%s' % (folder, f) for f in listdir(folder) if isfile(join(folder, f)) and 'intrusion_exp' in f]
-		print files
+		print(files)
 
 		intru_gold = '%s/%s' % (folder, 'intrusion_gold.txt')
 
@@ -51,9 +51,9 @@ def handler(folder):
 
 		# print idx
 
-		print '\nIntrusion results!!'
+		print('\nIntrusion results!!')
 		for method in total:
-			print '%s accuracy: %d/%d - %f' % (method, correct[method], total[method], float(correct[method]) / total[method])
+			print('%s accuracy: %d/%d - %f' % (method, correct[method], total[method], float(correct[method]) / total[method]))
 
 
 	# files = ['%s/%s' % (folder, f) for f in listdir(folder) if isfile(join(folder, f)) and 'isa_exp' in f]
@@ -95,7 +95,7 @@ def handler(folder):
 
 	# subdomain result
 	files = ['%s/%s' % (folder, f) for f in listdir(folder) if isfile(join(folder, f)) and 'subdomain_exp' in f]
-	print files
+	print(files)
 
 	intru_gold = '%s/%s' % (folder, 'subdomain_gold.txt')
 
@@ -129,9 +129,9 @@ def handler(folder):
 				if value == 'n':
 					incorrect[method] += 1
 
-	print '\nSubdomain results!!'
+	print('\nSubdomain results!!')
 	for method in total:
-		print '%s accuracy: %d/%d/%d - %f' % (method, correct[method], incorrect[method], total[method], float(correct[method]) / total[method])
+		print('%s accuracy: %d/%d/%d - %f' % (method, correct[method], incorrect[method], total[method], float(correct[method]) / total[method]))
 
 
 if __name__ == "__main__":

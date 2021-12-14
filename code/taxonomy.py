@@ -53,7 +53,7 @@ class Taxonomy:
 		return None
 
 	def sample_a_node(self):
-		return random.choice(self.all_nodes.values())
+		return random.choice(list(self.all_nodes.values()))
 
 
 
