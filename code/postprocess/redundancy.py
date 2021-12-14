@@ -31,7 +31,7 @@ def load_taxonomy(tax_file):
 
 def compute_pmi(inverted_index, tax):
     values = []
-    for node, keywords in tax.items():
+    for node, keywords in list(tax.items()):
         pairs = set(frozenset([i, j]) for i in keywords for j in keywords if i != j)
         for p in pairs:
             pair = list(p)
@@ -54,7 +54,7 @@ def main(idx_file, taxonomy_dir, output_file):
     inverted_index = load_inverted_index(idx_file)
     # print len(inverted_index)
     taxonomy_files = get_tax_filenames(taxonomy_dir)
-    print taxonomy_files
+    print(taxonomy_files)
     with open(output_file, 'a') as fout:
         for tax_file in taxonomy_files:
             tax = load_taxonomy(tax_file)

@@ -3,9 +3,9 @@ __author__: Jiaming Shen
 __description__: Based on AutoPhrase output, generate 1) papers.txt, 2) keywords.txt
 __latest_update__: Auguest 2, 2017
 '''
-from config import *
-from AutoPhraseOutput import AutoPhraseOutput
-from SegPhraseOutput import SegPhraseOutput
+from .config import *
+from .AutoPhraseOutput import AutoPhraseOutput
+from .SegPhraseOutput import SegPhraseOutput
 import re
 from pattern.en import parsetree
 from pattern.en import parse

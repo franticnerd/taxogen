@@ -17,7 +17,7 @@ def get_candidates(folder, o_file):
         phrase = line.split(' ')[0]
         quality_phrases.add(phrase)
 
-  print('Quality phrase count: ' + str(len(quality_phrases)))
+  print(('Quality phrase count: ' + str(len(quality_phrases))))
 
   with open(o_file, 'w+') as g:
     for phrase in quality_phrases:
@@ -49,7 +49,7 @@ def get_reidx_file(text, cand_f, o_file):
           pd_map[t].add(str(idx))
       idx += 1
       if idx % 10000 == 0:
-        print("[Construct Inverted Index] Parse %s documents" % idx)
+        print(("[Construct Inverted Index] Parse %s documents" % idx))
 
   with open(o_file, 'w+') as g:
     for ph in pd_map:

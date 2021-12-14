@@ -31,7 +31,7 @@ def avg_weighted_colors(color_list, c_size):
 	for (color, weight) in color_list:
 		w_color = [x * weight for x in color]
 		# print w_color
-		result_color = map(operator.add, result_color, w_color)
+		result_color = list(map(operator.add, result_color, w_color))
 		# print result_color
 	return l1_normalize(result_color)
 
@@ -57,7 +57,7 @@ def cossim(p, q):
 
 def euclidean_distance(p, q):
 	if len(p) != len(q):
-		print 'Euclidean distance error: p, q have different length'
+		print('Euclidean distance error: p, q have different length')
 	
 	distance = 0
 
@@ -69,7 +69,7 @@ def euclidean_distance(p, q):
 
 def euclidean_cluster(ps, c):
 	if len(ps) == 0 or c == None:
-		print 'Cluster is empty'
+		print('Cluster is empty')
 
 	distance = 0
 
@@ -83,7 +83,7 @@ def euclidean_cluster(ps, c):
 
 def dot_product(p, q):
 	if len(p) != len(q):
-		print 'KL divergence error: p, q have different length'
+		print('KL divergence error: p, q have different length')
 	
 	p_len = q_len = mix_len = 0
 
@@ -122,7 +122,7 @@ def avg_emb_with_distinct(ele_map, embs_from, dist_map, vec_size):
 	avg_emb = [0] * vec_size
 	t_weight = 0
 
-	for key, value in ele_map.iteritems():
+	for key, value in ele_map.items():
 		t_emb = embs_from[key]
 		w = value * dist_map[key]
 		for i in range(vec_size):
@@ -140,7 +140,7 @@ def avg_emb(ele_map, embs_from, vec_size):
 	avg_emb = [0] * vec_size
 	t_weight = 0
 
-	for key, value in ele_map.iteritems():
+	for key, value in ele_map.items():
 		t_emb = embs_from[key]
 		w = value
 		for i in range(vec_size):

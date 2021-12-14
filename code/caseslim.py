@@ -66,7 +66,7 @@ class CaseSlim:
 			group = [(self_df, self.max_df, self_cnt, sum_self)]
 
 			self.context_groups[phrase] = []
-			for phrase_group, phrase_values in self.phrase_cnt_context.items():
+			for phrase_group, phrase_values in list(self.phrase_cnt_context.items()):
 				context_df = self.phrase_df_context[phrase_group].get(phrase, 0)
 				sum_context = self.sum_cnt_context[phrase_group]
 				context_cnt = phrase_values.get(phrase, 0)
@@ -167,7 +167,7 @@ class CaseSlim:
 		self.sum_cnt = sum(self.phrase_cnt.values())
 		self.sum_cnt_context = {}
 		self.global_scores = global_scores
-		for group, docs in context_doc_groups.items():
+		for group, docs in list(context_doc_groups.items()):
 			self.phrase_cnt_context[group], self.phrase_df_context[group] = self.agg_phrase_cnt_df(freq_data, docs)
 			if len(self.phrase_df_context[group]) > 0:
 				self.max_df_context[group] = max(self.phrase_df_context[group].values())
@@ -248,7 +248,7 @@ def run_caseolap(cells, freq_data, target_phs, o_file, verbose=3, top_k=200):
   of = open(o_file, 'w+')
 
   for cell in cells:
-    print('[CaseOLAP] Running CaseOLAP for cell: %s' % cell)
+    print(('[CaseOLAP] Running CaseOLAP for cell: %s' % cell))
 
     selected_docs = cells[cell]
     context_doc_groups = copy.copy(cells)
@@ -260,7 +260,7 @@ def run_caseolap(cells, freq_data, target_phs, o_file, verbose=3, top_k=200):
 
     phr_str = ', '.join([ph[0] + '|' + str(ph[1]) for ph in top_phrases if ph[0] in target_phs])
     of.write('[%s]\n' % phr_str)
-    print('[CaseOLAP] Finished CaseOLAP for cell: %s' % cell)
+    print(('[CaseOLAP] Finished CaseOLAP for cell: %s' % cell))
 
 
 def main_caseolap(link_f, cell_f, token_f, output_f):

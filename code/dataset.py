@@ -76,7 +76,7 @@ class SubDataSet:
                 if keyword in full_data.embeddings:
                     keywords.append(keyword)
                 else:
-                    print(keyword, ' not in the embedding file')
+                    print((keyword, ' not in the embedding file'))
         return keywords
 
     def gen_keyword_id(self):
@@ -210,4 +210,4 @@ if __name__ == '__main__':
     keyword_file = data_dir + 'input/candidates.txt'
     embedding_file = data_dir + 'input/embeddings.txt'
     dataset = DataSet(embedding_file, document_file, keyword_file)
-    print(len(dataset.get_candidate_embeddings()))
+    print((len(dataset.get_candidate_embeddings())))

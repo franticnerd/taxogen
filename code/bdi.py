@@ -2,7 +2,7 @@ import numpy as np
 from os import listdir
 from collections import defaultdict
 import utils
-import Queue
+import queue
 import argparse
 from os import listdir
 from os.path import isfile, join, isdir, abspath, dirname, basename, exists
@@ -55,23 +55,23 @@ def compute_dbi(embs, clus_map, center_map):
 def output_dbi(dbi_scores):
 
     dbi_by_lvl = {}
-    all_dbi = [x[0] for x in dbi_scores.values()]
+    all_dbi = [x[0] for x in list(dbi_scores.values())]
 
-    print 'Average DBI for all is: %f' % (sum(all_dbi) / len(all_dbi))
+    print('Average DBI for all is: %f' % (sum(all_dbi) / len(all_dbi)))
 
-    for x in dbi_scores.values():
+    for x in list(dbi_scores.values()):
         if x[1] not in dbi_by_lvl:
             dbi_by_lvl[x[1]] = []
         dbi_by_lvl[x[1]].append(x[0])
 
     for lvl in dbi_by_lvl:
         dbis = dbi_by_lvl[lvl]
-        print 'Average DBI for level %d is: %f' % (lvl, sum(dbis) / len(dbis))
+        print('Average DBI for level %d is: %f' % (lvl, sum(dbis) / len(dbis)))
 
 
 def recursion(root, lvl):
 
-    q = Queue.Queue()
+    q = queue.Queue()
     q.put((root, -1, 1, '*'))
 
     dbi_scores = {}
@@ -102,7 +102,7 @@ def recursion(root, lvl):
         
         # handle current
         dbi = compute_dbi(embs, clus_map, hier_map)
-        print 'Computing DBI for %s: %f' % (c_name, dbi)
+        print('Computing DBI for %s: %f' % (c_name, dbi))
         dbi_scores[c_name] = (dbi, level)
     output_dbi(dbi_scores)
 

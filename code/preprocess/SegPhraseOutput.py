@@ -65,7 +65,7 @@ class SegPhraseOutput(object):
 
         # sanity checking
         if (len(q) != 0):
-            print("[ERROR]: mismatched </phrase> in document: %s" % doc)
+            print(("[ERROR]: mismatched </phrase> in document: %s" % doc))
 
     def save_phrase_to_pos_sequence(self, output_path=""):
         with open(output_path, "w") as fout:
@@ -83,11 +83,11 @@ class SegPhraseOutput(object):
                 phrase = seg[0]
                 pos_sequence = eval(seg[1])
                 self.phrase_to_pos_sequence[phrase] = pos_sequence
-        print("[INFO] Number of phrases before NP pruning = ", len(self.phrase_to_pos_sequence))
+        print(("[INFO] Number of phrases before NP pruning = ", len(self.phrase_to_pos_sequence)))
 
     def obtain_pos_sequence_to_score(self):
         pos_sequence_2_score = {}
-        for v in self.phrase_to_pos_sequence.values():
+        for v in list(self.phrase_to_pos_sequence.values()):
             for pos_sequence in v:
                 if pos_sequence not in pos_sequence_2_score:
                     pos_sequence_list = pos_sequence.split()
@@ -102,8 +102,8 @@ class SegPhraseOutput(object):
         self.pos_sequence_to_score = pos_sequence_2_score
 
 
-        print(len(self.pos_sequence_to_score))
-        print(self.pos_sequence_to_score)
+        print((len(self.pos_sequence_to_score)))
+        print((self.pos_sequence_to_score))
 
     def obtain_candidate_phrase(self, threshold = 0.8, min_sup = 5):
         candidate_phrase = []
@@ -112,15 +112,15 @@ class SegPhraseOutput(object):
             freq = sum(self.phrase_to_pos_sequence[phrase].values())
             if freq < min_sup:
                 continue
-            for pos_sequence in self.phrase_to_pos_sequence[phrase].keys():
+            for pos_sequence in list(self.phrase_to_pos_sequence[phrase].keys()):
                 pos_sequence_weight = float(self.phrase_to_pos_sequence[phrase][pos_sequence]) / freq
                 pos_sequence_score = self.pos_sequence_to_score[pos_sequence]
                 phrase_score += (pos_sequence_weight * pos_sequence_score)
             if phrase_score >= threshold:
                 # print(phrase, phrase_score)
                 candidate_phrase.append(phrase)
-        print(len(candidate_phrase))
-        print(candidate_phrase[0:10])
+        print((len(candidate_phrase)))
+        print((candidate_phrase[0:10]))
         self.candidate_phrase = candidate_phrase
 
     def save_candidate_phrase(self, output_path=""):
